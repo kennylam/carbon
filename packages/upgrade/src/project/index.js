@@ -7,9 +7,10 @@
 
 'use strict';
 
-const migrations = new Set([require('./0.0.1-alpha.32')]);
+const { Project } = require('./project');
+const { Workspace } = require('./workspace');
 
 module.exports = {
-  name: '@carbon/elements',
-  migrations,
+  Project,
+  Workspace,
 };
