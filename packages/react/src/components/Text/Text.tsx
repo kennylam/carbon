@@ -5,13 +5,30 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import PropTypes from 'prop-types';
+import PropTypes, { ReactNodeLike } from 'prop-types';
 import React, { useContext } from 'react';
+import { PolymorphicProps } from '../../types/common';
+import { TextDir } from './TextDirection';
 import { TextDirectionContext } from './TextDirectionContext';
 
-function Text({ as: BaseComponent = 'span', children, dir = 'auto', ...rest }) {
-  const context = useContext(TextDirectionContext);
-  const textProps = {};
+export interface TextBaseProps {
+  dir?: TextDir | undefined;
+}
+
+export type TextProps<T extends React.ElementType> = PolymorphicProps<
+  T,
+  TextBaseProps
+>;
+function Text<T extends React.ElementType>({
+  as,
+  children,
+  dir = 'auto',
+  ...rest
+}: TextProps<T>) {
+  // TODO: Update with context typing once its been converted to TS
+  const context = useContext<any>(TextDirectionContext);
+  const textProps: { dir?: TextDir } = {};
+  const BaseComponent = as ?? 'span';
   const value = {
     ...context,
   };
@@ -71,7 +88,7 @@ Text.propTypes = {
   dir: PropTypes.oneOf(['ltr', 'rtl', 'auto']),
 };
 
-function getTextFromChildren(children) {
+function getTextFromChildren(children: ReactNodeLike) {
   if (typeof children === 'string') {
     return children;
   }
@@ -81,11 +98,11 @@ function getTextFromChildren(children) {
       return child;
     }
     return null;
-  }).filter((text) => {
+  })?.filter((text) => {
     return text !== null;
   });
 
-  if (text.length === 1) {
+  if (text?.length === 1) {
     return text[0];
   }
 
