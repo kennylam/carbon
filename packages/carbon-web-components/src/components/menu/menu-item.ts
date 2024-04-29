@@ -26,7 +26,7 @@ import { MenuContext } from './menu-context';
 class CDSmenuItem extends LitElement {
   @provide({ context: MenuContext })
   @consume({ context: MenuContext })
-  _myData;
+  context;
 
   readonly hoverIntentDelay = 150; // in ms
   hoverIntentTimeout;
@@ -160,12 +160,23 @@ class CDSmenuItem extends LitElement {
       this._handleClick(e);
     }
   };
+  _registerItem = () => {
+    console.log('test');
+    // this.context = {
+    //   ...this.context,
+    //   items: [...this.context.items, 'test']
+    // }
+    this.context.items.push(
+      this.shadowRoot?.querySelector(`.${prefix}--menu-item`)
+    );
+  };
   firstUpdated() {
     this.hasChildren = this.childNodes.length > 0;
     this.isDisabled = this.disabled && !this.hasChildren;
     this.direction = document.dir;
     this.isRtl = this.direction === 'rtl';
     this.isDanger = this.kind === 'danger';
+    this._registerItem();
   }
   render() {
     const {
