@@ -6,8 +6,10 @@
  */
 
 import React, { useState } from 'react';
+import { action } from '@storybook/addon-actions';
 import { Document, Folder } from '@carbon/icons-react';
 import { default as TreeView, TreeNode } from './';
+import mdx from './TreeView.mdx';
 import './story.scss';
 
 const nodes = [
@@ -186,7 +188,14 @@ export default {
   subcomponents: {
     TreeNode,
   },
-  args: {},
+  parameters: {
+    docs: {
+      page: mdx,
+    },
+  },
+  args: {
+    onSelect: action('onSelect'),
+  },
   argTypes: {
     children: {
       table: {
@@ -259,3 +268,12 @@ Playground.argTypes = {
     control: { type: 'select' },
   },
 };
+
+export const Temp = () => (
+  <TreeView label="Tree View">
+    <TreeNode label="Enabled">
+      <TreeNode label="Disabled" disabled />
+    </TreeNode>
+    <TreeNode label="Disabled" disabled></TreeNode>
+  </TreeView>
+);

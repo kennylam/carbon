@@ -6,7 +6,13 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { ReactNode, useContext, useState } from 'react';
+import React, {
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from 'react';
 import classNames from 'classnames';
 import { useNormalizedInputProps } from '../../internal/useNormalizedInputProps';
 import PasswordInput from './PasswordInput';
@@ -16,6 +22,7 @@ import { textInputProps } from './util';
 import { FormContext } from '../FluidForm';
 import { usePrefix } from '../../internal/usePrefix';
 import { useAnnouncer } from '../../internal/useAnnouncer';
+import { Text } from '../Text';
 
 type ExcludedAttributes = 'defaultValue' | 'id' | 'size' | 'value';
 
@@ -121,6 +128,11 @@ export interface TextInputProps
   size?: 'sm' | 'md' | 'lg' | 'xl';
 
   /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `TextInput` component
+   */
+  slug?: ReactNode;
+
+  /**
    * Specify the type of the `<input>`
    */
   type?: string;
@@ -163,6 +175,7 @@ const TextInput = React.forwardRef(function TextInput(
     warnText,
     enableCounter = false,
     maxCount,
+    slug,
     ...rest
   }: TextInputProps,
   ref
@@ -250,6 +263,7 @@ const TextInput = React.forwardRef(function TextInput(
     `${prefix}--text-input__field-wrapper`,
     {
       [`${prefix}--text-input__field-wrapper--warning`]: normalizedProps.warn,
+      [`${prefix}--text-input__field-wrapper--slug`]: slug,
     }
   );
   const iconClasses = classNames({
@@ -265,13 +279,15 @@ const TextInput = React.forwardRef(function TextInput(
 
   const counter =
     enableCounter && maxCount ? (
-      <div className={counterClasses}>{`${textCount}/${maxCount}`}</div>
+      <Text
+        as="div"
+        className={counterClasses}>{`${textCount}/${maxCount}`}</Text>
     ) : null;
 
   const label = labelText ? (
-    <label htmlFor={id} className={labelClasses}>
+    <Text as="label" htmlFor={id} className={labelClasses}>
       {labelText}
-    </label>
+    </Text>
   ) : null;
 
   const labelWrapper = (
@@ -282,9 +298,9 @@ const TextInput = React.forwardRef(function TextInput(
   );
 
   const helper = helperText ? (
-    <div id={normalizedProps.helperId} className={helperTextClasses}>
+    <Text as="div" id={normalizedProps.helperId} className={helperTextClasses}>
       {helperText}
-    </div>
+    </Text>
   ) : null;
 
   const input = (
@@ -300,8 +316,40 @@ const TextInput = React.forwardRef(function TextInput(
   );
 
   const { isFluid } = useContext(FormContext);
+  const announcerRef = useRef(null);
+  const [prevAnnouncement, setPrevAnnouncement] = useState('');
   const ariaAnnouncement = useAnnouncer(textCount, maxCount);
+  useEffect(() => {
+    if (ariaAnnouncement && ariaAnnouncement !== prevAnnouncement) {
+      const announcer = announcerRef.current as HTMLSpanElement | null;
+      if (announcer) {
+        // Clear the content first
+        announcer.textContent = '';
+        // Set the new content after a small delay
+        const timeoutId = setTimeout(() => {
+          if (announcer) {
+            announcer.textContent = ariaAnnouncement;
+            setPrevAnnouncement(ariaAnnouncement);
+          }
+        }, 1000);
+        // clear the timeout
+        return () => {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+          }
+        };
+      }
+    }
+  }, [ariaAnnouncement, prevAnnouncement]);
   const Icon = normalizedProps.icon as any;
+
+  // Slug is always size `mini`
+  let normalizedSlug;
+  if (slug && slug['type']?.displayName === 'AILabel') {
+    normalizedSlug = React.cloneElement(slug as React.ReactElement<any>, {
+      size: 'mini',
+    });
+  }
 
   return (
     <div className={inputWrapperClasses}>
@@ -319,7 +367,13 @@ const TextInput = React.forwardRef(function TextInput(
           data-invalid={normalizedProps.invalid || null}>
           {Icon && <Icon className={iconClasses} />}
           {input}
-          <span className={`${prefix}--text-input__counter-alert`} role="alert">
+          {normalizedSlug}
+          <span
+            className={`${prefix}--text-input__counter-alert`}
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            ref={announcerRef}>
             {ariaAnnouncement}
           </span>
           {isFluid && <hr className={`${prefix}--text-input__divider`} />}
@@ -432,6 +486,11 @@ TextInput.propTypes = {
    * Specify the size of the Text Input. Currently supports the following:
    */
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
+
+  /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `TextInput` component
+   */
+  slug: PropTypes.node,
 
   /**
    * Specify the type of the `<input>`

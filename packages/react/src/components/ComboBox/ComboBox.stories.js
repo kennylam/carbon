@@ -5,11 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { WithLayer } from '../../../.storybook/templates/WithLayer';
 
 import ComboBox from '../ComboBox';
+import Button from '../Button';
+import { AILabel, AILabelContent, AILabelActions } from '../AILabel';
+import { IconButton } from '../IconButton';
+import { View, FolderOpen, Folders } from '@carbon/icons-react';
 import mdx from './ComboBox.mdx';
 
 const items = [
@@ -61,23 +65,92 @@ export default {
   },
 };
 
+export const DownshiftActionsTest = () => {
+  const downshiftActions = useRef();
+
+  return (
+    <div style={{ width: 300 }}>
+      <ComboBox
+        onChange={() => {}}
+        id="carbon-combobox"
+        items={items}
+        itemToString={(item) => (item ? item.text : '')}
+        titleText="ComboBox title"
+        helperText="Combobox helper text"
+        downshiftActions={downshiftActions}
+        downshiftProps={{
+          onStateChange: (changes) => {
+            console.log('onStateChange changes', changes);
+
+            if (changes.selectedItem === null) {
+              downshiftActions?.current?.openMenu?.();
+              return;
+            }
+            if (changes?.isOpen && changes?.inputValue === 'Option 1') {
+              downshiftActions?.current?.setInputValue?.('');
+              return;
+            }
+            if (!changes?.isOpen && changes?.inputValue !== 'Option 1') {
+              downshiftActions?.current?.setInputValue?.('Option 1');
+              return;
+            }
+          },
+        }}
+      />
+    </div>
+  );
+};
+
 export const Default = () => (
   <div style={{ width: 300 }}>
     <ComboBox
       onChange={() => {}}
       id="carbon-combobox"
       items={items}
-      downshiftProps={{
-        onStateChange: () => {
-          console.log('the state has changed');
-        },
-      }}
       itemToString={(item) => (item ? item.text : '')}
       titleText="ComboBox title"
       helperText="Combobox helper text"
     />
   </div>
 );
+
+export const AllowCustomValue = (args) => {
+  const filterItems = (menu) => {
+    return menu?.item?.toLowerCase().includes(menu?.inputValue?.toLowerCase());
+  };
+  return (
+    <div style={{ width: 300 }}>
+      <ComboBox
+        allowCustomValue
+        shouldFilterItem={filterItems}
+        onChange={args.onChange}
+        id="carbon-combobox"
+        items={['Apple', 'Orange', 'Banana', 'Pineapple', 'Raspberry', 'Lime']}
+        titleText="ComboBox title"
+        helperText="Combobox helper text"
+      />
+    </div>
+  );
+};
+export const ExperimentalAutoAlign = () => (
+  <div style={{ width: 400 }}>
+    <div style={{ height: 300 }}></div>
+    <ComboBox
+      onChange={() => {}}
+      id="carbon-combobox"
+      items={items}
+      itemToString={(item) => (item ? item.text : '')}
+      titleText="ComboBox title"
+      helperText="Combobox helper text"
+      autoAlign={true}
+    />
+    <div style={{ height: 800 }}></div>
+  </div>
+);
+
+AllowCustomValue.argTypes = {
+  onChange: { action: 'onChange' },
+};
 
 export const _WithLayer = () => (
   <WithLayer>
@@ -96,16 +169,56 @@ export const _WithLayer = () => (
   </WithLayer>
 );
 
+const aiLabel = (
+  <AILabel className="slug-container">
+    <AILabelContent>
+      <div>
+        <p className="secondary">AI Explained</p>
+        <h1>84%</h1>
+        <p className="secondary bold">Confidence score</p>
+        <p className="secondary">
+          Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
+        </p>
+        <hr />
+        <p className="secondary">Model type</p>
+        <p className="bold">Foundation model</p>
+      </div>
+      <AILabelActions>
+        <IconButton kind="ghost" label="View">
+          <View />
+        </IconButton>
+        <IconButton kind="ghost" label="Open Folder">
+          <FolderOpen />
+        </IconButton>
+        <IconButton kind="ghost" label="Folders">
+          <Folders />
+        </IconButton>
+        <Button>View details</Button>
+      </AILabelActions>
+    </AILabelContent>
+  </AILabel>
+);
+
+export const withAILabel = () => (
+  <div style={{ width: 300 }}>
+    <ComboBox
+      onChange={() => {}}
+      id="carbon-combobox"
+      items={items}
+      itemToString={(item) => (item ? item.text : '')}
+      titleText="ComboBox title"
+      helperText="Combobox helper text"
+      slug={aiLabel}
+    />
+  </div>
+);
+
 export const Playground = (args) => (
   <div style={{ width: 300 }}>
     <ComboBox
       id="carbon-combobox"
       items={items}
-      downshiftProps={{
-        onStateChange: () => {
-          console.log('the state has changed');
-        },
-      }}
       itemToString={(item) => (item ? item.text : '')}
       titleText="ComboBox title"
       helperText="Combobox helper text"
@@ -166,15 +279,10 @@ Playground.argTypes = {
   onChange: {
     action: 'changed',
   },
-  onClick: {
+  onToggleClick: {
     action: 'clicked',
   },
   onInputChange: {
-    table: {
-      disable: true,
-    },
-  },
-  onToggleClick: {
     table: {
       disable: true,
     },

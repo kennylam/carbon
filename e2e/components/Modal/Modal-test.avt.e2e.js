@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('Modal @avt', () => {
-  test('default state', async ({ page }) => {
+test.describe('@avt Modal', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'Modal',
       id: 'components-modal--default',
@@ -22,7 +22,7 @@ test.describe('Modal @avt', () => {
     await expect(page).toHaveNoACViolations('Modal');
   });
 
-  test('default state - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav default state', async ({ page }) => {
     await visitStory(page, {
       component: 'Modal',
       id: 'components-modal--with-state-manager',
@@ -34,7 +34,6 @@ test.describe('Modal @avt', () => {
     const button = page.getByRole('button', { name: 'Launch modal' });
 
     // Open the modal via keyboard navigation
-    await page.keyboard.press('Tab');
     await expect(button).toBeFocused();
     button.press('Enter');
 
@@ -66,12 +65,12 @@ test.describe('Modal @avt', () => {
     await page.keyboard.press('Enter');
 
     // The modal should no longer be open/visisble
-    await expect(page.getByRole('dialog')).not.toBeVisible();
+    await expect(page.getByRole('dialog')).toBeHidden();
     // Focus moves to the button that opened the Modal
     await expect(button).toBeFocused();
   });
 
-  test('danger modal - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav danger modal', async ({ page }) => {
     await visitStory(page, {
       component: 'Modal',
       id: 'components-modal--danger-modal',
@@ -84,7 +83,7 @@ test.describe('Modal @avt', () => {
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeFocused();
   });
 
-  test('default state, no interactive elements in body - keyboard nav', async ({
+  test('@avt-keyboard-nav default state, no interactive elements in body', async ({
     page,
   }) => {
     await visitStory(page, {
@@ -99,7 +98,7 @@ test.describe('Modal @avt', () => {
     await expect(page.getByRole('button', { name: 'Add' })).toBeFocused();
   });
 
-  test('passive modal - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav passive modal', async ({ page }) => {
     await visitStory(page, {
       component: 'Modal',
       id: 'components-modal--passive-modal',

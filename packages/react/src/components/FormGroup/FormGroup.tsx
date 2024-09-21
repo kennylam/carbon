@@ -21,6 +21,10 @@ export interface FormGroupProps extends ReactAttr<HTMLFieldSetElement> {
    */
   className?: string;
   /**
+   * Specify whether the FormGroup should be disabled
+   */
+  disabled?: boolean;
+  /**
    * Specify whether the <FormGroup> is invalid
    */
   invalid?: boolean;
@@ -45,13 +49,14 @@ export interface FormGroupProps extends ReactAttr<HTMLFieldSetElement> {
 }
 
 const FormGroup = ({
+  disabled = false,
   legendId,
   legendText,
-  invalid,
+  invalid = false,
   children,
   className,
-  message,
-  messageText,
+  message = false,
+  messageText = '',
   ...rest
 }: FormGroupProps) => {
   const prefix = usePrefix();
@@ -60,6 +65,7 @@ const FormGroup = ({
 
   return (
     <fieldset
+      disabled={disabled}
       {...(invalid && { 'data-invalid': '' })}
       className={classNamesFieldset}
       {...rest}
@@ -89,6 +95,11 @@ FormGroup.propTypes = {
   className: PropTypes.string,
 
   /**
+   * Specify whether the FormGroup should be disabled
+   */
+  disabled: PropTypes.bool,
+
+  /**
    * Specify whether the <FormGroup> is invalid
    */
   invalid: PropTypes.bool,
@@ -113,12 +124,6 @@ FormGroup.propTypes = {
    * Provide the text for the message in the <FormGroup>
    */
   messageText: PropTypes.string,
-};
-
-FormGroup.defaultProps = {
-  invalid: false,
-  message: false,
-  messageText: '',
 };
 
 export default FormGroup;

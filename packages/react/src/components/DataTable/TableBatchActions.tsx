@@ -12,7 +12,7 @@ import Button from '../Button';
 import TableActionList from './TableActionList';
 import { Text } from '../Text';
 import { usePrefix } from '../../internal/usePrefix';
-import type { InternationalProps } from '../../types/common';
+import type { TranslateWithId } from '../../types/common';
 
 const TableBatchActionsTranslationKeys = [
   'carbon.table.batch.cancel',
@@ -31,7 +31,7 @@ export interface TableBatchActionsTranslationArgs {
 
 export interface TableBatchActionsProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    InternationalProps<
+    TranslateWithId<
       TableBatchActionsTranslationKey,
       TableBatchActionsTranslationArgs
     > {
@@ -134,7 +134,7 @@ const TableBatchActions: TableBatchActionsComponent = ({
       {...rest}>
       <div className={batchSummaryClasses}>
         <p className={`${prefix}--batch-summary__para`}>
-          <Text as="span">
+          <Text>
             {totalSelected > 1 || totalSelected === 0
               ? t('carbon.table.batch.items.selected', { totalSelected })
               : t('carbon.table.batch.item.selected', { totalSelected })}
@@ -207,10 +207,6 @@ TableBatchActions.propTypes = {
    * this component.
    */
   translateWithId: PropTypes.func,
-};
-
-TableBatchActions.defaultProps = {
-  translateWithId,
 };
 
 export default TableBatchActions;

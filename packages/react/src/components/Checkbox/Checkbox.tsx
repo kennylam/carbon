@@ -5,15 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import PropTypes, { ReactNodeLike } from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { ReactNode } from 'react';
 import classNames from 'classnames';
 import { Text } from '../Text';
 import { usePrefix } from '../../internal/usePrefix';
 import { WarningFilled, WarningAltFilled } from '@carbon/icons-react';
-import setupGetInstanceId from '../../tools/setupGetInstanceId';
-
-const getInstanceId = setupGetInstanceId();
+import { useId } from '../../internal/useId';
+import { noopFn } from '../../internal/noopFn';
 
 type ExcludedAttributes = 'id' | 'onChange' | 'onClick' | 'type';
 
@@ -31,7 +30,7 @@ export interface CheckboxProps
    * Provide a label to provide a description of the Checkbox input that you are
    * exposing to the user
    */
-  labelText: NonNullable<ReactNodeLike>;
+  labelText: NonNullable<ReactNode>;
 
   /**
    * Specify whether the underlying input should be checked by default
@@ -46,7 +45,7 @@ export interface CheckboxProps
   /**
    * Provide text for the form group for additional help
    */
-  helperText?: React.ReactNode;
+  helperText?: ReactNode;
 
   /**
    * Specify whether the label should be hidden, or not
@@ -66,7 +65,12 @@ export interface CheckboxProps
   /**
    * Provide the text that is displayed when the Checkbox is in an invalid state
    */
-  invalidText?: React.ReactNode;
+  invalidText?: ReactNode;
+
+  /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `Checkbox` component
+   */
+  slug?: ReactNode;
 
   /**
    * Specify whether the Checkbox is currently invalid
@@ -76,7 +80,7 @@ export interface CheckboxProps
   /**
    * Provide the text that is displayed when the Checkbox is in an invalid state
    */
-  warnText?: React.ReactNode;
+  warnText?: ReactNode;
 
   /**
    * Provide an optional handler that is called when the internal state of
@@ -101,9 +105,9 @@ const Checkbox = React.forwardRef(
       helperText,
       id,
       labelText,
-      onChange,
+      onChange = noopFn,
       onClick,
-      indeterminate,
+      indeterminate = false,
       invalid,
       invalidText,
       hideLabel,
@@ -111,6 +115,7 @@ const Checkbox = React.forwardRef(
       title = '',
       warn,
       warnText,
+      slug,
       ...other
     }: CheckboxProps,
     ref
@@ -120,7 +125,7 @@ const Checkbox = React.forwardRef(
     const showWarning = !readOnly && !invalid && warn;
     const showHelper = !invalid && !warn;
 
-    const checkboxGroupInstanceId = getInstanceId();
+    const checkboxGroupInstanceId = useId();
 
     const helperId = !helperText
       ? undefined
@@ -140,11 +145,20 @@ const Checkbox = React.forwardRef(
         [`${prefix}--checkbox-wrapper--readonly`]: readOnly,
         [`${prefix}--checkbox-wrapper--invalid`]: !readOnly && invalid,
         [`${prefix}--checkbox-wrapper--warning`]: showWarning,
+        [`${prefix}--checkbox-wrapper--slug`]: slug,
       }
     );
     const innerLabelClasses = classNames(`${prefix}--checkbox-label-text`, {
       [`${prefix}--visually-hidden`]: hideLabel,
     });
+
+    let normalizedSlug;
+    if (slug && React.isValidElement(slug)) {
+      const size = slug.props?.['kind'] === 'inline' ? 'md' : 'mini';
+      normalizedSlug = React.cloneElement(slug as React.ReactElement<any>, {
+        size,
+      });
+    }
 
     return (
       <div className={wrapperClasses}>
@@ -187,7 +201,10 @@ const Checkbox = React.forwardRef(
           htmlFor={id}
           className={`${prefix}--checkbox-label`}
           title={title}>
-          <Text className={innerLabelClasses}>{labelText}</Text>
+          <Text className={innerLabelClasses}>
+            {labelText}
+            {normalizedSlug}
+          </Text>
         </label>
         <div className={`${prefix}--checkbox__validation-msg`}>
           {!readOnly && invalid && (
@@ -281,6 +298,11 @@ Checkbox.propTypes = {
   readOnly: PropTypes.bool,
 
   /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `Checkbox` component
+   */
+  slug: PropTypes.node,
+
+  /**
    * Specify a title for the <label> node for the Checkbox
    */
   title: PropTypes.string,
@@ -294,11 +316,6 @@ Checkbox.propTypes = {
    * Provide the text that is displayed when the Checkbox is in warning state
    */
   warnText: PropTypes.node,
-};
-
-Checkbox.defaultProps = {
-  onChange: () => {},
-  indeterminate: false,
 };
 
 Checkbox.displayName = 'Checkbox';

@@ -18,7 +18,7 @@ import { Information } from '@carbon/icons-react';
 import './test.scss';
 
 export default {
-  title: 'Experimental/unstable__FluidTextInput',
+  title: 'Experimental/Fluid Components/unstable__FluidTextInput',
   component: FluidTextInput,
   subcomponents: {
     FluidTextInputSkeleton,
@@ -31,17 +31,6 @@ export const Default = () => (
     placeholder="Placeholder text"
     id="input-1"
   />
-);
-
-export const PasswordInput = () => (
-  <div style={{ width: '300px' }}>
-    <FluidTextInput
-      id="input-2"
-      labelText="Label"
-      placeholder="Placeholder text"
-      isPassword
-    />
-  </div>
 );
 
 const ToggleTip = (
@@ -85,7 +74,6 @@ Playground.args = {
   invalid: false,
   invalidText:
     'Error message that is really long can wrap to more lines but should not be excessively long.',
-  isPassword: false,
   disabled: false,
   labelText: 'Label',
   warn: false,
@@ -123,8 +111,8 @@ Playground.argTypes = {
     },
   },
   isPassword: {
-    control: {
-      type: 'boolean',
+    table: {
+      disable: true,
     },
   },
   disabled: {

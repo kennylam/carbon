@@ -7,9 +7,9 @@
 
 'use strict';
 
-const { expect, test } = require('@playwright/test');
-const { themes } = require('../../test-utils/env');
-const { snapshotStory, visitStory } = require('../../test-utils/storybook');
+import { test } from '@playwright/test';
+import { themes } from '../../test-utils/env';
+import { snapshotStory } from '../../test-utils/storybook';
 
 test.describe('Tag', () => {
   themes.forEach((theme) => {
@@ -17,21 +17,10 @@ test.describe('Tag', () => {
       test('default @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'Tag',
-          id: 'components-tag--default',
+          id: 'components-tag--read-only',
           theme,
         });
       });
     });
-  });
-
-  test('accessibility-checker @avt', async ({ page }) => {
-    await visitStory(page, {
-      component: 'Tag',
-      id: 'components-tag--default',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await expect(page).toHaveNoACViolations('Tag');
   });
 });

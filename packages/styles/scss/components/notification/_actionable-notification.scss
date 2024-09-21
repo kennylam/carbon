@@ -190,6 +190,16 @@
     opacity: 1;
   }
 
+  .#{$prefix}--actionable-notification--warning
+    .#{$prefix}--inline-notification__icon
+    path[opacity='0'],
+  .#{$prefix}--actionable-notification--warning-alt
+    .#{$prefix}--inline-notification__icon
+    path:first-of-type {
+    fill: $black-100;
+    opacity: 1;
+  }
+
   .#{$prefix}--actionable-notification__details {
     display: flex;
     flex-grow: 1;
@@ -221,6 +231,10 @@
     display: flex;
     flex-wrap: wrap;
     padding: convert.to-rem(15px) 0;
+  }
+
+  .#{$prefix}--actionable-notification__button-wrapper {
+    display: flex;
   }
 
   .#{$prefix}--actionable-notification--toast
@@ -322,8 +336,7 @@
     margin-inline-start: calc(
       #{$spacing-07} + #{convert.to-rem(20px)} - #{convert.to-rem(2px)}
     );
-    padding-inline-end: $spacing-05;
-    padding-inline-start: $spacing-05;
+    padding-inline: $spacing-05;
   }
 
   // Tertiary button styles by default use mostly "inverse" tokens. Since the non-low-contrast notification

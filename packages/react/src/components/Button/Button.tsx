@@ -7,13 +7,11 @@
 
 import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
-import classNames from 'classnames';
-import { IconButton } from '../IconButton';
+import { IconButton, IconButtonKind, IconButtonKinds } from '../IconButton';
 import { composeEventHandlers } from '../../tools/events';
-import { usePrefix } from '../../internal/usePrefix';
-import { useId } from '../../internal/useId';
 import { PolymorphicProps } from '../../types/common';
 import { PopoverAlignment } from '../Popover';
+import ButtonBase from './ButtonBase';
 
 export const ButtonKinds = [
   'primary',
@@ -40,7 +38,7 @@ export const ButtonTooltipPositions = ['top', 'right', 'bottom', 'left'];
 
 export type ButtonTooltipPosition = (typeof ButtonTooltipPositions)[number];
 
-interface ButtonBaseProps
+export interface ButtonBaseProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * Specify the message read by screen readers for the danger button variant
@@ -76,7 +74,9 @@ interface ButtonBaseProps
   /**
    * Specify the kind of Button you want to create
    */
-  kind?: ButtonKind;
+  kind?: ButtonBaseProps['hasIconOnly'] extends true
+    ? IconButtonKind
+    : ButtonKind;
 
   /**
    * Optional prop to allow overriding the icon rendering.
@@ -107,25 +107,32 @@ export type ButtonProps<T extends React.ElementType> = PolymorphicProps<
   ButtonBaseProps
 >;
 
-export interface ButtonComponent {
-  <T extends React.ElementType>(
-    props: ButtonProps<T>,
-    context?: any
-  ): React.ReactElement<any, any> | null;
+export type ButtonComponent = <T extends React.ElementType>(
+  props: ButtonProps<T>,
+  context?: any
+) => React.ReactElement<any, any> | null;
+
+function isIconOnlyButton(
+  hasIconOnly: ButtonBaseProps['hasIconOnly'],
+  _kind: ButtonBaseProps['kind']
+): _kind is IconButtonKind {
+  if (hasIconOnly === true) {
+    return true;
+  }
+
+  return false;
 }
 
 const Button = React.forwardRef(function Button<T extends React.ElementType>(
-  {
+  props: ButtonProps<T>,
+  ref: React.Ref<unknown>
+) {
+  const tooltipRef = useRef(null);
+  const {
     as,
     children,
-    className,
-    dangerDescription = 'danger',
-    disabled = false,
     hasIconOnly = false,
-    href,
     iconDescription,
-    isExpressive = false,
-    isSelected,
     kind = 'primary',
     onBlur,
     onClick,
@@ -134,110 +141,24 @@ const Button = React.forwardRef(function Button<T extends React.ElementType>(
     onMouseLeave,
     renderIcon: ButtonImageElement,
     size,
-    tabIndex,
     tooltipAlignment = 'center',
     tooltipPosition = 'top',
-    type = 'button',
     ...rest
-  }: ButtonProps<T>,
-  ref: React.Ref<unknown>
-) {
-  const tooltipRef = useRef(null);
-  const prefix = usePrefix();
+  } = props;
 
   const handleClick = (evt: React.MouseEvent) => {
     // Prevent clicks on the tooltip from triggering the button click event
     if (evt.target === tooltipRef.current) {
       evt.preventDefault();
-      return;
     }
   };
 
-  const buttonClasses = classNames(className, {
-    [`${prefix}--btn`]: true,
-    [`${prefix}--btn--sm`]: size === 'sm' && !isExpressive, // TODO: V12 - Remove this class
-    [`${prefix}--btn--md`]: size === 'md' && !isExpressive, // TODO: V12 - Remove this class
-    [`${prefix}--btn--xl`]: size === 'xl', // TODO: V12 - Remove this class
-    [`${prefix}--btn--2xl`]: size === '2xl', // TODO: V12 - Remove this class
-    [`${prefix}--layout--size-${size}`]: size,
-    [`${prefix}--btn--${kind}`]: kind,
-    [`${prefix}--btn--disabled`]: disabled,
-    [`${prefix}--btn--expressive`]: isExpressive,
-    [`${prefix}--btn--icon-only`]: hasIconOnly,
-    [`${prefix}--btn--selected`]: hasIconOnly && isSelected && kind === 'ghost',
-  });
-
-  const commonProps = {
-    tabIndex,
-    className: buttonClasses,
-    ref,
-  };
-
-  const buttonImage = !ButtonImageElement ? null : (
-    <ButtonImageElement
-      aria-label={iconDescription}
-      className={`${prefix}--btn__icon`}
-      aria-hidden="true"
-    />
-  );
-
   const iconOnlyImage = !ButtonImageElement ? null : <ButtonImageElement />;
 
-  const dangerButtonVariants = ['danger', 'danger--tertiary', 'danger--ghost'];
-
-  let component: React.ElementType = 'button';
-  const assistiveId = useId('danger-description');
-  const { 'aria-pressed': ariaPressed } = rest;
-  let otherProps: Partial<ButtonBaseProps> = {
-    disabled,
-    type,
-    'aria-describedby': dangerButtonVariants.includes(kind)
-      ? assistiveId
-      : undefined,
-    'aria-pressed':
-      ariaPressed ?? (hasIconOnly && kind === 'ghost' ? isSelected : undefined),
-  };
-  const anchorProps = {
-    href,
-  };
-
-  let assistiveText: JSX.Element | null = null;
-  if (dangerButtonVariants.includes(kind)) {
-    assistiveText = (
-      <span id={assistiveId} className={`${prefix}--visually-hidden`}>
-        {dangerDescription}
-      </span>
-    );
-  }
-
-  if (as) {
-    component = as;
-    otherProps = {
-      ...otherProps,
-      ...anchorProps,
-    };
-  } else if (href && !disabled) {
-    component = 'a';
-    otherProps = anchorProps;
-  }
-
-  if (!hasIconOnly) {
-    return React.createElement(
-      component,
-      {
-        onMouseEnter,
-        onMouseLeave,
-        onFocus,
-        onBlur,
-        onClick,
-        ...rest,
-        ...commonProps,
-        ...otherProps,
-      },
-      assistiveText,
-      children,
-      buttonImage
-    );
+  if (!isIconOnlyButton(hasIconOnly, kind)) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { tooltipAlignment, ...propsWithoutTooltipAlignment } = props;
+    return <ButtonBase ref={ref} {...propsWithoutTooltipAlignment} />;
   } else {
     let align: PopoverAlignment | undefined = undefined;
 
@@ -246,10 +167,10 @@ const Button = React.forwardRef(function Button<T extends React.ElementType>(
         align = tooltipPosition;
       }
       if (tooltipAlignment === 'end') {
-        align = `${tooltipPosition}-right`;
+        align = `${tooltipPosition}-end`;
       }
       if (tooltipAlignment === 'start') {
-        align = `${tooltipPosition}-left`;
+        align = `${tooltipPosition}-start`;
       }
     }
 
@@ -259,6 +180,8 @@ const Button = React.forwardRef(function Button<T extends React.ElementType>(
 
     return (
       <IconButton
+        {...rest}
+        ref={ref}
         as={as}
         align={align}
         label={iconDescription}
@@ -269,10 +192,9 @@ const Button = React.forwardRef(function Button<T extends React.ElementType>(
         onFocus={onFocus}
         onBlur={onBlur}
         onClick={composeEventHandlers([onClick, handleClick])}
-        {...rest}
-        {...commonProps}
-        {...otherProps}>
-        {iconOnlyImage ? iconOnlyImage : children}
+        renderIcon={iconOnlyImage ? null : ButtonImageElement} // avoid doubling the icon.
+      >
+        {iconOnlyImage ?? children}
       </IconButton>
     );
   }
@@ -346,7 +268,24 @@ Button.propTypes = {
   /**
    * Specify the kind of Button you want to create
    */
-  kind: PropTypes.oneOf(ButtonKinds),
+  kind: (props, propName, componentName) => {
+    const { hasIconOnly } = props;
+    const validKinds = hasIconOnly ? IconButtonKinds : ButtonKinds;
+
+    if (props[propName] === undefined) {
+      return null;
+    }
+
+    if (!validKinds.includes(props[propName])) {
+      return new Error(
+        `Invalid prop \`${propName}\` supplied to \`${componentName}\`. Expected one of ${validKinds.join(
+          ', '
+        )}.`
+      );
+    }
+
+    return null;
+  },
 
   /**
    * Provide an optional function to be called when the button element

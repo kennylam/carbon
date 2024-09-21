@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('CodeSnippet @avt', () => {
-  test('accessibility-checker CodeSnippet inline', async ({ page }) => {
+test.describe('@avt CodeSnippet', () => {
+  test('@avt-default-state inline', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--inline',
@@ -22,9 +22,7 @@ test.describe('CodeSnippet @avt', () => {
     await expect(page).toHaveNoACViolations('CodeSnippet inline');
   });
 
-  test('accessibility-checker CodeSnippet inline hover @avt', async ({
-    page,
-  }) => {
+  test('@avt-advanced-states inline hover', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--inline',
@@ -34,13 +32,11 @@ test.describe('CodeSnippet @avt', () => {
     });
 
     await expect(page.getByRole('button')).toBeVisible();
-    page.getByRole('button').hover();
+    await page.getByRole('button').hover();
     await expect(page).toHaveNoACViolations('CodeSnippet inline hover');
   });
 
-  test('accessibility-checker CodeSnippet inline focused @avt', async ({
-    page,
-  }) => {
+  test('@avt-advanced-states inline focused', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--inline',
@@ -55,9 +51,7 @@ test.describe('CodeSnippet @avt', () => {
   });
 
   // Skipping due to a11y violation issue #14237
-  test.skip('accessibility-checker CodeSnippet multiline @avt', async ({
-    page,
-  }) => {
+  test.skip('@avt-default-state multiline', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--multiline',
@@ -68,9 +62,7 @@ test.describe('CodeSnippet @avt', () => {
     await expect(page).toHaveNoACViolations('CodeSnippet multiline');
   });
 
-  test('accessibility-checker CodeSnippet singleline @avt', async ({
-    page,
-  }) => {
+  test('@avt-default-state singleline', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--singleline',
@@ -81,7 +73,7 @@ test.describe('CodeSnippet @avt', () => {
     await expect(page).toHaveNoACViolations('CodeSnippet singleline');
   });
 
-  test('accessibility-checker CodeSnippet skeleton @avt', async ({ page }) => {
+  test('@avt-advanced-states skeleton', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--skeleton',
@@ -92,9 +84,7 @@ test.describe('CodeSnippet @avt', () => {
     await expect(page).toHaveNoACViolations('CodeSnippet skeleton');
   });
 
-  test('accessibility-checker CodeSnippet inline keyboard nav', async ({
-    page,
-  }) => {
+  test('@avt-keyboard-nav inline', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--inline',
@@ -113,9 +103,7 @@ test.describe('CodeSnippet @avt', () => {
     await expect(page.getByRole('tooltip')).toHaveText('Copied to clipboard');
   });
 
-  test('accessibility-checker CodeSnippet multiline keyboard nav', async ({
-    page,
-  }) => {
+  test('@avt-keyboard-nav multiline', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--multiline',
@@ -139,12 +127,10 @@ test.describe('CodeSnippet @avt', () => {
     await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
     await expect(page.getByText('Show less')).toBeVisible();
-    await expect(page.getByText('Show more')).not.toBeVisible();
+    await expect(page.getByText('Show more')).toBeHidden();
   });
 
-  test('accessibility-checker CodeSnippet singleline keyboard nav', async ({
-    page,
-  }) => {
+  test('@avt-keyboard-nav singleline', async ({ page }) => {
     await visitStory(page, {
       component: 'CodeSnippet',
       id: 'components-codesnippet--singleline',

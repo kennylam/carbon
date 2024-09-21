@@ -7,9 +7,9 @@
 
 'use strict';
 
-const { expect, test } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const { themes } = require('../../test-utils/env');
-const { snapshotStory, visitStory } = require('../../test-utils/storybook');
+const { snapshotStory } = require('../../test-utils/storybook');
 
 test.describe('FluidDropdown', () => {
   themes.forEach((theme) => {
@@ -17,21 +17,10 @@ test.describe('FluidDropdown', () => {
       test('fluid dropdown @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'FluidDropdown',
-          id: 'experimental-unstable-fluiddropdown--default',
+          id: 'experimental-fluid-components-unstable-fluiddropdown--default',
           theme,
         });
       });
     });
-  });
-
-  test('accessibility-checker @avt', async ({ page }) => {
-    await visitStory(page, {
-      component: 'FluidDropdown',
-      id: 'experimental-unstable-fluiddropdown--default',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await expect(page).toHaveNoACViolations('FluidDropdown');
   });
 });

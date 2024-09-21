@@ -8,6 +8,8 @@
 /* eslint-disable no-console */
 
 import React from 'react';
+import ExampleDropContainerApp from './stories/drop-container';
+import ExampleDropContainerAppSingle from './stories/drag-and-drop-single';
 
 import {
   default as FileUploader,
@@ -16,7 +18,6 @@ import {
   FileUploaderItem,
   FileUploaderSkeleton,
 } from './';
-import './FileUploader-story.scss';
 
 const filenameStatuses = ['edit', 'complete', 'uploading'];
 
@@ -65,6 +66,7 @@ export const _FileUploaderItem = (args) => {
     />
   );
 };
+
 _FileUploaderItem.argTypes = {
   errorBody: {
     control: 'text',
@@ -140,7 +142,7 @@ export const _FileUploaderDropContainer = () => (
 );
 
 export const DragAndDropUploadContainerExampleApplication = (args) =>
-  require('./stories/drop-container').default(args);
+  ExampleDropContainerApp(args);
 
 DragAndDropUploadContainerExampleApplication.args = {
   labelText: 'Drag and drop files here or click to upload',
@@ -155,7 +157,7 @@ DragAndDropUploadContainerExampleApplication.argTypes = {
 };
 
 export const DragAndDropUploadSingleContainerExampleApplication = (args) =>
-  require('./stories/drag-and-drop-single').default(args);
+  ExampleDropContainerAppSingle(args);
 
 DragAndDropUploadSingleContainerExampleApplication.args = {
   labelText: 'Drag and drop a file here or click to upload',

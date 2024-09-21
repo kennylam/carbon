@@ -17,7 +17,7 @@ type ColumnSpanPercent = '25%' | '50%' | '75%' | '100%';
 
 type ColumnSpanSimple = boolean | number | ColumnSpanPercent;
 
-interface ColumnSpanObject {
+export interface ColumnSpanObject {
   span?: ColumnSpanSimple;
 
   offset?: number;
@@ -29,7 +29,7 @@ interface ColumnSpanObject {
 
 export type ColumnSpan = ColumnSpanSimple | ColumnSpanObject;
 
-interface ColumnBaseProps {
+export interface ColumnBaseProps {
   /**
    * Pass in content that will be rendered within the `Column`
    */
@@ -218,6 +218,12 @@ Column.propTypes = {
   sm: spanPropType,
 
   /**
+   * Specify constant column span, start, or end values that will not change
+   * based on breakpoint
+   */
+  span: PropTypes.oneOfType([PropTypes.number, percentSpanType]),
+
+  /**
    * Specify column span for the `xlg` breakpoint (Default breakpoint up to
    * 1584px) This breakpoint supports 16 columns by default.
    *
@@ -360,10 +366,12 @@ function getClassNameForBreakpoints(
       continue;
     }
 
-    // If our breakpoint is a string, the user has specified a percent
+    // If our breakpoint is a string, the user might have specified a percent
     // they'd like this column to span.
     if (typeof breakpoint === 'string') {
-      classNames.push(`${prefix}--${name}:col-span-${breakpoint.slice(0, -1)}`);
+      classNames.push(
+        `${prefix}--${name}:col-span-${breakpoint.replace('%', '')}`
+      );
       continue;
     }
 
@@ -377,12 +385,16 @@ function getClassNameForBreakpoints(
     if (typeof breakpoint === 'object') {
       const { span, offset, start, end } = breakpoint;
 
-      if (typeof offset === 'number' && offset > 0) {
-        classNames.push(`${prefix}--${name}:col-start-${offset + 1}`);
+      if (typeof offset === 'number') {
+        classNames.push(
+          `${prefix}--${name}:col-start-${offset > 0 ? offset + 1 : 'auto'}`
+        );
       }
 
       if (typeof start === 'number') {
-        classNames.push(`${prefix}--${name}:col-start-${start}`);
+        classNames.push(
+          `${prefix}--${name}:col-start-${start ? start : 'auto'}`
+        );
       }
 
       if (typeof end === 'number') {
@@ -462,8 +474,13 @@ function getClassNameForSpan(
 ): string {
   const classNames: string[] = [];
 
-  if (typeof value === 'number' || typeof value === 'string') {
+  if (typeof value === 'number') {
     classNames.push(`${prefix}--col-span-${value}`);
+  }
+  // If value is a string, the user has specified a percent
+  // they'd like this column to span.
+  else if (typeof value === 'string') {
+    classNames.push(`${prefix}--col-span-${value.slice(0, -1)}`);
   } else if (typeof value === 'object') {
     const { span, start, end } = value;
 

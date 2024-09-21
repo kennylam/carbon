@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('Search @avt', () => {
-  test('accessibility-checker', async ({ page }) => {
+test.describe('@avt Search', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'Search',
       id: 'components-search--default',
@@ -22,7 +22,7 @@ test.describe('Search @avt', () => {
     await expect(page).toHaveNoACViolations('components-search--default');
   });
 
-  test('accessibility-checker expandable', async ({ page }) => {
+  test('@avt-advanced-states expandable', async ({ page }) => {
     await visitStory(page, {
       component: 'Search',
       id: 'components-search--expandable',
@@ -33,7 +33,7 @@ test.describe('Search @avt', () => {
     await expect(page).toHaveNoACViolations('components-search--expandable');
   });
 
-  test('search - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav - search', async ({ page }) => {
     await visitStory(page, {
       component: 'Search',
       id: 'components-search--default',
@@ -42,9 +42,11 @@ test.describe('Search @avt', () => {
       },
     });
     const search = page.getByRole('searchbox');
-    const clearButton = page.getByRole('button');
+    const clearButton = page.getByRole('button', {
+      name: 'Clear search input',
+    });
     await expect(search).toBeVisible();
-    await expect(clearButton).not.toBeVisible();
+    await expect(clearButton).toBeHidden();
 
     // Tab to the Search
     await page.keyboard.press('Tab');
@@ -67,7 +69,7 @@ test.describe('Search @avt', () => {
     await expect(search).toBeFocused();
   });
 
-  test('expandable search - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav - expandable search', async ({ page }) => {
     await visitStory(page, {
       component: 'Search',
       id: 'components-search--expandable',
@@ -80,15 +82,15 @@ test.describe('Search @avt', () => {
       name: 'Clear search input',
     });
     const searchButton = page.getByRole('button');
-    await expect(search).not.toBeVisible();
-    await expect(clearButton).not.toBeVisible();
+    await expect(search).toBeHidden();
+    await expect(clearButton).toBeHidden();
     await expect(searchButton).toBeVisible();
     await expect(searchButton).not.toHaveAttribute('aria-expanded', 'true');
 
     // Tab to the ExpandableSearch, should only open on Enter
     await page.keyboard.press('Tab');
     await expect(searchButton).toBeFocused();
-    await expect(search).not.toBeVisible();
+    await expect(search).toBeHidden();
     // Enter search value
     await page.keyboard.press('Enter');
     await expect(search).toBeVisible();
@@ -111,6 +113,6 @@ test.describe('Search @avt', () => {
     // Close ExpandableSearch with ESC
     await page.keyboard.press('Escape');
     await expect(searchButton).not.toHaveAttribute('aria-expanded', 'true');
-    await expect(search).not.toBeVisible();
+    await expect(search).toBeHidden();
   });
 });

@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('UIShell @avt', () => {
-  test('header', async ({ page }) => {
+test.describe('@avt UIShell', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'UIShell',
       id: 'components-ui-shell-header--header-w-navigation',
@@ -22,7 +22,7 @@ test.describe('UIShell @avt', () => {
     await expect(page).toHaveNoACViolations('UIShell');
   });
 
-  test('sidenav rail w/header', async ({ page }) => {
+  test('@avt-advanced-states sidenav rail w/header', async ({ page }) => {
     await visitStory(page, {
       component: 'UIShell',
       id: 'components-ui-shell-sidenav--side-nav-rail-w-header',
@@ -33,7 +33,7 @@ test.describe('UIShell @avt', () => {
     await expect(page).toHaveNoACViolations('UIShell-side-nav-rail-w-header');
   });
 
-  test('sidenav rail w/header - expanded state open category sidenav', async ({
+  test('@avt-advanced-states sidenav rail w/header - expanded state open category sidenav', async ({
     page,
   }) => {
     await visitStory(page, {
@@ -59,7 +59,7 @@ test.describe('UIShell @avt', () => {
     );
   });
 
-  test('sidenav rail w/header - expanded state header link', async ({
+  test('@avt-advanced-states sidenav rail w/header - expanded state header link', async ({
     page,
   }) => {
     await visitStory(page, {
@@ -80,7 +80,7 @@ test.describe('UIShell @avt', () => {
     );
   });
 
-  test('sidenav rail w/header - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav sidenav rail w/header', async ({ page }) => {
     await visitStory(page, {
       component: 'UIShell',
       id: 'components-ui-shell-sidenav--side-nav-rail-w-header',
@@ -113,9 +113,7 @@ test.describe('UIShell @avt', () => {
     await expect(page.getByRole('link', { name: 'Sub-link 3' })).toBeFocused();
     // tab once more and the sublinks menu should close
     await page.keyboard.press('Tab');
-    await expect(
-      page.getByRole('link', { name: 'Sub-link 1' })
-    ).not.toBeVisible();
+    await expect(page.getByRole('link', { name: 'Sub-link 1' })).toBeHidden();
     // tab through to open the sidenav
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
@@ -131,5 +129,25 @@ test.describe('UIShell @avt', () => {
     await page.keyboard.press('Tab');
     // focus should then be within the main content of the page
     await expect(page.getByRole('link', { name: 'Carbon' })).toBeFocused();
+  });
+
+  test('@avt-keyboard-nav header w/ navigation actions and siddenav', async ({
+    page,
+  }) => {
+    await visitStory(page, {
+      component: 'UIShell',
+      id: 'components-ui-shell-header--header-w-navigation-actions-and-side-nav',
+      globals: {
+        theme: 'white',
+      },
+    });
+
+    await page.getByRole('button', { name: 'Category title' }).first().focus();
+    await expect(
+      page.getByRole('button', { name: 'Category title' }).first()
+    ).toBeFocused();
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('link', { name: 'Link 5' })).toBeFocused();
   });
 });

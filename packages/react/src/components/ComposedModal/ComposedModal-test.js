@@ -14,6 +14,9 @@ import ComposedModal, { ModalBody } from './ComposedModal';
 import { ModalHeader } from './ModalHeader';
 import { ModalFooter } from './ModalFooter';
 import { TextInput } from '../../';
+import { AILabel } from '../AILabel';
+
+const prefix = 'cds';
 
 describe('ComposedModal', () => {
   describe('it renders as expected', () => {
@@ -31,6 +34,16 @@ describe('ComposedModal', () => {
       expect(screen.getByRole('dialog', { hidden: true })).toHaveClass(
         'custom-class'
       );
+    });
+
+    it('supports a custom class on the modal body', () => {
+      render(
+        <ComposedModal>
+          <ModalBody className="custom-class" data-testid="modal-body" />
+        </ComposedModal>
+      );
+
+      expect(screen.getByTestId('modal-body')).toHaveClass('custom-class');
     });
 
     it('should spread props onto the outermost div', () => {
@@ -95,7 +108,7 @@ describe('ComposedModal', () => {
         </ComposedModal>
       );
 
-      await userEvent.click(screen.getByTitle('Close'));
+      await userEvent.click(screen.getByLabelText('Close'));
 
       expect(onClose).toHaveBeenCalled();
     });
@@ -109,7 +122,7 @@ describe('ComposedModal', () => {
         </ComposedModal>
       );
 
-      await userEvent.click(screen.getByTitle('Close'));
+      await userEvent.click(screen.getByLabelText('Close'));
 
       expect(screen.getByRole('presentation', { hidden: true })).toHaveClass(
         'is-visible'
@@ -196,8 +209,60 @@ describe('ComposedModal', () => {
       );
 
       expect(screen.getByRole('dialog', { hidden: true })).toHaveClass(
-        'cds--modal-container--lg'
+        `${prefix}--modal-container--lg`
       );
     });
+
+    it('disables buttons when inline loading status is active', () => {
+      render(
+        <ComposedModal open>
+          <ModalHeader>Modal header</ModalHeader>
+          <ModalBody>This is the modal body content</ModalBody>
+          <ModalFooter
+            primaryButtonText="Add"
+            secondaryButtonText="Cancel"
+            loadingStatus="active"
+            loadingDescription="loading..."></ModalFooter>
+        </ComposedModal>
+      );
+
+      expect(screen.getByTitle('loading')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'loading loading...' })
+      ).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeDisabled();
+    });
+
+    it('should respect slug prop', () => {
+      const { container } = render(
+        <ComposedModal open slug={<AILabel />}>
+          <ModalHeader>Modal header</ModalHeader>
+          <ModalBody>This is the modal body content</ModalBody>
+          <ModalFooter
+            primaryButtonText="Add"
+            secondaryButtonText="Cancel"
+            loadingStatus="active"
+            loadingDescription="loading..."></ModalFooter>
+        </ComposedModal>
+      );
+
+      expect(container.firstChild).toHaveClass(`${prefix}--modal--slug`);
+    });
+  });
+
+  it('should handle onClick events', async () => {
+    const onClick = jest.fn();
+    render(
+      <ComposedModal open onClick={onClick}>
+        <p>
+          Custom domains direct requests for your apps in this Cloud Foundry
+          organization to a URL that you own. A custom domain can be a shared
+          domain, a shared subdomain, or a shared domain and host.
+        </p>
+      </ComposedModal>
+    );
+    const modal = screen.getByRole('dialog');
+    await userEvent.click(modal);
+    expect(onClick).toHaveBeenCalled();
   });
 });

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { action } from '@storybook/addon-actions';
 
 import { ArrowsVertical } from '@carbon/icons-react';
@@ -62,6 +62,36 @@ export const _OverflowMenu = () => {
   );
 };
 
+export const AutoAlign = () => {
+  const ref = useRef();
+
+  useEffect(() => {
+    console.log(ref);
+    ref?.current?.scrollIntoView({ block: 'center', inline: 'center' });
+  });
+
+  return (
+    <div style={{ width: '5000px', height: '5000px' }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: '2500px',
+          left: '2500px',
+        }}
+        ref={ref}>
+        <OverflowMenu autoAlign={true}>
+          <MenuItem label="Stop app" />
+          <MenuItem label="Restart app" />
+          <MenuItem label="Rename app" />
+          <MenuItem label="Edit routes and access" />
+          <MenuItemDivider />
+          <MenuItem label="Delete app" kind="danger" />
+        </OverflowMenu>
+      </div>
+    </div>
+  );
+};
+
 export const Nested = () => {
   return (
     <OverflowMenu>
@@ -92,6 +122,63 @@ export const CustomIcon = () => {
         defaultSelectedItem="Descending"
       />
     </OverflowMenu>
+  );
+};
+
+export const WithMenuAlignment = (args) => {
+  return (
+    <>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <OverflowMenu {...args} menuAlignment="bottom-start">
+          <MenuItem label="Stop app" />
+          <MenuItem label="Restart app" />
+          <MenuItem label="Rename app" />
+          <MenuItem label="Edit routes and access" />
+          <MenuItemDivider />
+          <MenuItem label="Delete app" kind="danger" />
+        </OverflowMenu>
+
+        <OverflowMenu {...args} menuAlignment="bottom-end">
+          <MenuItem label="Stop app" />
+          <MenuItem label="Restart app" />
+          <MenuItem label="Rename app" />
+          <MenuItem label="Edit routes and access" />
+          <MenuItemDivider />
+          <MenuItem label="Delete app" kind="danger" />
+        </OverflowMenu>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          marginTop: '15rem',
+          justifyContent: 'space-between',
+        }}>
+        <OverflowMenu
+          {...args}
+          menuAlignment="top-start"
+          tooltipAlignment="bottom">
+          <MenuItem label="Stop app" />
+          <MenuItem label="Restart app" />
+          <MenuItem label="Rename app" />
+          <MenuItem label="Edit routes and access" />
+          <MenuItemDivider />
+          <MenuItem label="Delete app" kind="danger" />
+        </OverflowMenu>
+
+        <OverflowMenu
+          {...args}
+          menuAlignment="top-end"
+          tooltipAlignment="bottom">
+          <MenuItem label="Stop app" />
+          <MenuItem label="Restart app" />
+          <MenuItem label="Rename app" />
+          <MenuItem label="Edit routes and access" />
+          <MenuItemDivider />
+          <MenuItem label="Delete app" kind="danger" />
+        </OverflowMenu>
+      </div>
+    </>
   );
 };
 
@@ -127,5 +214,12 @@ Playground.argTypes = {
     table: {
       disable: true,
     },
+  },
+  menuAlignment: {
+    options: ['bottom-start', 'bottom-end', 'top-start', 'top-end'],
+    control: { type: 'select' },
+    description:
+      'Specify how the menu should align with the button element `bottom-start` `bottom-end` `top-start` `top-end`',
+    default: 'bottom-start',
   },
 };

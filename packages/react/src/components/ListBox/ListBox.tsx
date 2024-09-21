@@ -6,7 +6,7 @@
  */
 
 import cx from 'classnames';
-import React, { KeyboardEvent, MouseEvent, useContext } from 'react';
+import React, { type KeyboardEvent, type MouseEvent, useContext } from 'react';
 import PropTypes from 'prop-types';
 import deprecate from '../../prop-types/deprecate';
 import { ListBoxType, ListBoxSize } from './ListBoxPropTypes';
@@ -45,6 +45,11 @@ export interface ListBoxProps
   invalidText?: React.ReactNode;
 
   /**
+   * Specify the id to be applied to the element containing the invalid text
+   */
+  invalidTextId?: string;
+
+  /**
    * Specify if the control should render open
    */
   isOpen?: boolean;
@@ -78,6 +83,11 @@ export interface ListBoxProps
    * Provide the text that is displayed when the control is in warning state
    */
   warnText?: React.ReactNode;
+
+  /**
+   * Specify the id to be applied to the element containing the warn text
+   */
+  warnTextId?: string;
 }
 
 export type ListBoxComponent = ForwardRefReturn<HTMLDivElement, ListBoxProps>;
@@ -90,13 +100,15 @@ const ListBox: ListBoxComponent = React.forwardRef(function ListBox(
   {
     children,
     className: containerClassName,
-    disabled,
-    type,
+    disabled = false,
+    type = 'default',
     size,
     invalid,
     invalidText,
+    invalidTextId,
     warn,
     warnText,
+    warnTextId,
     light,
     isOpen,
     ...rest
@@ -132,10 +144,14 @@ const ListBox: ListBoxComponent = React.forwardRef(function ListBox(
       </div>
       {isFluid && <hr className={`${prefix}--list-box__divider`} />}
       {invalid ? (
-        <div className={`${prefix}--form-requirement`}>{invalidText}</div>
+        <div className={`${prefix}--form-requirement`} id={invalidTextId}>
+          {invalidText}
+        </div>
       ) : null}
       {showWarning ? (
-        <div className={`${prefix}--form-requirement`}>{warnText}</div>
+        <div className={`${prefix}--form-requirement`} id={warnTextId}>
+          {warnText}
+        </div>
       ) : null}
     </>
   );
@@ -156,7 +172,7 @@ ListBox.propTypes = {
   /**
    * Specify whether the ListBox is currently disabled
    */
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
 
   /**
    * Specify whether the control is currently invalid
@@ -167,6 +183,11 @@ ListBox.propTypes = {
    * Specify the text to be displayed when the control is invalid
    */
   invalidText: PropTypes.node,
+
+  /**
+   * Specify the id to be applied to the element containing the invalid text
+   */
+  invalidTextId: PropTypes.string,
 
   /**
    * Specify if the control should render open
@@ -192,7 +213,7 @@ ListBox.propTypes = {
    * Specify the "type" of the ListBox. Currently supports either `default` or
    * `inline` as an option.
    */
-  type: ListBoxType.isRequired,
+  type: ListBoxType,
 
   /**
    * Specify whether the control is currently in warning state
@@ -202,12 +223,12 @@ ListBox.propTypes = {
   /**
    * Provide the text that is displayed when the control is in warning state
    */
-  warnText: PropTypes.node,
-};
+  warnText: PropTypes.string,
 
-ListBox.defaultProps = {
-  disabled: false,
-  type: 'default',
+  /**
+   * Specify the id to be applied to the element containing the warn text
+   */
+  warnTextId: PropTypes.string,
 };
 
 export default ListBox;

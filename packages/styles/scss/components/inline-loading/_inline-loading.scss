@@ -30,7 +30,7 @@ $-loading-gap-small: 110;
   }
 
   .#{$prefix}--inline-loading__text {
-    @include type-style('label-01');
+    @include type-style('label-02');
 
     color: $text-secondary;
   }
@@ -61,7 +61,7 @@ $-loading-gap-small: 110;
   .#{$prefix}--inline-loading__checkmark {
     animation-duration: 250ms;
     animation-fill-mode: forwards;
-    animation-name: stroke;
+    animation-name: #{$prefix}--stroke;
     fill: none;
     stroke: $interactive;
     stroke-dasharray: 12;
@@ -83,6 +83,15 @@ $-loading-gap-small: 110;
   .#{$prefix}--loading--small .#{$prefix}--inline-loading__svg {
     stroke: $interactive;
   }
+
+  .#{$prefix}--btn .#{$prefix}--inline-loading--btn {
+    min-block-size: 0;
+
+    .#{$prefix}--inline-loading__text {
+      @include type-style('body-short-01');
+    }
+  }
+
   /* If IE11 Don't show check animation */
   @media screen and (-ms-high-contrast: active),
     screen and (-ms-high-contrast: none) {

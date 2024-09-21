@@ -6,15 +6,25 @@
  */
 
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {
+  useLayoutEffect,
+  useState,
+  ReactNode,
+  useRef,
+  ForwardedRef,
+} from 'react';
 import classNames from 'classnames';
 import { Close } from '@carbon/icons-react';
-import setupGetInstanceId from '../../tools/setupGetInstanceId';
+import { useId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
 import { PolymorphicProps } from '../../types/common';
+import { Text } from '../Text';
+import deprecate from '../../prop-types/deprecate';
+import { DefinitionTooltip } from '../Tooltip';
+import { isEllipsisActive } from './isEllipsisActive';
+import { useMergeRefs } from '@floating-ui/react';
 
-const getInstanceId = setupGetInstanceId();
-const TYPES = {
+export const TYPES = {
   red: 'Red',
   magenta: 'Magenta',
   purple: 'Purple',
@@ -29,9 +39,15 @@ const TYPES = {
   outline: 'Outline',
 };
 
+export const SIZES = {
+  sm: 'sm',
+  md: 'md',
+  lg: 'lg',
+};
+
 export interface TagBaseProps {
   /**
-   * Provide content to be rendered inside of a <Tag>
+   * Provide content to be rendered inside of a `Tag`
    */
   children?: React.ReactNode;
 
@@ -41,12 +57,12 @@ export interface TagBaseProps {
   className?: string;
 
   /**
-   * Specify if the <Tag> is disabled
+   * Specify if the `Tag` is disabled
    */
   disabled?: boolean;
 
   /**
-   * Determine if <Tag> is a filter/chip
+   * @deprecated The `filter` prop has been deprecated and will be removed in the next major version. Use DismissibleTag instead.
    */
   filter?: boolean;
 
@@ -56,7 +72,7 @@ export interface TagBaseProps {
   id?: string;
 
   /**
-   * Click handler for filter tag close button.
+   * @deprecated The `onClose` prop has been deprecated and will be removed in the next major version. Use DismissibleTag instead.
    */
   onClose?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 
@@ -67,18 +83,23 @@ export interface TagBaseProps {
   renderIcon?: React.ElementType;
 
   /**
-   * Specify the size of the Tag. Currently supports either `sm` or
-   * 'md' (default) sizes.
+   * Specify the size of the Tag. Currently supports either `sm`,
+   * `md` (default) or `lg` sizes.
    */
-  size?: 'sm' | 'md';
+  size?: keyof typeof SIZES;
 
   /**
-   * Text to show on clear filters
+   * **Experimental:** Provide a `Slug` component to be rendered inside the `Tag` component
+   */
+  slug?: ReactNode;
+
+  /**
+   * @deprecated The `title` prop has been deprecated and will be removed in the next major version. Use DismissibleTag instead.
    */
   title?: string;
 
   /**
-   * Specify the type of the <Tag>
+   * Specify the type of the `Tag`
    */
   type?: keyof typeof TYPES;
 }
@@ -88,29 +109,53 @@ export type TagProps<T extends React.ElementType> = PolymorphicProps<
   TagBaseProps
 >;
 
-const Tag = <T extends React.ElementType>({
-  children,
-  className,
-  id,
-  type,
-  filter,
-  renderIcon: CustomIconElement,
-  title = 'Clear filter',
-  disabled,
-  onClose,
-  size,
-  as: BaseComponent,
-  ...other
-}: TagProps<T>) => {
+const Tag = React.forwardRef(function Tag<T extends React.ElementType>(
+  {
+    children,
+    className,
+    id,
+    type,
+    filter, // remove filter in next major release - V12
+    renderIcon: CustomIconElement,
+    title = 'Clear filter', // remove title in next major release - V12
+    disabled,
+    onClose, // remove onClose in next major release - V12
+    size,
+    as: BaseComponent,
+    slug,
+    ...other
+  }: TagProps<T>,
+  forwardRef: ForwardedRef<HTMLElement | undefined>
+) {
   const prefix = usePrefix();
-  const tagId = id || `tag-${getInstanceId()}`;
+  const tagRef = useRef<HTMLElement>();
+  const ref = useMergeRefs([forwardRef, tagRef]);
+  const tagId = id || `tag-${useId()}`;
+  const [isEllipsisApplied, setIsEllipsisApplied] = useState(false);
+
+  useLayoutEffect(() => {
+    const newElement = tagRef.current?.getElementsByClassName(
+      `${prefix}--tag__label`
+    )[0];
+    setIsEllipsisApplied(isEllipsisActive(newElement));
+  }, [prefix, tagRef]);
+
+  const conditions = [
+    `${prefix}--tag--selectable`,
+    `${prefix}--tag--filter`,
+    `${prefix}--tag--operational`,
+  ];
+
+  const isInteractiveTag = conditions.some((el) => className?.includes(el));
+
   const tagClasses = classNames(`${prefix}--tag`, className, {
     [`${prefix}--tag--disabled`]: disabled,
     [`${prefix}--tag--filter`]: filter,
     [`${prefix}--tag--${size}`]: size, // TODO: V12 - Remove this class
     [`${prefix}--layout--size-${size}`]: size,
     [`${prefix}--tag--${type}`]: type,
-    [`${prefix}--tag--interactive`]: other.onClick && !filter,
+    [`${prefix}--tag--interactive`]:
+      other.onClick && !isInteractiveTag && isEllipsisApplied,
   });
 
   const typeText =
@@ -123,15 +168,33 @@ const Tag = <T extends React.ElementType>({
     }
   };
 
+  // Slug is always size `md` and `inline`
+  let normalizedSlug;
+  if (slug && slug['type']?.displayName === 'AILabel' && !isInteractiveTag) {
+    normalizedSlug = React.cloneElement(slug as React.ReactElement<any>, {
+      size: 'sm',
+      kind: 'inline',
+    });
+  }
+
   if (filter) {
-    const ComponentTag = BaseComponent ?? 'div';
+    const ComponentTag = (BaseComponent as React.ElementType) ?? 'div';
     return (
       <ComponentTag className={tagClasses} id={tagId} {...other}>
-        <span
-          className={`${prefix}--tag__label`}
-          title={typeof children === 'string' ? children : undefined}>
+        {CustomIconElement && size !== 'sm' ? (
+          <div className={`${prefix}--tag__custom-icon`}>
+            <CustomIconElement />
+          </div>
+        ) : (
+          ''
+        )}
+
+        <Text
+          title={typeof children === 'string' ? children : undefined}
+          className={`${prefix}--tag__label`}>
           {children !== null && children !== undefined ? children : typeText}
-        </span>
+        </Text>
+        {normalizedSlug}
         <button
           type="button"
           className={`${prefix}--tag__close-icon`}
@@ -145,27 +208,68 @@ const Tag = <T extends React.ElementType>({
     );
   }
 
-  const ComponentTag = BaseComponent ?? (other.onClick ? 'button' : 'div');
+  const ComponentTag =
+    BaseComponent ??
+    (other.onClick || className?.includes(`${prefix}--tag--operational`)
+      ? 'button'
+      : 'div');
+
+  const labelClasses = classNames({
+    [`${prefix}--tag__label`]: !isInteractiveTag,
+  });
 
   return (
     <ComponentTag
-      disabled={ComponentTag === 'button' ? disabled : null}
+      ref={ref}
+      disabled={disabled}
       className={tagClasses}
       id={tagId}
+      type={ComponentTag === 'button' ? 'button' : undefined}
       {...other}>
-      {CustomIconElement ? (
+      {CustomIconElement && size !== 'sm' ? (
         <div className={`${prefix}--tag__custom-icon`}>
           <CustomIconElement />
         </div>
       ) : (
         ''
       )}
-      <span title={typeof children === 'string' ? children : undefined}>
-        {children !== null && children !== undefined ? children : typeText}
-      </span>
+      {isEllipsisApplied && !isInteractiveTag ? (
+        <DefinitionTooltip
+          openOnHover={false}
+          definition={
+            children !== null && children !== undefined ? children : typeText
+          }
+          className={`${prefix}--definition--tooltip--tag`}>
+          <Text
+            title={
+              children !== null &&
+              children !== undefined &&
+              typeof children === 'string'
+                ? children
+                : typeText
+            }
+            className={labelClasses}>
+            {children !== null && children !== undefined ? children : typeText}
+          </Text>
+        </DefinitionTooltip>
+      ) : (
+        <Text
+          title={
+            children !== null &&
+            children !== undefined &&
+            typeof children === 'string'
+              ? children
+              : typeText
+          }
+          className={labelClasses}>
+          {children !== null && children !== undefined ? children : typeText}
+        </Text>
+      )}
+
+      {normalizedSlug}
     </ComponentTag>
   );
-};
+});
 
 Tag.propTypes = {
   /**
@@ -175,7 +279,7 @@ Tag.propTypes = {
   as: PropTypes.elementType,
 
   /**
-   * Provide content to be rendered inside of a <Tag>
+   * Provide content to be rendered inside of a `Tag`
    */
   children: PropTypes.node,
 
@@ -185,14 +289,17 @@ Tag.propTypes = {
   className: PropTypes.string,
 
   /**
-   * Specify if the <Tag> is disabled
+   * Specify if the `Tag` is disabled
    */
   disabled: PropTypes.bool,
 
   /**
-   * Determine if <Tag> is a filter/chip
+   * Determine if `Tag` is a filter/chip
    */
-  filter: PropTypes.bool,
+  filter: deprecate(
+    PropTypes.bool,
+    'The `filter` prop has been deprecated and will be removed in the next major version. Use DismissibleTag instead.'
+  ),
 
   /**
    * Specify the id for the tag.
@@ -202,7 +309,10 @@ Tag.propTypes = {
   /**
    * Click handler for filter tag close button.
    */
-  onClose: PropTypes.func,
+  onClose: deprecate(
+    PropTypes.func,
+    'The `onClose` prop has been deprecated and will be removed in the next major version. Use DismissibleTag instead.'
+  ),
 
   /**
    * Optional prop to render a custom icon.
@@ -211,18 +321,26 @@ Tag.propTypes = {
   renderIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 
   /**
-   * Specify the size of the Tag. Currently supports either `sm` or
-   * 'md' (default) sizes.
+   * Specify the size of the Tag. Currently supports either `sm`,
+   * `md` (default) or `lg` sizes.
    */
-  size: PropTypes.oneOf(['sm', 'md']),
+  size: PropTypes.oneOf(Object.keys(SIZES)),
+
+  /**
+   * **Experimental:** Provide a `Slug` component to be rendered inside the `Tag` component
+   */
+  slug: PropTypes.node,
 
   /**
    * Text to show on clear filters
    */
-  title: PropTypes.string,
+  title: deprecate(
+    PropTypes.string,
+    'The `title` prop has been deprecated and will be removed in the next major version. Use DismissibleTag instead.'
+  ),
 
   /**
-   * Specify the type of the <Tag>
+   * Specify the type of the `Tag`
    */
   type: PropTypes.oneOf(Object.keys(TYPES)),
 };

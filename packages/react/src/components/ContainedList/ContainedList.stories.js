@@ -116,6 +116,7 @@ export const WithActions = () => {
       iconDescription="Dismiss"
       hasIconOnly
       renderIcon={Close}
+      aria-label="Dismiss"
     />
   );
 
@@ -159,6 +160,7 @@ export const WithExpandableSearch = () => {
       action={
         <ExpandableSearch
           placeholder="Filter"
+          labelText="Search"
           value={searchTerm}
           onChange={handleChange}
           closeButtonLabelText="Clear search input"
@@ -201,6 +203,7 @@ export const WithPersistentSearch = () => {
         onChange={handleChange}
         closeButtonLabelText="Clear search input"
         size="lg"
+        labelText="Filter search"
       />
       {searchResults.map((listItem, key) => (
         <ContainedListItem key={key}>{listItem}</ContainedListItem>
@@ -217,6 +220,7 @@ export const WithInteractiveItemsAndActions = () => {
       iconDescription="Dismiss"
       hasIconOnly
       renderIcon={Close}
+      aria-label="Dismiss"
     />
   );
 

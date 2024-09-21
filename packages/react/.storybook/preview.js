@@ -9,8 +9,8 @@ import {
   Subtitle,
   Description,
   Primary,
-  ArgsTable,
   Stories,
+  ArgTypes,
 } from '@storybook/blocks';
 
 import './styles.scss';
@@ -21,6 +21,7 @@ import React from 'react';
 import { breakpoints } from '@carbon/layout';
 import { GlobalTheme } from '../src/components/Theme';
 import { Layout } from '../src/components/Layout';
+import { TextDirection } from '../src/components/Text';
 
 import theme from './theme';
 
@@ -123,6 +124,25 @@ const globalTypes = {
 };
 
 const parameters = {
+  a11y: {
+    // Can specify engine as "axe" or "accessibility-checker" (axe default)
+    engine: 'accessibility-checker',
+    config: {
+      rules: [
+        {
+          // To disable a rule across all stories, set `enabled` to `false`.
+          // Use with caution: all violations of this rule will be ignored!
+          id: 'html_lang_exists',
+          enabled: false,
+        },
+        { id: 'page_title_exists', enabled: false },
+        { id: 'skip_main_exists', enabled: false },
+        { id: 'html_skipnav_exists', enabled: false },
+        { id: 'aria_content_in_landmark', enabled: false },
+        { id: 'aria_child_tabbable', enabled: false },
+      ],
+    },
+  },
   backgrounds: {
     // https://storybook.js.org/docs/react/essentials/backgrounds#grid
     grid: {
@@ -171,7 +191,7 @@ const parameters = {
         <Subtitle />
         <Description />
         <Primary />
-        <ArgsTable />
+        <ArgTypes />
         <Stories includePrimary={false} />
       </>
     ),
@@ -222,12 +242,10 @@ const parameters = {
   },
   options: {
     storySort: (storyA, storyB) => {
-      const isUsingV6Store = process.env.STORYBOOK_STORE_7 === 'false';
-
-      const idA = isUsingV6Store ? storyA[1].id : storyA.id;
-      const idB = isUsingV6Store ? storyB[1].id : storyB.id;
-      const titleA = isUsingV6Store ? storyA[1].title : storyA.title;
-      const titleB = isUsingV6Store ? storyB[1].title : storyB.title;
+      const idA = storyA.id;
+      const idB = storyB.id;
+      const titleA = storyA.title;
+      const titleB = storyB.title;
 
       if (idA.includes('welcome')) {
         return -1;
@@ -322,7 +340,12 @@ const decorators = [
     return (
       <GlobalTheme theme={theme}>
         <Layout size={layoutSize || null} density={layoutDensity || null}>
-          <Story key={randomKey} {...context} />
+          <TextDirection
+            getTextDirection={(text) => {
+              return dir;
+            }}>
+            <Story key={randomKey} {...context} />
+          </TextDirection>
         </Layout>
       </GlobalTheme>
     );

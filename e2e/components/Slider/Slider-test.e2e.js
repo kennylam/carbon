@@ -29,6 +29,22 @@ test.describe('Slider', () => {
           theme,
         });
       });
+
+      test('two handle slider @vrt', async ({ page }) => {
+        await snapshotStory(page, {
+          component: 'Slider',
+          id: 'components-slider--two-handle-slider',
+          theme,
+        });
+      });
+
+      test('slider with formatLabel @vrt', async ({ page }) => {
+        await snapshotStory(page, {
+          component: 'Slider',
+          id: 'components-slider--slider-with-custom-value-label',
+          theme,
+        });
+      });
     });
   });
 });

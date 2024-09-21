@@ -7,7 +7,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import isEqual from 'lodash.isequal';
+import isEqual from 'react-fast-compare';
 import getDerivedStateFromProps from './state/getDerivedStateFromProps';
 import { getNextSortState } from './state/sorting';
 import type { DataTableSortState } from './state/sortStates';
@@ -15,8 +15,7 @@ import { getCellId } from './tools/cells';
 import denormalize from './tools/denormalize';
 import { composeEventHandlers } from '../../tools/events';
 import { defaultFilterRows } from './tools/filter';
-import { defaultSortRow } from './tools/sorting';
-import setupGetInstanceId from './tools/instanceId';
+import setupGetInstanceId from '../../tools/setupGetInstanceId';
 import Table from './Table';
 import TableActionList from './TableActionList';
 import TableBatchAction from './TableBatchAction';
@@ -32,11 +31,13 @@ import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import TableSelectAll from './TableSelectAll';
 import TableSelectRow from './TableSelectRow';
+import TableSlugRow from './TableSlugRow';
 import TableToolbar from './TableToolbar';
 import TableToolbarAction from './TableToolbarAction';
 import TableToolbarContent from './TableToolbarContent';
 import TableToolbarSearch from './TableToolbarSearch';
 import TableToolbarMenu from './TableToolbarMenu';
+import { TranslateWithId } from '../../types/common';
 
 const getInstanceId = setupGetInstanceId();
 
@@ -49,7 +50,12 @@ const translationKeys = {
   unselectAll: 'carbon.table.all.unselect',
   selectRow: 'carbon.table.row.select',
   unselectRow: 'carbon.table.row.unselect',
-};
+} as const;
+
+/**
+ * Message ids that will be passed to translateWithId().
+ */
+type TranslationKey = (typeof translationKeys)[keyof typeof translationKeys];
 
 const defaultTranslations = {
   [translationKeys.expandAll]: 'Expand all rows',
@@ -63,15 +69,6 @@ const defaultTranslations = {
 };
 
 const translateWithId = (id) => defaultTranslations[id];
-
-const dataTableDefaultProps = {
-  filterRows: defaultFilterRows,
-  locale: 'en',
-  overflowMenuOnHover: true,
-  size: 'lg',
-  sortRow: defaultSortRow,
-  translateWithId,
-};
 
 export type DataTableSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -100,6 +97,7 @@ export interface DataTableRow<ColTypes extends any[]> {
 export interface DataTableHeader {
   key: string;
   header: React.ReactNode;
+  slug?: React.ReactElement;
 }
 
 export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
@@ -112,7 +110,7 @@ export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
     header: DataTableHeader;
     isSortable?: boolean;
     onClick?: (
-      e: React.MouseEvent,
+      e: React.MouseEvent<HTMLButtonElement>,
       sortState: { sortHeaderKey: string; sortDirection: DataTableSortState }
     ) => void;
     [key: string]: unknown;
@@ -120,23 +118,26 @@ export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
     isSortable: boolean | undefined;
     isSortHeader: boolean;
     key: string;
-    onClick: (e: MouseEvent) => void;
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
     sortDirection: DataTableSortState;
     [key: string]: unknown;
   };
   getExpandHeaderProps: (getExpandHeaderPropsArgs?: {
-    onClick?: (e: MouseEvent, expandState: { isExpanded?: boolean }) => void;
-    onExpand?: (e: MouseEvent) => void;
+    onClick?: (
+      e: React.MouseEvent<HTMLButtonElement>,
+      expandState: { isExpanded?: boolean }
+    ) => void;
+    onExpand?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     [key: string]: unknown;
   }) => {
     ariaLabel: string; // TODO Remove in v12
     ['aria-label']: string;
     isExpanded: boolean;
-    onExpand: (e: MouseEvent) => void;
+    onExpand: (e: React.MouseEvent<HTMLButtonElement>) => void;
     [key: string]: unknown;
   };
   getRowProps: (getRowPropsArgs: {
-    onClick?: (e: MouseEvent) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     row: DataTableRow<ColTypes>;
     [key: string]: unknown;
   }) => {
@@ -146,7 +147,7 @@ export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
     isExpanded?: boolean;
     isSelected?: boolean;
     key: string;
-    onExpand: (e: MouseEvent) => void;
+    onExpand: (e: React.MouseEvent<HTMLButtonElement>) => void;
     [key: string]: unknown;
   };
   getExpandedRowProps: (getExpandedRowPropsArgs: {
@@ -156,19 +157,20 @@ export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
     ['id']: string;
     [key: string]: unknown;
   };
-  getSelectionProps: (getSelectionPropsArgs: {
-    onClick?: (e: MouseEvent) => void;
+  getSelectionProps: (getSelectionPropsArgs?: {
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     row: DataTableRow<ColTypes>;
     [key: string]: unknown;
   }) => {
     ariaLabel: string;
-    checked: boolean | undefined;
+    'aria-label': string;
+    checked?: boolean;
     disabled?: boolean | undefined;
     id: string;
     indeterminate?: boolean;
     name: string;
-    onSelect: (e: MouseEvent) => void;
-    radio?: boolean | null;
+    onSelect: (e: React.MouseEvent<HTMLInputElement>) => void;
+    radio?: boolean;
     [key: string]: unknown;
   };
   getToolbarProps: (getToolbarPropsArgs?: { [key: string]: unknown }) => {
@@ -198,6 +200,10 @@ export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
     stickyHeader?: boolean;
     useStaticWidth?: boolean;
   };
+  getCellProps: (getCellPropsArgs: { cell: DataTableCell<ColTypes> }) => {
+    [key: string]: unknown;
+    hasSlugHeader?: boolean;
+  };
 
   // Custom event handlers
   onInputChange: (
@@ -214,13 +220,14 @@ export interface DataTableRenderProps<RowType, ColTypes extends any[]> {
   radio: boolean | undefined;
 }
 
-export interface DataTableProps<RowType, ColTypes extends any[]> {
+export interface DataTableProps<RowType, ColTypes extends any[]>
+  extends TranslateWithId<TranslationKey> {
   children?: (
     renderProps: DataTableRenderProps<RowType, ColTypes>
   ) => React.ReactElement;
   experimentalAutoAlign?: boolean;
   filterRows?: (filterRowsArgs: {
-    cellsById: Record<string, DataTableCell<RowType>>;
+    cellsById: Record<string, DataTableCell<ColTypes>>;
     getCellId: (rowId: string, header: string) => string;
     headers: Array<DataTableHeader>;
     inputValue: string;
@@ -246,7 +253,6 @@ export interface DataTableProps<RowType, ColTypes extends any[]> {
     }
   ) => number;
   stickyHeader?: boolean;
-  translateWithId?: (id: string) => string;
   useStaticWidth?: boolean;
   useZebraStyles?: boolean;
 }
@@ -274,12 +280,11 @@ interface DataTableState<ColTypes extends any[]> {
  * consumer.
  */
 class DataTable<RowType, ColTypes extends any[]> extends React.Component<
-  DataTableProps<RowType, ColTypes> & typeof dataTableDefaultProps,
+  DataTableProps<RowType, ColTypes>,
   DataTableState<ColTypes>
 > {
   instanceId: number;
 
-  static defaultProps = dataTableDefaultProps;
   static propTypes = {
     /**
      * Experimental property. Allows table to align cell contents to the top if there is text wrapping in the content. Might have performance issues, intended for smaller tables
@@ -392,6 +397,7 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
   static TableRow: typeof TableRow;
   static TableSelectAll: typeof TableSelectAll;
   static TableSelectRow: typeof TableSelectRow;
+  static TableSlugRow: typeof TableSlugRow;
   static TableToolbar: typeof TableToolbar;
   static TableToolbarAction: typeof TableToolbarAction;
   static TableToolbarContent: typeof TableToolbarContent;
@@ -452,7 +458,7 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
   }: {
     header: DataTableHeader;
     onClick?: (
-      e: React.MouseEvent,
+      e: React.MouseEvent<HTMLButtonElement>,
       sortState: { sortHeaderKey: string; sortDirection: DataTableSortState }
     ) => void;
     isSortable?: boolean;
@@ -465,6 +471,7 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
       sortDirection,
       isSortable,
       isSortHeader: sortHeaderKey === header.key,
+      slug: header.slug,
       onClick: (event) => {
         const nextSortState = getNextSortState(this.props, this.state, {
           key: header.key,
@@ -490,12 +497,15 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
    */
   getExpandHeaderProps = (
     { onClick, onExpand, ...rest } = {} as {
-      onClick?: (e: MouseEvent, expandState: { isExpanded: boolean }) => void;
-      onExpand?: (e: MouseEvent) => void;
+      onClick?: (
+        e: React.MouseEvent<HTMLButtonElement>,
+        expandState: { isExpanded: boolean }
+      ) => void;
+      onExpand?: (e: React.MouseEvent<HTMLButtonElement>) => void;
       [key: string]: unknown;
     }
   ) => {
-    const { translateWithId: t } = this.props;
+    const { translateWithId: t = translateWithId } = this.props;
     const { isExpandedAll, rowIds, rowsById } = this.state;
     const isExpanded =
       isExpandedAll || rowIds.every((id) => rowsById[id].isExpanded);
@@ -557,11 +567,11 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
     onClick,
     ...rest
   }: {
-    onClick?: (e: MouseEvent) => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     row: DataTableRow<ColTypes>;
     [key: string]: unknown;
   }) => {
-    const { translateWithId: t } = this.props;
+    const { translateWithId: t = translateWithId } = this.props;
     const translationKey = row.isExpanded
       ? translationKeys.collapseRow
       : translationKeys.expandRow;
@@ -612,12 +622,12 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
    */
   getSelectionProps = (
     { onClick, row, ...rest } = {} as {
-      onClick?: (e: MouseEvent) => void;
+      onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
       row: DataTableRow<ColTypes>;
       [key: string]: unknown;
     }
   ) => {
-    const { translateWithId: t } = this.props;
+    const { translateWithId: t = translateWithId } = this.props;
 
     // If we're given a row, return the selection state values for that row
     if (row) {
@@ -632,10 +642,11 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
           onClick,
         ]),
         id: `${this.getTablePrefix()}__select-row-${row.id}`,
-        name: `select-row`,
-        ariaLabel: t(translationKey),
+        name: `select-row-${this.instanceId}`,
+        ariaLabel: t(translationKey), // TODO remove in v12
+        'aria-label': t(translationKey),
         disabled: row.disabled,
-        radio: this.props.radio || null,
+        radio: this.props.radio,
       };
     }
 
@@ -653,7 +664,8 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
 
     return {
       ...rest,
-      ariaLabel: t(translationKey),
+      ariaLabel: t(translationKey), // TODO remove in v12
+      'aria-label': t(translationKey),
       checked,
       id: `${this.getTablePrefix()}__select-all`,
       indeterminate,
@@ -694,11 +706,11 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
   getTableProps = () => {
     const {
       useZebraStyles,
-      size,
+      size = 'lg',
       isSortable,
       useStaticWidth,
       stickyHeader,
-      overflowMenuOnHover,
+      overflowMenuOnHover = false,
       experimentalAutoAlign,
     } = this.props;
     return {
@@ -725,6 +737,20 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
   };
 
   /**
+   * Get the props associated with the given table cell.
+   *
+   * @param {object} config
+   * @param {object} config.cell the cell we want the props for
+   * @returns {object}
+   */
+  getCellProps = ({ cell, ...rest }) => {
+    return {
+      ...rest,
+      hasSlugHeader: cell.hasSlugHeader,
+    };
+  };
+
+  /**
    * Helper utility to get all the currently selected rows
    * @returns {Array<string>} the array of rowIds that are currently selected
    */
@@ -739,9 +765,10 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
    * @returns {Array<string>} the array of rowIds that are currently included through the filter
    *  */
   getFilteredRowIds = () => {
+    const { filterRows = defaultFilterRows } = this.props;
     const filteredRowIds =
       typeof this.state.filterInputValue === 'string'
-        ? this.props.filterRows({
+        ? filterRows({
             rowIds: this.state.rowIds,
             headers: this.props.headers,
             cellsById: this.state.cellsById,
@@ -941,8 +968,12 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
   };
 
   render() {
-    // eslint-disable-next-line react/prop-types
-    const { children, filterRows, headers, render } = this.props;
+    const {
+      children,
+      filterRows = defaultFilterRows,
+      headers,
+      render,
+    } = this.props;
     const { filterInputValue, rowIds, rowsById, cellsById } = this.state;
     const filteredRowIds =
       typeof filterInputValue === 'string'
@@ -970,6 +1001,7 @@ class DataTable<RowType, ColTypes extends any[]> extends React.Component<
       getBatchActionProps: this.getBatchActionProps,
       getTableProps: this.getTableProps,
       getTableContainerProps: this.getTableContainerProps,
+      getCellProps: this.getCellProps,
 
       // Custom event handlers
       onInputChange: this.handleOnInputValueChange,
@@ -1010,6 +1042,7 @@ DataTable.TableHeader = TableHeader;
 DataTable.TableRow = TableRow;
 DataTable.TableSelectAll = TableSelectAll;
 DataTable.TableSelectRow = TableSelectRow;
+DataTable.TableSlugRow = TableSlugRow;
 DataTable.TableToolbar = TableToolbar;
 DataTable.TableToolbarAction = TableToolbarAction;
 DataTable.TableToolbarContent = TableToolbarContent;

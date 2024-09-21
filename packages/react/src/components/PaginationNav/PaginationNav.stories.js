@@ -28,13 +28,19 @@ export const Playground = (args) => (
 );
 
 Playground.args = {
+  size: 'lg',
   loop: false,
   itemsShown: 10,
   page: 0,
   totalItems: 25,
+  disableOverflow: false,
 };
 
 Playground.argTypes = {
+  size: {
+    options: ['sm', 'md', 'lg'],
+    control: { type: 'select' },
+  },
   loop: {
     control: {
       type: 'boolean',
@@ -53,6 +59,11 @@ Playground.argTypes = {
   totalItems: {
     control: {
       type: 'number',
+    },
+  },
+  disableOverflow: {
+    control: {
+      type: 'boolean',
     },
   },
 };

@@ -18,6 +18,7 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import Link from '../Link';
 import { Add } from '@carbon/icons-react';
+import { AILabel } from '../AILabel';
 
 const prefix = 'cds';
 
@@ -45,6 +46,13 @@ describe('Tile', () => {
     it('should support a custom `className` prop on the outermost element', () => {
       render(<Tile className="custom-tile-class">Default tile</Tile>);
       expect(screen.getByText('Default tile')).toHaveClass('custom-tile-class');
+    });
+
+    it('should respect slug prop', () => {
+      render(<Tile slug={<AILabel />}>Default tile</Tile>);
+      expect(
+        screen.getByRole('button', { name: 'AI - Show information' })
+      ).toBeInTheDocument();
     });
   });
 
@@ -80,6 +88,15 @@ describe('Tile', () => {
       );
 
       expect(screen.getByTestId('test')).toBeInTheDocument();
+    });
+
+    it('should respect slug prop', () => {
+      render(<ClickableTile slug={<AILabel />}>Default tile</ClickableTile>);
+
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(document.querySelector('svg')).toHaveClass(
+        `${prefix}--tile--slug-icon`
+      );
     });
   });
 
@@ -153,6 +170,21 @@ describe('Tile', () => {
       await userEvent.tab();
 
       expect(id1).toHaveFocus();
+    });
+
+    it('should respect slug prop', () => {
+      render(
+        <SelectableTile
+          slug={<AILabel />}
+          id="tile-1"
+          name="tiles"
+          value="value">
+          Default tile
+        </SelectableTile>
+      );
+      expect(
+        screen.getByRole('button', { name: 'AI - Show information' })
+      ).toBeInTheDocument();
     });
   });
 
@@ -279,6 +311,22 @@ describe('Tile', () => {
       expect(screen.getByRole('button')).not.toHaveClass(
         `${prefix}--tile--is-expanded`
       );
+    });
+
+    it('should respect slug prop', () => {
+      render(
+        <ExpandableTile slug={<AILabel />}>
+          <TileAboveTheFoldContent>
+            <div>TestAbove</div>
+          </TileAboveTheFoldContent>
+          <TileBelowTheFoldContent>
+            <div>TestBelow</div>
+          </TileBelowTheFoldContent>
+        </ExpandableTile>
+      );
+      expect(
+        screen.getByRole('button', { name: 'AI - Show information' })
+      ).toBeInTheDocument();
     });
   });
 

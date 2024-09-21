@@ -10,7 +10,7 @@
 import { expect, test } from '@playwright/test';
 import { visitStory } from '../../test-utils/storybook';
 
-test.describe('CopyButton @avt', () => {
+test.describe('@avt CopyButton', () => {
   test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'CopyButton',
@@ -22,7 +22,7 @@ test.describe('CopyButton @avt', () => {
     await expect(page).toHaveNoACViolations('CopyButton @avt-default-state');
   });
 
-  test('@avt-keyboard-nav default', async ({ page }) => {
+  test('@avt-keyboard-nav', async ({ page }) => {
     await visitStory(page, {
       component: 'CopyButton',
       id: 'components-copybutton--default',

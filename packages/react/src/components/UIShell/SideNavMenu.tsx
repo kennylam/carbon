@@ -82,23 +82,23 @@ const SideNavMenu = React.forwardRef<HTMLElement, SideNavMenuProps>(
     },
     ref: ForwardedRef<HTMLElement>
   ) {
-    const isRail = useContext(SideNavContext);
+    const { isRail } = useContext(SideNavContext);
     const prefix = usePrefix();
     const [isExpanded, setIsExpanded] = useState<boolean>(defaultExpanded);
     const [prevExpanded, setPrevExpanded] = useState<boolean>(defaultExpanded);
     const className = cx({
       [`${prefix}--side-nav__item`]: true,
       [`${prefix}--side-nav__item--active`]:
-        isActive || (hasActiveChild(children) && !isExpanded),
+        isActive || (hasActiveDescendant(children) && !isExpanded),
       [`${prefix}--side-nav__item--icon`]: IconElement,
       [`${prefix}--side-nav__item--large`]: large,
       [customClassName as string]: !!customClassName,
     });
 
-    if (isSideNavExpanded === false && isExpanded === true) {
+    if (!isSideNavExpanded && isExpanded && isRail) {
       setIsExpanded(false);
       setPrevExpanded(true);
-    } else if (isSideNavExpanded === true && prevExpanded === true) {
+    } else if (isSideNavExpanded && prevExpanded && isRail) {
       setIsExpanded(true);
       setPrevExpanded(false);
     }
@@ -132,9 +132,7 @@ const SideNavMenu = React.forwardRef<HTMLElement, SideNavMenuProps>(
               <IconElement />
             </SideNavIcon>
           )}
-          <span className={`${prefix}--side-nav__submenu-title`} title={title}>
-            {title}
-          </span>
+          <span className={`${prefix}--side-nav__submenu-title`}>{title}</span>
           <SideNavIcon className={`${prefix}--side-nav__submenu-chevron`} small>
             <ChevronDown size={20} />
           </SideNavIcon>
@@ -202,7 +200,7 @@ SideNavMenu.propTypes = {
 Defining the children parameter with the type ReactNode | ReactNode[]. This allows for various possibilities:
 a single element, an array of elements, or null or undefined.
 **/
-function hasActiveChild(children: ReactNode | ReactNode[]): boolean {
+function hasActiveDescendant(children: ReactNode | ReactNode[]): boolean {
   if (Array.isArray(children)) {
     return children.some((child) => {
       if (!React.isValidElement(child)) {
@@ -215,9 +213,14 @@ function hasActiveChild(children: ReactNode | ReactNode[]): boolean {
       const props = child.props as {
         isActive?: boolean;
         'aria-current'?: string;
+        children: ReactNode | ReactNode[];
       };
 
-      if (props.isActive === true || props['aria-current']) {
+      if (
+        props.isActive === true ||
+        props['aria-current'] ||
+        (props.children instanceof Array && hasActiveDescendant(props.children))
+      ) {
         return true;
       }
 

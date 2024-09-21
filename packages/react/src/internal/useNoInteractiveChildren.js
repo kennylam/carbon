@@ -25,6 +25,24 @@ export function useNoInteractiveChildren(
   }
 }
 
+export function useInteractiveChildrenNeedDescription(
+  ref,
+  message = `interactive child node(s) should have an \`aria-describedby\` property`
+) {
+  if (__DEV__) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useEffect(() => {
+      const node = ref.current ? getInteractiveContent(ref.current) : false;
+
+      if (node && !node.hasAttribute('aria-describedby')) {
+        throw new Error(
+          `Error: ${message}.\n\nInstead found: ${node.outerHTML}`
+        );
+      }
+    });
+  }
+}
+
 /**
  * Determines if a given DOM node has interactive content, or is itself
  * interactive. It returns the interactive node if one is found
@@ -85,7 +103,7 @@ export function getRoleContent(node) {
  * @see https://github.com/w3c/aria-practices/blob/0553bb51588ffa517506e2a1b2ca1422ed438c5f/examples/js/utils.js#L68
  */
 function isFocusable(element) {
-  if (element.tabIndex < 0) {
+  if (element.tabIndex === undefined || element.tabIndex < 0) {
     return false;
   }
 
@@ -98,11 +116,7 @@ function isFocusable(element) {
       return !!element.href && element.rel !== 'ignore';
     case 'INPUT':
       return element.type !== 'hidden';
-    case 'BUTTON':
-    case 'SELECT':
-    case 'TEXTAREA':
-      return true;
     default:
-      return false;
+      return true;
   }
 }

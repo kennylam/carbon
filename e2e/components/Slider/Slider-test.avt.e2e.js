@@ -10,10 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('Slider @avt', () => {
-  test('accessibility-checker @avt - Slider default state', async ({
-    page,
-  }) => {
+test.describe('@avt Slider', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'Slider',
       id: 'components-slider--default',
@@ -24,7 +22,7 @@ test.describe('Slider @avt', () => {
     await expect(page).toHaveNoACViolations('Slider');
   });
 
-  test('accessibility-checker controlled slider', async ({ page }) => {
+  test('@avt-advanced-states controlled slider', async ({ page }) => {
     await visitStory(page, {
       component: 'Slider',
       id: 'components-slider--controlled-slider',
@@ -35,7 +33,7 @@ test.describe('Slider @avt', () => {
     await expect(page).toHaveNoACViolations('Slider-controlled');
   });
 
-  test('accessibility-checker controlled slider with layer', async ({
+  test('@avt-advanced-states controlled slider with layer', async ({
     page,
   }) => {
     await visitStory(page, {
@@ -50,7 +48,18 @@ test.describe('Slider @avt', () => {
     );
   });
 
-  test('accessibility-checker skeleton', async ({ page }) => {
+  test('@avt-advanced-states two handle slider', async ({ page }) => {
+    await visitStory(page, {
+      component: 'Slider',
+      id: 'components-slider--two-handle-slider',
+      globals: {
+        theme: 'white',
+      },
+    });
+    await expect(page).toHaveNoACViolations('Slider-two-handle-slider');
+  });
+
+  test('@avt-advanced-states skeleton', async ({ page }) => {
     await visitStory(page, {
       component: 'Slider',
       id: 'components-slider--skeleton',
@@ -61,7 +70,18 @@ test.describe('Slider @avt', () => {
     await expect(page).toHaveNoACViolations('Slider-skeleton');
   });
 
-  test('accessibility-checker slider with layer', async ({ page }) => {
+  test('@avt-advanced-states two handle skeleton', async ({ page }) => {
+    await visitStory(page, {
+      component: 'Slider',
+      id: 'components-slider--two-handle-skeleton',
+      globals: {
+        theme: 'white',
+      },
+    });
+    await expect(page).toHaveNoACViolations('Slider-two-handle-skeleton');
+  });
+
+  test('@avt-advanced-states slider with layer', async ({ page }) => {
     await visitStory(page, {
       component: 'Slider',
       id: 'components-slider--with-layer',
@@ -72,8 +92,55 @@ test.describe('Slider @avt', () => {
     await expect(page).toHaveNoACViolations('Slider-with-layer');
   });
 
+  test('@avt-advanced-states slider with custom format', async ({ page }) => {
+    await visitStory(page, {
+      component: 'Slider',
+      id: 'components-slider--slider-with-custom-value-label',
+      globals: {
+        theme: 'white',
+      },
+    });
+
+    await expect(page).toHaveNoACViolations('Slider-with-custom-value-label');
+  });
+
+  test.slow('@avt-keyboard-nav slider with custom format', async ({ page }) => {
+    await visitStory(page, {
+      component: 'Slider',
+      id: 'components-slider--slider-with-custom-value-label',
+      globals: {
+        theme: 'white',
+      },
+    });
+
+    // Test for label changes
+    // Initial value
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('slider')).toBeVisible();
+    await page.keyboard.press('Tab');
+
+    await expect(page.getByRole('slider')).toHaveAttribute(
+      'aria-valuetext',
+      'Medium'
+    );
+    // Move to high
+    await page.keyboard.press('Shift+ArrowRight');
+    await expect(page.getByRole('slider')).toHaveAttribute(
+      'aria-valuetext',
+      'High'
+    );
+
+    // Move to Low
+    await page.keyboard.press('Shift+ArrowLeft');
+    await page.keyboard.press('Shift+ArrowLeft');
+    await expect(page.getByRole('slider')).toHaveAttribute(
+      'aria-valuetext',
+      'Low'
+    );
+  });
+
   // Prevent timeout
-  test.slow('default state - keyboard nav', async ({ page }) => {
+  test.slow('@avt-keyboard-nav', async ({ page }) => {
     await visitStory(page, {
       component: 'Slider',
       id: 'components-slider--default',

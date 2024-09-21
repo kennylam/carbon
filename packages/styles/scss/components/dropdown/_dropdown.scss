@@ -93,6 +93,10 @@
     border-block-end-color: $border-subtle;
   }
 
+  .#{$prefix}--dropdown--open .#{$prefix}--list-box__field {
+    outline: none;
+  }
+
   .#{$prefix}--dropdown--invalid {
     @include focus-outline('invalid');
 
@@ -155,7 +159,7 @@
 
   button.#{$prefix}--dropdown-text {
     border: none;
-    // button-reset mixin contradicts with bx--dropdown-text styles
+    // button-reset mixin contradicts with cds--dropdown-text styles
     background: none;
     color: $text-primary;
     inline-size: 100%;
@@ -171,11 +175,10 @@
 
     display: block;
     overflow: hidden;
-    // Account for the border in `.bx--dropdown`
+    // Account for the border in `.cds--dropdown`
     block-size: calc(100% + 1px);
     // 2rem + SVG width
-    padding-inline-end: convert.to-rem(42px);
-    padding-inline-start: $spacing-05;
+    padding-inline: $spacing-05 convert.to-rem(42px);
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -189,14 +192,13 @@
     position: absolute;
     z-index: z('dropdown');
     display: flex;
+    // NOTE: IE, Edge, and Safari do not support two value `overflow` shorthand.
+    overflow: hidden auto;
     flex-direction: column;
     background-color: $layer;
     inline-size: 100%;
     list-style: none;
     max-block-size: 0;
-    // NOTE: IE, Edge, and Safari do not support two value `overflow` shorthand.
-    overflow-x: hidden;
-    overflow-y: auto;
     transition: max-height $duration-fast-02 motion(standard, productive);
   }
 
@@ -269,8 +271,7 @@
 
   .#{$prefix}--dropdown--sm .#{$prefix}--dropdown-link {
     block-size: convert.to-rem(32px);
-    padding-block-end: convert.to-rem(7px);
-    padding-block-start: convert.to-rem(7px);
+    padding-block: convert.to-rem(7px) convert.to-rem(7px);
   }
 
   .#{$prefix}--dropdown--focused,
@@ -284,13 +285,13 @@
   // We don't want to apply focus styles via focus selector when using the aria-activedescendant structure
   .#{$prefix}--dropdown-list[aria-activedescendant]
     .#{$prefix}--dropdown-link:focus {
-    // Copied from .bx--dropdown-link styles
+    // Copied from .cds--dropdown-link styles
     padding: convert.to-rem(11px) 0;
     margin: 0 $spacing-05;
     outline: none;
   }
 
-  // Need added weight for item that is :focused and .bx--dropdown--focused
+  // Need added weight for item that is :focused and .cds--dropdown--focused
   .#{$prefix}--dropdown-list[aria-activedescendant]
     .#{$prefix}--dropdown--focused:focus {
     // copied from default focus styles
@@ -480,6 +481,9 @@
   .#{$prefix}--dropdown--readonly:hover {
     background-color: transparent;
     border-block-end-color: $border-subtle;
+  }
+  .#{$prefix}--dropdown--inline.#{$prefix}--dropdown--readonly {
+    border-block-end-color: transparent;
   }
 
   .#{$prefix}--dropdown--readonly .#{$prefix}--list-box__field,

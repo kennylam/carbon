@@ -7,9 +7,9 @@
 
 'use strict';
 
-const { expect, test } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const { themes } = require('../../test-utils/env');
-const { snapshotStory, visitStory } = require('../../test-utils/storybook');
+const { snapshotStory } = require('../../test-utils/storybook');
 
 test.describe('FluidDatePicker', () => {
   themes.forEach((theme) => {
@@ -17,7 +17,7 @@ test.describe('FluidDatePicker', () => {
       test('fluid date picker (range) @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'FluidDatePicker',
-          id: 'experimental-unstable-fluiddatepicker--range-with-calendar',
+          id: 'experimental-fluid-components-unstable-fluiddatepicker--range-with-calendar',
           theme,
         });
       });
@@ -25,7 +25,7 @@ test.describe('FluidDatePicker', () => {
       test('fluid date picker (single) @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'FluidDatePicker',
-          id: 'experimental-unstable-fluiddatepicker--single',
+          id: 'experimental-fluid-components-unstable-fluiddatepicker--single',
           theme,
         });
       });
@@ -33,35 +33,10 @@ test.describe('FluidDatePicker', () => {
       test('fluid date picker (simple) @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'FluidDatePicker',
-          id: 'experimental-unstable-fluiddatepicker--simple',
+          id: 'experimental-fluid-components-unstable-fluiddatepicker--simple',
           theme,
         });
       });
     });
-  });
-
-  test('accessibility-checker @avt', async ({ page }) => {
-    await visitStory(page, {
-      component: 'FluidDatePicker',
-      id: 'experimental-unstable-fluiddatepicker--range-with-calendar',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await visitStory(page, {
-      component: 'FluidDatePicker',
-      id: 'experimental-unstable-fluiddatepicker--single',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await visitStory(page, {
-      component: 'FluidDatePicker',
-      id: 'experimental-unstable-fluiddatepicker--simple',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await expect(page).toHaveNoACViolations('FluidDatePicker');
   });
 });

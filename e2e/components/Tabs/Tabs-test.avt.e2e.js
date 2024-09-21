@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('Tabs @avt', () => {
-  test('accessibility-checker @avt - Tabs default state', async ({ page }) => {
+test.describe('@avt Tabs', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--default',
@@ -22,7 +22,7 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs');
   });
 
-  test('accessibility-checker tabs contained', async ({ page }) => {
+  test('@avt-advanced-states tabs contained', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--contained',
@@ -33,7 +33,18 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs-contained');
   });
 
-  test('accessibility-checker tabs contained with icons', async ({ page }) => {
+  test('@avt-advanced-states tabs vertical', async ({ page }) => {
+    await visitStory(page, {
+      component: 'Tabs',
+      id: 'components-tabs--vertical',
+      globals: {
+        theme: 'white',
+      },
+    });
+    await expect(page).toHaveNoACViolations('Tabs-vertical');
+  });
+
+  test('@avt-advanced-states tabs contained with icons', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--contained-with-icons',
@@ -44,7 +55,7 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs-contained-with-icons');
   });
 
-  test('accessibility-checker tabs contained with secondary labels', async ({
+  test('@avt-advanced-states tabs contained with secondary labels', async ({
     page,
   }) => {
     await visitStory(page, {
@@ -59,9 +70,7 @@ test.describe('Tabs @avt', () => {
     );
   });
 
-  test('accessibility-checker tabs dismissable with icons', async ({
-    page,
-  }) => {
+  test('@avt-advanced-states tabs dismissable with icons', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--dismissable-with-icons',
@@ -72,7 +81,7 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs--dismissable-with-icons');
   });
 
-  test('accessibility-checker tabs icon 20 only', async ({ page }) => {
+  test('@avt-advanced-states tabs icon 20 only', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--icon-20-only',
@@ -83,7 +92,7 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs--icon-20-only');
   });
 
-  test('accessibility-checker tabs manual', async ({ page }) => {
+  test('@avt-advanced-states tabs manual', async ({ page }) => {
     await visitStory(page, {
       component: 'Slider',
       id: 'components-tabs--manual',
@@ -94,7 +103,7 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs--manual');
   });
 
-  test('accessibility-checker tabs skeleton', async ({ page }) => {
+  test('@avt-advanced-states tabs skeleton', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--skeleton',
@@ -105,7 +114,7 @@ test.describe('Tabs @avt', () => {
     await expect(page).toHaveNoACViolations('Tabs-skeleton');
   });
 
-  test.slow('default state - keyboard nav', async ({ page }) => {
+  test.slow('@avt-keyboard-nav', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--default',
@@ -152,7 +161,54 @@ test.describe('Tabs @avt', () => {
     await expect(page.getByRole('tab', { name: 'Tab label 4' })).toBeFocused();
   });
 
-  test.slow('dismissable state - keyboard nav', async ({ page }) => {
+  test.slow('@avt-keyboard-nav', async ({ page }) => {
+    await visitStory(page, {
+      component: 'Tabs',
+      id: 'components-tabs--default',
+      globals: {
+        theme: 'white',
+      },
+    });
+
+    // Focus on the first tab via keyboard navigation
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('tab', { name: 'Tab label 1' })).toBeVisible();
+
+    // Focus should be on content within the first Tab
+    await page.keyboard.press('Tab');
+    await expect(
+      page.getByRole('tabpanel', { name: 'Tab Panel 1' })
+    ).toBeFocused();
+
+    // Moving back one tab stop we should back on Tab label 1
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.getByRole('tab', { name: 'Tab label 1' })).toBeFocused();
+
+    // Nav through the default tab panel via keyboard navigation
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('tab', { name: 'Tab label 2' })).toBeVisible();
+
+    // Move through the actions in the second tab
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('checkbox')).toBeVisible();
+
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible();
+
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('textbox')).toBeVisible();
+
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Shift+Tab');
+    await expect(page.getByRole('tab', { name: 'Tab label 2' })).toBeFocused();
+
+    // Continue to nav through the default tab panel via keyboard navigation
+    await page.keyboard.press('ArrowDown');
+    await expect(page.getByRole('tab', { name: 'Tab label 4' })).toBeFocused();
+  });
+
+  test.slow('@avt-keyboard-nav - dismissable state', async ({ page }) => {
     await visitStory(page, {
       component: 'Tabs',
       id: 'components-tabs--dismissable',
@@ -177,8 +233,6 @@ test.describe('Tabs @avt', () => {
 
     // Pressing delete should delete the dismissable tab
     await page.keyboard.press('Delete');
-    await expect(
-      page.getByRole('tab', { name: 'Tab label 4' })
-    ).not.toBeVisible();
+    await expect(page.getByRole('tab', { name: 'Tab label 4' })).toBeHidden();
   });
 });

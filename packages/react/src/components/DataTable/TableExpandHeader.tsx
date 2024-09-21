@@ -18,7 +18,7 @@ type TableExpandHeaderPropsBase = {
   /**
    * Space separated list of one or more ID values referencing the TableExpandedRow(s) being controlled by the TableExpandHeader
    */
-  ['aria-controls']: string;
+  ['aria-controls']?: string;
 
   /**
    * @deprecated This prop has been deprecated and will be
@@ -31,7 +31,7 @@ type TableExpandHeaderPropsBase = {
    * Specify the string read by a voice reader when the expand trigger is
    * focused
    */
-  ['aria-label']: string;
+  ['aria-label']?: string;
 
   /**
    * @deprecated The enableExpando prop is being replaced by `enableToggle`
@@ -150,7 +150,7 @@ TableExpandHeader.propTypes = {
   className: PropTypes.string,
 
   /**
-   * The enableExpando prop is being replaced by enableToggle
+   * The enableExpando prop is being replaced by TableExpandHeader
    */
   enableExpando: deprecate(
     PropTypes.bool,

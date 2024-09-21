@@ -6,10 +6,9 @@ import { textInputProps } from './util';
 import { warning } from '../../internal/warning';
 import deprecate from '../../prop-types/deprecate';
 import { usePrefix } from '../../internal/usePrefix';
-import setupGetInstanceId from '../../tools/setupGetInstanceId';
+import { useId } from '../../internal/useId';
 import { ReactAttr } from '../../types/common';
-
-const getInstanceId = setupGetInstanceId();
+import { noopFn } from '../../internal/noopFn';
 
 let didWarnAboutDeprecation = false;
 
@@ -126,12 +125,13 @@ const ControlledPasswordInput = React.forwardRef(
       className,
       id,
       placeholder,
-      onChange,
-      onClick,
+      onChange = noopFn,
+      onClick = noopFn,
+      disabled = false,
       hideLabel,
-      invalid,
-      invalidText,
-      helperText,
+      invalid = false,
+      invalidText = '',
+      helperText = '',
       light,
       // eslint-disable-next-line react/prop-types
       type = 'password',
@@ -141,14 +141,13 @@ const ControlledPasswordInput = React.forwardRef(
       tooltipAlignment = 'center',
       hidePasswordLabel = 'Hide password',
       showPasswordLabel = 'Show password',
-      size,
+      size = undefined,
       ...other
     }: ControlledPasswordInputProps,
     ref
   ) {
     const prefix = usePrefix();
-    const { current: controlledPasswordInstanceId } = useRef(getInstanceId());
-
+    const controlledPasswordInstanceId = useId();
     if (__DEV__) {
       warning(
         didWarnAboutDeprecation,
@@ -171,12 +170,12 @@ const ControlledPasswordInput = React.forwardRef(
     const sharedTextInputProps = {
       id,
       onChange: (evt: React.ChangeEvent<HTMLInputElement>) => {
-        if (!other.disabled) {
+        if (!disabled) {
           onChange?.(evt);
         }
       },
       onClick: (evt: React.MouseEvent<HTMLInputElement>) => {
-        if (!other.disabled) {
+        if (!disabled) {
           onClick?.(evt);
         }
       },
@@ -188,10 +187,10 @@ const ControlledPasswordInput = React.forwardRef(
     };
     const labelClasses = classNames(`${prefix}--label`, {
       [`${prefix}--visually-hidden`]: hideLabel,
-      [`${prefix}--label--disabled`]: other.disabled,
+      [`${prefix}--label--disabled`]: disabled,
     });
     const helperTextClasses = classNames(`${prefix}--form__helper-text`, {
-      [`${prefix}--form__helper-text--disabled`]: other.disabled,
+      [`${prefix}--form__helper-text--disabled`]: disabled,
     });
     const label = labelText ? (
       <label htmlFor={id} className={labelClasses}>
@@ -380,16 +379,6 @@ ControlledPasswordInput.propTypes = {
    * Provide the current value of the `<input>`
    */
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-ControlledPasswordInput.defaultProps = {
-  disabled: false,
-  onChange: () => {},
-  onClick: () => {},
-  invalid: false,
-  invalidText: '',
-  helperText: '',
-  size: undefined,
 };
 
 export default ControlledPasswordInput;

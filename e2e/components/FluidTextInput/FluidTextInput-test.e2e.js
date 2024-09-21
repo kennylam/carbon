@@ -7,9 +7,9 @@
 
 'use strict';
 
-const { expect, test } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const { themes } = require('../../test-utils/env');
-const { snapshotStory, visitStory } = require('../../test-utils/storybook');
+const { snapshotStory } = require('../../test-utils/storybook');
 
 test.describe('FluidTextInput', () => {
   themes.forEach((theme) => {
@@ -17,34 +17,16 @@ test.describe('FluidTextInput', () => {
       test('fluid text input @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'FluidTextInput',
-          id: 'experimental-unstable-fluidtextinput--default',
+          id: 'experimental-fluid-components-unstable-fluidtextinput--default',
           theme,
         });
 
         await snapshotStory(page, {
-          component: 'FluidTextInput',
-          id: 'experimental-unstable-fluidtextinput--password-input',
+          component: 'FluidPasswordInput',
+          id: 'experimental-fluid-components-unstable-fluidpasswordinput--default',
           theme,
         });
       });
     });
-  });
-
-  test('accessibility-checker @avt', async ({ page }) => {
-    await visitStory(page, {
-      component: 'FluidTextInput',
-      id: 'experimental-unstable-fluidtextinput--default',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await visitStory(page, {
-      component: 'FluidTextInput',
-      id: 'experimental-unstable-fluidtextinput--password-input',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await expect(page).toHaveNoACViolations('FluidTextInput');
   });
 });

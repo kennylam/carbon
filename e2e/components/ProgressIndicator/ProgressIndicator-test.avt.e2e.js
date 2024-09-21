@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('ProgressIndicator', () => {
-  test('accessibility-checker @avt', async ({ page }) => {
+test.describe('@avt ProgressIndicator', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--default',
@@ -22,9 +22,7 @@ test.describe('ProgressIndicator', () => {
     await expect(page).toHaveNoACViolations('ProgressIndicator');
   });
 
-  test('accessibility-checker interactive progressindicator @avt', async ({
-    page,
-  }) => {
+  test('@avt-advanced-states interactive', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--interactive',
@@ -35,9 +33,7 @@ test.describe('ProgressIndicator', () => {
     await expect(page).toHaveNoACViolations('ProgressIndicator-interactive');
   });
 
-  test('accessibility-checker skeleton progressindicator @avt', async ({
-    page,
-  }) => {
+  test('@avt-advanced-states skeleton', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--skeleton',
@@ -48,23 +44,7 @@ test.describe('ProgressIndicator', () => {
     await expect(page).toHaveNoACViolations('ProgressIndicator-skeleton');
   });
 
-  test('accessibility-checker - onHover @avt', async ({ page }) => {
-    await visitStory(page, {
-      component: 'ProgressIndicator',
-      id: 'components-progressindicator--default',
-      globals: {
-        theme: 'white',
-      },
-    });
-
-    await expect(page.getByText('First step')).toBeVisible();
-
-    page.getByText('First step').hover();
-
-    await expect(page).toHaveNoACViolations('ProgressIndicator-onhover');
-  });
-
-  test('accessibility-checker - complete @avt', async ({ page }) => {
+  test('@avt-advanced-states - complete', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--default',
@@ -77,7 +57,7 @@ test.describe('ProgressIndicator', () => {
     expect(page.locator('.cds--progress-step--complete')).toBeTruthy();
   });
 
-  test('accessibility-checker - current @avt', async ({ page }) => {
+  test('@avt-advanced-states', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--default',
@@ -90,7 +70,7 @@ test.describe('ProgressIndicator', () => {
     expect(page.locator('.cds--progress-step--current')).toBeTruthy();
   });
 
-  test('accessibility-checker - interactive onHover @avt', async ({ page }) => {
+  test('@avt-advanced-states - interactive onHover', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--interactive',
@@ -99,16 +79,18 @@ test.describe('ProgressIndicator', () => {
       },
     });
 
-    await expect(page.getByText('Click me')).toBeVisible();
+    const clickMeButton = page.getByRole('button').first();
 
-    page.getByText('Click me').hover();
+    await expect(clickMeButton).toBeVisible();
+
+    await clickMeButton.hover();
 
     await expect(page).toHaveNoACViolations(
       'ProgressIndicator-interactive-onhover'
     );
   });
 
-  test('progress indicator - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav progress indicator', async ({ page }) => {
     await visitStory(page, {
       component: 'ProgressIndicator',
       id: 'components-progressindicator--interactive',
@@ -117,7 +99,6 @@ test.describe('ProgressIndicator', () => {
       },
     });
     // Testing the first element interaction
-    await page.keyboard.press('Tab');
     await expect(page.getByRole('button', { name: 'Click me' })).toBeVisible();
     await page.keyboard.press('Tab');
     await expect(page.getByRole('button', { name: 'Click me' })).toBeFocused();

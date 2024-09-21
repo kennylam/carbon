@@ -24,10 +24,9 @@ import {
 import deprecate from '../../prop-types/deprecate';
 import { usePrefix } from '../../internal/usePrefix';
 import { FormContext } from '../FluidForm';
-import setupGetInstanceId from '../../tools/setupGetInstanceId';
+import { useId } from '../../internal/useId';
 import { composeEventHandlers } from '../../tools/events';
-
-const getInstanceId = setupGetInstanceId();
+import { Text } from '../Text';
 
 type ExcludedAttributes = 'size';
 
@@ -98,7 +97,7 @@ interface SelectProps
   light?: boolean;
 
   /**
-   * Reserved for use with <Pagination> component. Will not render a label for the
+   * Reserved for use with Pagination component. Will not render a label for the
    * select since Pagination renders one for us.
    */
   noLabel?: boolean;
@@ -119,6 +118,11 @@ interface SelectProps
   size?: 'sm' | 'md' | 'lg';
 
   /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `Dropdown` component
+   */
+  slug?: ReactNode;
+
+  /**
    * Specify whether the control is currently in warning state
    */
   warn?: boolean;
@@ -134,22 +138,23 @@ const Select = React.forwardRef(function Select(
     className,
     id,
     inline = false,
-    labelText,
+    labelText = 'Select',
     disabled = false,
     children,
-    // reserved for use with <Pagination> component
+    // reserved for use with Pagination component
     noLabel = false,
     // eslint-disable-next-line no-unused-vars
     hideLabel = false,
     invalid = false,
-    invalidText,
-    helperText,
+    invalidText = '',
+    helperText = '',
     light = false,
     readOnly,
     size,
     warn = false,
     warnText,
     onChange,
+    slug,
     ...other
   }: SelectProps,
   ref: ForwardedRef<HTMLSelectElement>
@@ -158,7 +163,7 @@ const Select = React.forwardRef(function Select(
   const { isFluid } = useContext(FormContext);
   const [isFocused, setIsFocused] = useState(false);
   const [title, setTitle] = useState('');
-  const { current: selectInstanceId } = useRef(getInstanceId());
+  const selectInstanceId = useId();
 
   const selectClasses = classNames({
     [`${prefix}--select`]: true,
@@ -170,6 +175,7 @@ const Select = React.forwardRef(function Select(
     [`${prefix}--select--warning`]: warn,
     [`${prefix}--select--fluid--invalid`]: isFluid && invalid,
     [`${prefix}--select--fluid--focus`]: isFluid && isFocused,
+    [`${prefix}--select--slug`]: slug,
   });
   const labelClasses = classNames(`${prefix}--label`, {
     [`${prefix}--visually-hidden`]: hideLabel,
@@ -190,9 +196,9 @@ const Select = React.forwardRef(function Select(
   })();
   const error =
     invalid || warn ? (
-      <div className={`${prefix}--form-requirement`} id={errorId}>
+      <Text as="div" className={`${prefix}--form-requirement`} id={errorId}>
         {errorText}
-      </div>
+      </Text>
     ) : null;
   const helperTextClasses = classNames(`${prefix}--form__helper-text`, {
     [`${prefix}--form__helper-text--disabled`]: disabled,
@@ -203,9 +209,9 @@ const Select = React.forwardRef(function Select(
     : `select-helper-text-${selectInstanceId}`;
 
   const helper = helperText ? (
-    <div id={helperId} className={helperTextClasses}>
+    <Text as="div" id={helperId} className={helperTextClasses}>
       {helperText}
-    </div>
+    </Text>
   ) : null;
   const ariaProps = {};
   if (invalid) {
@@ -240,6 +246,14 @@ const Select = React.forwardRef(function Select(
     },
   };
 
+  // Slug is always size `mini`
+  let normalizedSlug;
+  if (slug && slug['type']?.displayName === 'AILabel') {
+    normalizedSlug = React.cloneElement(slug as React.ReactElement<any>, {
+      size: 'mini',
+    });
+  }
+
   const input = (() => {
     return (
       <>
@@ -273,9 +287,9 @@ const Select = React.forwardRef(function Select(
     <div className={classNames(`${prefix}--form-item`, className)}>
       <div className={selectClasses}>
         {!noLabel && (
-          <label htmlFor={id} className={labelClasses}>
+          <Text as="label" htmlFor={id} className={labelClasses}>
             {labelText}
-          </label>
+          </Text>
         )}
         {inline && (
           <div className={`${prefix}--select-input--inline__wrapper`}>
@@ -294,6 +308,7 @@ const Select = React.forwardRef(function Select(
             onFocus={handleFocus}
             onBlur={handleFocus}>
             {input}
+            {normalizedSlug}
             {isFluid && <hr className={`${prefix}--select__divider`} />}
             {isFluid && error ? error : null}
           </div>
@@ -374,7 +389,7 @@ Select.propTypes = {
   ),
 
   /**
-   * Reserved for use with <Pagination> component. Will not render a label for the
+   * Reserved for use with Pagination component. Will not render a label for the
    * select since Pagination renders one for us.
    */
   noLabel: PropTypes.bool,
@@ -396,6 +411,11 @@ Select.propTypes = {
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
 
   /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `Select` component
+   */
+  slug: PropTypes.node,
+
+  /**
    * Specify whether the control is currently in warning state
    */
   warn: PropTypes.bool,
@@ -404,15 +424,6 @@ Select.propTypes = {
    * Provide the text that is displayed when the control is in warning state
    */
   warnText: PropTypes.node,
-};
-
-Select.defaultProps = {
-  disabled: false,
-  labelText: 'Select',
-  inline: false,
-  invalid: false,
-  invalidText: '',
-  helperText: '',
 };
 
 export default Select;

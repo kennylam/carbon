@@ -6,9 +6,10 @@
  */
 
 import React from 'react';
-import { Menu, MenuItem } from './';
-import { render, screen } from '@testing-library/react';
+import { Menu, MenuItem, MenuItemSelectable, MenuItemRadioGroup } from './';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { waitForPosition } from '../ListBox/test-helpers';
 
 describe('Menu', () => {
   describe('renders as expected', () => {
@@ -82,6 +83,104 @@ describe('Menu', () => {
       expect(document.querySelector('.custom-class')).toBeInTheDocument();
       document.body.removeChild(el);
     });
+
+    it('warns about nested menus in basic mode', async () => {
+      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <Menu open mode="basic">
+          <MenuItem label="Submenu">
+            <MenuItem label="Item" />
+          </MenuItem>
+        </Menu>
+      );
+      await waitForPosition();
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
+  });
+
+  describe('Submenu behavior', () => {
+    beforeEach(async () => {
+      jest.useFakeTimers();
+      render(
+        <Menu open>
+          <MenuItem label="Submenu">
+            <MenuItem label="Item" />
+          </MenuItem>
+        </Menu>
+      );
+      await waitForPosition();
+    });
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+    it('should only show parent and not then submenu when not hovered', () => {
+      const menus = screen.getAllByRole('menu');
+      expect(menus.length).toBe(2);
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).not.toHaveClass('cds--menu--open');
+    });
+
+    it('should show sub menu when hovered for hoverIntentDelay', async () => {
+      const menus = screen.getAllByRole('menu');
+      await act(() =>
+        fireEvent.mouseEnter(
+          screen.getByRole('menuitem', { name: 'Submenu Submenu' })
+        )
+      );
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).not.toHaveClass('cds--menu--open');
+
+      await act(() => jest.runOnlyPendingTimers());
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).toHaveClass('cds--menu--open');
+    });
+
+    it('should close sub menu on leave after leaveIntentDelay', async () => {
+      const menus = screen.getAllByRole('menu');
+      await act(() => {
+        fireEvent.mouseEnter(
+          screen.getByRole('menuitem', { name: 'Submenu Submenu' })
+        );
+        jest.runOnlyPendingTimers();
+      });
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).toHaveClass('cds--menu--open');
+
+      await act(() => {
+        fireEvent.mouseLeave(
+          screen.getByRole('menuitem', { name: 'Submenu Submenu' })
+        );
+        jest.runOnlyPendingTimers();
+      });
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).not.toHaveClass('cds--menu--open');
+    });
+
+    it('should cancel close sub menu on leave and reenter before leaveIntentDelay', async () => {
+      const menus = screen.getAllByRole('menu');
+      await act(() => {
+        fireEvent.mouseEnter(
+          screen.getByRole('menuitem', { name: 'Submenu Submenu' })
+        );
+        jest.runOnlyPendingTimers();
+      });
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).toHaveClass('cds--menu--open');
+
+      await act(() => {
+        fireEvent.mouseLeave(
+          screen.getByRole('menuitem', { name: 'Submenu Submenu' })
+        );
+        fireEvent.mouseEnter(
+          screen.getByRole('menuitem', { name: 'Submenu Submenu' })
+        );
+        jest.runOnlyPendingTimers();
+      });
+      expect(menus[0]).toHaveClass('cds--menu--open');
+      expect(menus[1]).toHaveClass('cds--menu--open');
+    });
   });
 });
 
@@ -124,6 +223,35 @@ describe('MenuItem', () => {
       );
 
       expect(screen.getByText('item')).toBeInTheDocument();
+    });
+
+    it('warns about MenuItemSelectable in basic mode', () => {
+      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <Menu open mode="basic">
+          <MenuItemSelectable label="Option" />
+        </Menu>
+      );
+
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
+
+    it('warns about MenuItemRadioGroup in basic mode', () => {
+      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <Menu open mode="basic">
+          <MenuItemRadioGroup
+            label="Options"
+            items={['Option 1', 'Option 2']}
+          />
+        </Menu>
+      );
+
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
     });
   });
 });

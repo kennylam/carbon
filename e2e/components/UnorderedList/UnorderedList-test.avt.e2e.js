@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('UnorderedList @avt', () => {
-  test('accessibility-checker default', async ({ page }) => {
+test.describe('@avt UnorderedList', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'UnorderedList',
       id: 'components-unorderedlist--default',
@@ -24,7 +24,7 @@ test.describe('UnorderedList @avt', () => {
     );
   });
 
-  test('accessibility-checker nested', async ({ page }) => {
+  test('@avt-advanced-states nested', async ({ page }) => {
     await visitStory(page, {
       component: 'UnorderedList',
       id: 'components-unorderedlist--nested',

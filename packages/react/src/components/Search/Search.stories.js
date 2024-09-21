@@ -5,12 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
 import { WithLayer } from '../../../.storybook/templates/WithLayer';
 
 import ExpandableSearch from '../ExpandableSearch';
 import Search from '.';
+import Button from '../Button';
 
 export default {
   title: 'Components/Search',

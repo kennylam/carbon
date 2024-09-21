@@ -5,11 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, { KeyboardEventHandler, MouseEventHandler, useRef } from 'react';
+import React, {
+  type KeyboardEventHandler,
+  type MouseEventHandler,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useControllableState } from '../../internal/useControllableState';
 import { usePrefix } from '../../internal/usePrefix';
+import { Text } from '../Text';
 
 type ExcludedAttributes =
   | 'aria-labelledby'
@@ -153,6 +158,8 @@ export function Toggle({
     [`${prefix}--toggle__switch--checked`]: checked,
   });
 
+  const labelId = `${id}_label`;
+
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
@@ -184,14 +191,15 @@ export function Toggle({
         role="switch"
         type="button"
         aria-checked={checked}
-        aria-labelledby={id}
+        aria-labelledby={ariaLabelledby ?? (labelText ? labelId : undefined)}
         disabled={disabled}
         onClick={handleClick}
       />
       <LabelComponent
+        id={labelId}
         htmlFor={ariaLabelledby ? undefined : id}
         className={`${prefix}--toggle__label`}>
-        {labelText && <span className={labelTextClasses}>{labelText}</span>}
+        {labelText && <Text className={labelTextClasses}>{labelText}</Text>}
         <div className={appearanceClasses}>
           <div className={switchClasses}>
             {isSm && (
@@ -205,9 +213,9 @@ export function Toggle({
             )}
           </div>
           {renderSideLabel && (
-            <span className={`${prefix}--toggle__text`} aria-hidden="true">
+            <Text className={`${prefix}--toggle__text`} aria-hidden="true">
               {sideLabel}
-            </span>
+            </Text>
           )}
         </div>
       </LabelComponent>

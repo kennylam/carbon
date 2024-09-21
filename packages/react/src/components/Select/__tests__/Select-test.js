@@ -11,6 +11,7 @@ import SelectItem from '../../SelectItem';
 import SelectSkeleton from '../../Select/Select.Skeleton';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
+import { AILabel } from '../../AILabel';
 
 const prefix = 'cds';
 
@@ -215,7 +216,7 @@ describe('Select', () => {
 
     it('should respect warn prop', () => {
       const { container } = render(
-        <Select id="select" labelText="Select" warn />
+        <Select id="select" labelText="Select" warn warnText="Warning" />
       );
 
       // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
@@ -237,6 +238,16 @@ describe('Select', () => {
       expect(screen.getByText('This is a warning message')).toBeInTheDocument();
       expect(screen.getByText('This is a warning message')).toHaveClass(
         `${prefix}--form-requirement`
+      );
+    });
+
+    it('should respect slug prop', () => {
+      const { container } = render(
+        <Select id="select" labelText="Select" slug={<AILabel />} />
+      );
+
+      expect(container.firstChild.firstChild).toHaveClass(
+        `${prefix}--select--slug`
       );
     });
   });

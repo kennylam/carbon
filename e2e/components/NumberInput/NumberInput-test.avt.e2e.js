@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('NumberInput @avt', () => {
-  test('accessibility-checker default', async ({ page }) => {
+test.describe('@avt NumberInput', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'NumberInput',
       id: 'components-numberinput--default',
@@ -22,7 +22,7 @@ test.describe('NumberInput @avt', () => {
     await expect(page).toHaveNoACViolations('components-numberinput--default');
   });
 
-  test('accessibility-checker skeleton', async ({ page }) => {
+  test('@avt-advanced-states skeleton', async ({ page }) => {
     await visitStory(page, {
       component: 'NumberInput',
       id: 'components-numberinput--skeleton',
@@ -33,7 +33,7 @@ test.describe('NumberInput @avt', () => {
     await expect(page).toHaveNoACViolations('components-numberinput--skeleton');
   });
 
-  test('number input - keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav', async ({ page }) => {
     await visitStory(page, {
       component: 'NumberInput',
       id: 'components-numberinput--default',
@@ -81,8 +81,8 @@ test.describe('NumberInput @avt', () => {
     await expect(input).toHaveAttribute('data-invalid', 'true');
 
     // Allow setting value under `min`, but should cause input to be invalid
-    await input.fill('-1');
-    await expect(input).toHaveValue('-1');
+    await input.fill('-101');
+    await expect(input).toHaveValue('-101');
     await expect(input).toHaveAttribute('data-invalid', 'true');
   });
 });

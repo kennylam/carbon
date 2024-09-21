@@ -93,6 +93,16 @@ Array [
     "relativePath": "scss/components/accordion",
   },
   Object {
+    "filepath": "scss/components/ai-label/_ai-label.scss",
+    "importPath": "@carbon/styles/scss/components/ai-label/ai-label",
+    "relativePath": "scss/components/ai-label/ai-label",
+  },
+  Object {
+    "filepath": "scss/components/ai-label/_index.scss",
+    "importPath": "@carbon/styles/scss/components/ai-label",
+    "relativePath": "scss/components/ai-label",
+  },
+  Object {
     "filepath": "scss/components/aspect-ratio/_aspect-ratio.scss",
     "importPath": "@carbon/styles/scss/components/aspect-ratio/aspect-ratio",
     "relativePath": "scss/components/aspect-ratio/aspect-ratio",
@@ -126,6 +136,16 @@ Array [
     "filepath": "scss/components/button/_tokens.scss",
     "importPath": "@carbon/styles/scss/components/button/tokens",
     "relativePath": "scss/components/button/tokens",
+  },
+  Object {
+    "filepath": "scss/components/chat-button/_chat-button.scss",
+    "importPath": "@carbon/styles/scss/components/chat-button/chat-button",
+    "relativePath": "scss/components/chat-button/chat-button",
+  },
+  Object {
+    "filepath": "scss/components/chat-button/_index.scss",
+    "importPath": "@carbon/styles/scss/components/chat-button",
+    "relativePath": "scss/components/chat-button",
   },
   Object {
     "filepath": "scss/components/checkbox/_checkbox.scss",
@@ -608,6 +628,11 @@ Array [
     "relativePath": "scss/components/skeleton-styles/skeleton-styles",
   },
   Object {
+    "filepath": "scss/components/skeleton-styles/_ai-skeleton-styles.scss",
+    "importPath": "@carbon/styles/scss/components/skeleton-styles/ai-skeleton-styles",
+    "relativePath": "scss/components/skeleton-styles/ai-skeleton-styles",
+  },
+  Object {
     "filepath": "scss/components/slider/_index.scss",
     "importPath": "@carbon/styles/scss/components/slider",
     "relativePath": "scss/components/slider",
@@ -616,6 +641,16 @@ Array [
     "filepath": "scss/components/slider/_slider.scss",
     "importPath": "@carbon/styles/scss/components/slider/slider",
     "relativePath": "scss/components/slider/slider",
+  },
+  Object {
+    "filepath": "scss/components/slug/_index.scss",
+    "importPath": "@carbon/styles/scss/components/slug",
+    "relativePath": "scss/components/slug",
+  },
+  Object {
+    "filepath": "scss/components/slug/_slug.scss",
+    "importPath": "@carbon/styles/scss/components/slug/slug",
+    "relativePath": "scss/components/slug/slug",
   },
   Object {
     "filepath": "scss/components/stack/_index.scss",
@@ -881,6 +916,11 @@ Array [
     "filepath": "scss/type/_reset.scss",
     "importPath": "@carbon/styles/scss/type/reset",
     "relativePath": "scss/type/reset",
+  },
+  Object {
+    "filepath": "scss/utilities/_ai-gradient.scss",
+    "importPath": "@carbon/styles/scss/utilities/ai-gradient",
+    "relativePath": "scss/utilities/ai-gradient",
   },
   Object {
     "filepath": "scss/utilities/_box-shadow.scss",

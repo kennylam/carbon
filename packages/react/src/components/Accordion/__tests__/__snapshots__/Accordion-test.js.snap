@@ -31,15 +31,21 @@ exports[`Accordion should render 1`] = `
         </svg>
         <div
           class="cds--accordion__title"
+          dir="auto"
         >
           Heading A
         </div>
       </button>
       <div
-        class="cds--accordion__content"
-        id="accordion-item-:r0:"
+        class="cds--accordion__wrapper"
+        hidden=""
       >
-        Panel A
+        <div
+          class="cds--accordion__content"
+          id="accordion-item-:r0:"
+        >
+          Panel A
+        </div>
       </div>
     </li>
     <li
@@ -68,15 +74,21 @@ exports[`Accordion should render 1`] = `
         </svg>
         <div
           class="cds--accordion__title"
+          dir="auto"
         >
           Heading B
         </div>
       </button>
       <div
-        class="cds--accordion__content"
-        id="accordion-item-:r1:"
+        class="cds--accordion__wrapper"
+        hidden=""
       >
-        Panel B
+        <div
+          class="cds--accordion__content"
+          id="accordion-item-:r1:"
+        >
+          Panel B
+        </div>
       </div>
     </li>
     <li
@@ -105,15 +117,21 @@ exports[`Accordion should render 1`] = `
         </svg>
         <div
           class="cds--accordion__title"
+          dir="auto"
         >
           Heading C
         </div>
       </button>
       <div
-        class="cds--accordion__content"
-        id="accordion-item-:r2:"
+        class="cds--accordion__wrapper"
+        hidden=""
       >
-        Panel C
+        <div
+          class="cds--accordion__content"
+          id="accordion-item-:r2:"
+        >
+          Panel C
+        </div>
       </div>
     </li>
   </ul>

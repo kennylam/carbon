@@ -7,17 +7,17 @@
 
 'use strict';
 
-const { expect, test } = require('@playwright/test');
+const { test } = require('@playwright/test');
 const { themes } = require('../../test-utils/env');
-const { snapshotStory, visitStory } = require('../../test-utils/storybook');
+const { snapshotStory } = require('../../test-utils/storybook');
 
 test.describe('Popover', () => {
   themes.forEach((theme) => {
     test.describe(theme, () => {
-      test('Popover - auto align @vrt', async ({ page }) => {
+      test('Popover @vrt', async ({ page }) => {
         await snapshotStory(page, {
           component: 'Popover',
-          id: 'components-popover--auto-align',
+          id: 'components-popover--playground',
           theme,
         });
       });
@@ -30,16 +30,5 @@ test.describe('Popover', () => {
         });
       });
     });
-  });
-
-  test('accessibility-checker @avt', async ({ page }) => {
-    await visitStory(page, {
-      component: 'Popover',
-      id: 'components-popover--auto-align',
-      globals: {
-        theme: 'white',
-      },
-    });
-    await expect(page).toHaveNoACViolations('Popover');
   });
 });

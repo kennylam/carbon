@@ -260,8 +260,9 @@ export const link = TokenGroup.create({
     'link-secondary',
     {
       state: 'visited',
-      name: 'link-visited',
+      name: 'link-inverse-visited',
     },
+    'link-visited',
     'link-inverse',
     'link-inverse-active',
     'link-inverse-hover',
@@ -341,6 +342,56 @@ export const contextual = TokenGroup.create({
   ],
 });
 
+export const ai = TokenGroup.create({
+  name: 'AI',
+  properties: ['background'],
+  tokens: [
+    // Phase 2
+    'ai-popover-background',
+    'ai-popover-shadow-outer-01',
+    'ai-popover-shadow-outer-02',
+    // Linear gradient refactor
+    'ai-inner-shadow',
+    'ai-aura-start-sm',
+    'ai-aura-start',
+    'ai-aura-end',
+    'ai-aura-hover-background',
+    'ai-aura-hover-start',
+    'ai-aura-hover-end',
+    'ai-border-strong',
+    'ai-border-start',
+    'ai-border-end',
+    'ai-drop-shadow',
+    'ai-skeleton-background',
+    'ai-skeleton-element-background',
+    'ai-overlay',
+    // Caret tokens
+    'ai-popover-caret-center',
+    'ai-popover-caret-bottom',
+    'ai-popover-caret-bottom-background',
+    'ai-popover-caret-bottom-background-actions',
+    // Chat tokens
+    'chat-prompt-background',
+    'chat-prompt-border-start',
+    'chat-prompt-border-end',
+    'chat-bubble-user',
+    'chat-bubble-agent',
+    'chat-bubble-border',
+    'chat-avatar-bot',
+    'chat-avatar-agent',
+    'chat-avatar-user',
+    'chat-shell-background',
+    'chat-header-background',
+    // Chat button tokens
+    'chat-button',
+    'chat-button-hover',
+    'chat-button-text-hover',
+    'chat-button-active',
+    'chat-button-selected',
+    'chat-button-text-selected',
+  ],
+});
+
 export const group = TokenGroup.create({
   name: 'All',
   tokens: [
@@ -359,6 +410,7 @@ export const group = TokenGroup.create({
     link,
     icon,
     support,
+    ai,
 
     // Misc
     {

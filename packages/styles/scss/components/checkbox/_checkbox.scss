@@ -62,7 +62,7 @@
     display: flex;
     cursor: pointer;
     min-block-size: convert.to-rem(20px);
-    padding-block-start: convert.to-rem(2px);
+    padding-block-start: convert.to-rem(1px);
     padding-inline-start: convert.to-rem(20px);
     user-select: none;
   }
@@ -76,6 +76,10 @@
   .#{$prefix}--checkbox-label::before,
   .#{$prefix}--checkbox-label::after {
     box-sizing: border-box;
+
+    @media print {
+      print-color-adjust: exact;
+    }
   }
 
   // Spacing for presentational checkbox
@@ -360,5 +364,50 @@
   [dir='rtl']
     .#{$prefix}--checkbox-label[data-contained-checkbox-state='true']::after {
     transform: scale(1.2) rotate3d(0.5, 1, 0, 158deg);
+  }
+
+  // Slug styles
+  .#{$prefix}--checkbox-group--slug legend.#{$prefix}--label,
+  .#{$prefix}--checkbox-wrapper--slug .#{$prefix}--checkbox-label-text {
+    display: flex;
+  }
+
+  .#{$prefix}--checkbox-group--slug legend.#{$prefix}--label .#{$prefix}--slug,
+  .#{$prefix}--checkbox-wrapper--slug
+    .#{$prefix}--checkbox-label-text
+    .#{$prefix}--slug {
+    margin-inline-start: $spacing-03;
+  }
+
+  .#{$prefix}--checkbox-wrapper--slug
+    .#{$prefix}--checkbox-label-text
+    .#{$prefix}--slug__button--inline {
+    line-height: inherit;
+    margin-block-start: convert.to-rem(-1px);
+  }
+
+  // horizontal checkbox group
+  .#{$prefix}--checkbox-group--horizontal {
+    position: relative;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+
+    .#{$prefix}--form-item {
+      flex: none;
+      margin-block-end: 0;
+
+      &:not(:last-of-type) {
+        margin-inline-end: $spacing-05;
+      }
+    }
+
+    .#{$prefix}--checkbox-label-text {
+      padding-inline-start: $spacing-03;
+    }
+
+    .#{$prefix}--label + .#{$prefix}--form-item.#{$prefix}--checkbox-wrapper {
+      margin-block-start: 0;
+    }
   }
 }

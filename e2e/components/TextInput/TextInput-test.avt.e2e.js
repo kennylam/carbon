@@ -10,8 +10,8 @@
 const { expect, test } = require('@playwright/test');
 const { visitStory } = require('../../test-utils/storybook');
 
-test.describe('TextInput @avt', () => {
-  test('default state', async ({ page }) => {
+test.describe('@avt TextInput', () => {
+  test('@avt-default-state', async ({ page }) => {
     await visitStory(page, {
       component: 'TextInput',
       id: 'components-textinput--default',
@@ -22,7 +22,7 @@ test.describe('TextInput @avt', () => {
     await expect(page).toHaveNoACViolations('TextInput');
   });
 
-  test('disabled state', async ({ page }) => {
+  test('@avt-advanced-states - disabled', async ({ page }) => {
     await visitStory(page, {
       component: 'TextInput',
       id: 'components-textinput--playground',
@@ -38,7 +38,7 @@ test.describe('TextInput @avt', () => {
     await expect(page).toHaveNoACViolations('TextInput-Disabled');
   });
 
-  test('accessibility-checker keyboard nav', async ({ page }) => {
+  test('@avt-keyboard-nav', async ({ page }) => {
     await visitStory(page, {
       component: 'TextInput',
       id: 'components-textinput--default',
@@ -60,24 +60,23 @@ test.describe('TextInput @avt', () => {
     await expect(input).toHaveValue('Tex');
   });
 
-  test('accessibility-checker keyboard nav for password', async ({ page }) => {
+  test('@avt-keyboard-nav for password', async ({ page }) => {
     await visitStory(page, {
-      component: 'TextInput',
-      id: 'components-textinput--toggle-password-visibility',
+      component: 'PasswordInput',
+      id: 'components-passwordinput--default',
       globals: {
         theme: 'white',
       },
     });
     const input = page.getByRole('textbox');
-    const span = page.locator('span.cds--assistive-text');
 
     await page.keyboard.press('Tab');
     await input.fill('Text');
 
     // Checking toggle interaction
     await page.keyboard.press('Tab');
-    await expect(span).toHaveText('Show password');
+    await expect(page.getByLabel('Show password')).toBeVisible();
     await page.keyboard.press('Enter');
-    await expect(span).toHaveText('Hide password');
+    await expect(page.getByLabel('Hide password')).toBeVisible();
   });
 });

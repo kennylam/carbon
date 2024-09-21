@@ -358,42 +358,49 @@ export const HeaderWNavigationActionsAndSideNav = () => (
                   <HeaderMenuItem href="#">Sub-link 3</HeaderMenuItem>
                 </HeaderMenu>
               </HeaderSideNavItems>
-              <SideNavMenu renderIcon={Fade} title="Category title">
+              <SideNavMenu
+                renderIcon={Fade}
+                title="Category title"
+                tabIndex={0}>
                 <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
+                  Link 5
                 </SideNavMenuItem>
                 <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
+                  Link 6
                 </SideNavMenuItem>
                 <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
-                </SideNavMenuItem>
-              </SideNavMenu>
-              <SideNavMenu renderIcon={Fade} title="Category title">
-                <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
-                </SideNavMenuItem>
-                <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
-                </SideNavMenuItem>
-                <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
+                  Link 7
                 </SideNavMenuItem>
               </SideNavMenu>
               <SideNavMenu
                 renderIcon={Fade}
                 title="Category title"
-                isActive={true}>
+                tabIndex={0}>
                 <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
+                  Link 8
+                </SideNavMenuItem>
+                <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                  Link 9
+                </SideNavMenuItem>
+                <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                  Link 10
+                </SideNavMenuItem>
+              </SideNavMenu>
+              <SideNavMenu
+                renderIcon={Fade}
+                title="Category title"
+                isActive={true}
+                tabIndex={0}>
+                <SideNavMenuItem href="https://www.carbondesignsystem.com/">
+                  Link 11
                 </SideNavMenuItem>
                 <SideNavMenuItem
                   aria-current="page"
                   href="https://www.carbondesignsystem.com/">
-                  Link
+                  Link 12
                 </SideNavMenuItem>
                 <SideNavMenuItem href="https://www.carbondesignsystem.com/">
-                  Link
+                  Link 13
                 </SideNavMenuItem>
               </SideNavMenu>
               <SideNavLink

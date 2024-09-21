@@ -11,17 +11,23 @@ import React, {
 } from 'react';
 import { isElement } from 'react-is';
 import PropTypes from 'prop-types';
+import { Layer } from '../Layer';
 import { ModalHeader, type ModalHeaderProps } from './ModalHeader';
 import { ModalFooter, type ModalFooterProps } from './ModalFooter';
-
+import debounce from 'lodash.debounce';
+import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+import mergeRefs from '../../tools/mergeRefs';
 import cx from 'classnames';
-
 import toggleClass from '../../tools/toggleClass';
 import requiredIfGivenPropIsTruthy from '../../prop-types/requiredIfGivenPropIsTruthy';
-
-import wrapFocus from '../../internal/wrapFocus';
+import wrapFocus, {
+  elementOrParentIsFloatingMenu,
+  wrapFocusWithoutSentinels,
+} from '../../internal/wrapFocus';
 import { usePrefix } from '../../internal/usePrefix';
 import { keys, match } from '../../internal/keyboard';
+import { useFeatureFlag } from '../FeatureFlags';
+import { composeEventHandlers } from '../../tools/events';
 
 export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
   /** Specify the content to be placed in the ModalBody. */
@@ -29,7 +35,7 @@ export interface ModalBodyProps extends HTMLAttributes<HTMLDivElement> {
 
   /**
    * Provide whether the modal content has a form element.
-   * If `true` is used here, non-form child content should have `bx--modal-content__regular-content` class.
+   * If `true` is used here, non-form child content should have `cds--modal-content__regular-content` class.
    */
   hasForm?: boolean;
 
@@ -51,30 +57,54 @@ export const ModalBody = React.forwardRef<HTMLDivElement, ModalBodyProps>(
     ref
   ) {
     const prefix = usePrefix();
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [isScrollable, setIsScrollable] = useState(false);
     const contentClass = cx(
-      `${prefix}--modal-content`,
-      hasForm && `${prefix}--modal-content--with-form`,
-      hasScrollingContent && `${prefix}--modal-scroll-content`,
+      {
+        [`${prefix}--modal-content`]: true,
+        [`${prefix}--modal-content--with-form`]: hasForm,
+        [`${prefix}--modal-scroll-content`]:
+          hasScrollingContent || isScrollable,
+      },
       customClassName
     );
 
-    const hasScrollingContentProps = hasScrollingContent
-      ? { tabIndex: 0, role: 'region' }
-      : {};
+    useIsomorphicEffect(() => {
+      if (contentRef.current) {
+        setIsScrollable(
+          contentRef.current.scrollHeight > contentRef.current.clientHeight
+        );
+      }
+
+      function handler() {
+        if (contentRef.current) {
+          setIsScrollable(
+            contentRef.current.scrollHeight > contentRef.current.clientHeight
+          );
+        }
+      }
+
+      const debouncedHandler = debounce(handler, 200);
+      window.addEventListener('resize', debouncedHandler);
+      return () => {
+        debouncedHandler.cancel();
+        window.removeEventListener('resize', debouncedHandler);
+      };
+    }, []);
+
+    const hasScrollingContentProps =
+      hasScrollingContent || isScrollable
+        ? { tabIndex: 0, role: 'region' }
+        : {};
 
     return (
-      <>
-        <div
-          className={contentClass}
-          {...hasScrollingContentProps}
-          {...rest}
-          ref={ref}>
-          {children}
-        </div>
-        {hasScrollingContent && (
-          <div className={`${prefix}--modal-content--overflow-indicator`} />
-        )}
-      </>
+      <Layer
+        className={contentClass}
+        {...hasScrollingContentProps}
+        {...rest}
+        ref={mergeRefs(contentRef, ref)}>
+        {children}
+      </Layer>
     );
   }
 );
@@ -83,7 +113,6 @@ ModalBody.propTypes = {
   /**
    * Required props for the accessibility label of the header
    */
-  // @ts-expect-error: Built-in prop-types > TS logic doesn't jive well with custom validators
   ['aria-label']: requiredIfGivenPropIsTruthy(
     'hasScrollingContent',
     PropTypes.string
@@ -101,7 +130,7 @@ ModalBody.propTypes = {
 
   /**
    * Provide whether the modal content has a form element.
-   * If `true` is used here, non-form child content should have `bx--modal-content__regular-content` class.
+   * If `true` is used here, non-form child content should have `cds--modal-content__regular-content` class.
    */
   hasForm: PropTypes.bool,
 
@@ -113,12 +142,12 @@ ModalBody.propTypes = {
 
 export interface ComposedModalProps extends HTMLAttributes<HTMLDivElement> {
   /**
-   * Specify the aria-label for bx--modal-container
+   * Specify the aria-label for cds--modal-container
    */
   'aria-label'?: string;
 
   /**
-   * Specify the aria-labelledby for bx--modal-container
+   * Specify the aria-labelledby for cds--modal-container
    */
   'aria-labelledby'?: string;
 
@@ -178,9 +207,14 @@ export interface ComposedModalProps extends HTMLAttributes<HTMLDivElement> {
   selectorPrimaryFocus?: string;
 
   /** Specify the CSS selectors that match the floating menus. */
-  selectorsFloatingMenus?: Array<string | null | undefined>;
+  selectorsFloatingMenus?: string[];
 
   size?: 'xs' | 'sm' | 'md' | 'lg';
+
+  /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `ComposedModal` component
+   */
+  slug?: ReactNode;
 }
 
 const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
@@ -197,10 +231,11 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
       onKeyDown,
       open,
       preventCloseOnClickOutside,
-      selectorPrimaryFocus,
+      selectorPrimaryFocus = '[data-modal-primary-focus]',
       selectorsFloatingMenus,
       size,
       launcherButtonRef,
+      slug,
       ...rest
     },
     ref
@@ -212,8 +247,11 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
     const button = useRef<HTMLButtonElement>(null);
     const startSentinel = useRef<HTMLButtonElement>(null);
     const endSentinel = useRef<HTMLButtonElement>(null);
+    const focusTrapWithoutSentinels = useFeatureFlag(
+      'enable-experimental-focus-wrap-without-sentinels'
+    );
 
-    // Kepp track of modal open/close state
+    // Keep track of modal open/close state
     // and propagate it to the document.body
     useEffect(() => {
       if (open !== wasOpen) {
@@ -229,19 +267,41 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
       };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    function handleKeyDown(evt: KeyboardEvent) {
-      if (match(evt, keys.Escape)) {
-        closeModal(evt);
+    function handleKeyDown(event) {
+      event.stopPropagation();
+      if (match(event, keys.Escape)) {
+        closeModal(event);
       }
 
-      onKeyDown?.(evt);
+      if (
+        focusTrapWithoutSentinels &&
+        open &&
+        match(event, keys.Tab) &&
+        innerModal.current
+      ) {
+        wrapFocusWithoutSentinels({
+          containerNode: innerModal.current,
+          currentActiveNode: event.target,
+          event: event,
+        });
+      }
+
+      onKeyDown?.(event);
     }
-    function handleMousedown(evt: MouseEvent) {
-      const isInside = innerModal.current?.contains(evt.target as Node);
-      if (!isInside && !preventCloseOnClickOutside) {
+
+    function handleOnClick(evt: React.MouseEvent<HTMLDivElement>) {
+      const target = evt.target as Node;
+      evt.stopPropagation();
+      if (
+        !preventCloseOnClickOutside &&
+        !elementOrParentIsFloatingMenu(target, selectorsFloatingMenus) &&
+        innerModal.current &&
+        !innerModal.current.contains(target)
+      ) {
         closeModal(evt);
       }
     }
+
     function handleBlur({
       target: oldActiveNode,
       relatedTarget: currentActiveNode,
@@ -271,8 +331,11 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
 
     const modalClass = cx(
       `${prefix}--modal`,
-      isOpen && 'is-visible',
-      danger && `${prefix}--modal--danger`,
+      {
+        'is-visible': isOpen,
+        [`${prefix}--modal--danger`]: danger,
+        [`${prefix}--modal--slug`]: slug,
+      },
       customClassName
     );
 
@@ -345,14 +408,23 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
       }
     }, [open, selectorPrimaryFocus, isOpen]);
 
+    // Slug is always size `sm`
+    let normalizedSlug;
+    if (slug && slug['type']?.displayName === 'AILabel') {
+      normalizedSlug = React.cloneElement(slug as React.ReactElement<any>, {
+        size: 'sm',
+      });
+    }
+
     return (
-      <div
+      <Layer
         {...rest}
+        level={0}
         role="presentation"
         ref={ref}
         aria-hidden={!open}
-        onBlur={handleBlur}
-        onMouseDown={handleMousedown}
+        onBlur={!focusTrapWithoutSentinels ? handleBlur : () => {}}
+        onClick={composeEventHandlers([rest?.onClick, handleOnClick])}
         onKeyDown={handleKeyDown}
         className={modalClass}>
         <div
@@ -362,37 +434,41 @@ const ComposedModal = React.forwardRef<HTMLDivElement, ComposedModalProps>(
           aria-label={ariaLabel ? ariaLabel : generatedAriaLabel}
           aria-labelledby={ariaLabelledBy}>
           {/* Non-translatable: Focus-wrap code makes this `<button>` not actually read by screen readers */}
-
-          <button
-            type="button"
-            ref={startSentinel}
-            className={`${prefix}--visually-hidden`}>
-            Focus sentinel
-          </button>
+          {!focusTrapWithoutSentinels && (
+            <button
+              type="button"
+              ref={startSentinel}
+              className={`${prefix}--visually-hidden`}>
+              Focus sentinel
+            </button>
+          )}
           <div ref={innerModal} className={`${prefix}--modal-container-body`}>
+            {normalizedSlug}
             {childrenWithProps}
           </div>
           {/* Non-translatable: Focus-wrap code makes this `<button>` not actually read by screen readers */}
-          <button
-            type="button"
-            ref={endSentinel}
-            className={`${prefix}--visually-hidden`}>
-            Focus sentinel
-          </button>
+          {!focusTrapWithoutSentinels && (
+            <button
+              type="button"
+              ref={endSentinel}
+              className={`${prefix}--visually-hidden`}>
+              Focus sentinel
+            </button>
+          )}
         </div>
-      </div>
+      </Layer>
     );
   }
 );
 
 ComposedModal.propTypes = {
   /**
-   * Specify the aria-label for bx--modal-container
+   * Specify the aria-label for cds--modal-container
    */
   ['aria-label']: PropTypes.string,
 
   /**
-   * Specify the aria-labelledby for bx--modal-container
+   * Specify the aria-labelledby for cds--modal-container
    */
   ['aria-labelledby']: PropTypes.string,
 
@@ -461,15 +537,17 @@ ComposedModal.propTypes = {
   /**
    * Specify the CSS selectors that match the floating menus
    */
-  selectorsFloatingMenus: PropTypes.arrayOf(PropTypes.string),
+  selectorsFloatingMenus: PropTypes.arrayOf(PropTypes.string.isRequired),
 
   /**
    * Specify the size variant.
    */
   size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg']),
-};
-ComposedModal.defaultProps = {
-  selectorPrimaryFocus: '[data-modal-primary-focus]',
+
+  /**
+   * **Experimental**: Provide a `Slug` component to be rendered inside the `ComposedModal` component
+   */
+  slug: PropTypes.node,
 };
 
 export default ComposedModal;

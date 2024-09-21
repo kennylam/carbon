@@ -13,6 +13,8 @@ import { keys, matches } from '../../internal/keyboard';
 import uid from '../../tools/uniqueId';
 import { usePrefix } from '../../internal/usePrefix';
 import { ReactAttr } from '../../types/common';
+import { noopFn } from '../../internal/noopFn';
+import { Text } from '../Text';
 import { Tooltip } from '../Tooltip';
 
 export interface FileUploaderItemProps extends ReactAttr<HTMLSpanElement> {
@@ -71,23 +73,24 @@ export interface FileUploaderItemProps extends ReactAttr<HTMLSpanElement> {
    */
   uuid?: string;
 }
-
 function FileUploaderItem({
   uuid,
   name,
   status = 'uploading',
   iconDescription,
-  onDelete = () => {},
+  onDelete = noopFn,
   invalid,
   errorSubject,
   errorBody,
   size,
+  className,
   ...other
 }: FileUploaderItemProps) {
+  const textRef = useRef<HTMLParagraphElement>(null);
   const [isEllipsisApplied, setIsEllipsisApplied] = useState(false);
   const prefix = usePrefix();
   const { current: id } = useRef(uuid || uid());
-  const classes = cx(`${prefix}--file__selected-file`, {
+  const classes = cx(`${prefix}--file__selected-file`, className, {
     [`${prefix}--file__selected-file--invalid`]: invalid,
     [`${prefix}--file__selected-file--md`]: size === 'md',
     [`${prefix}--file__selected-file--sm`]: size === 'sm',
@@ -96,14 +99,17 @@ function FileUploaderItem({
     ? `${prefix}--file-filename-container-wrap-invalid`
     : `${prefix}--file-filename-container-wrap`;
 
+  const filterSpaceName = (name: string | undefined) => {
+    return name?.replace(/\s+/g, '');
+  };
+
   const isEllipsisActive = (element: any) => {
     setIsEllipsisApplied(element.offsetWidth < element.scrollWidth);
     return element.offsetWidth < element.scrollWidth;
   };
 
   useLayoutEffect(() => {
-    const element = document.querySelector(`[title="${name}"]`);
-    isEllipsisActive(element);
+    isEllipsisActive(textRef.current);
   }, [prefix, name]);
 
   return (
@@ -115,19 +121,26 @@ function FileUploaderItem({
             align="bottom"
             className={`${prefix}--file-filename-tooltip`}>
             <button className={`${prefix}--file-filename-button`} type="button">
-              <p
+              <Text
+                ref={textRef}
+                as="p"
                 title={name}
                 className={`${prefix}--file-filename-button`}
-                id={name}>
+                id={filterSpaceName(name)}>
                 {name}
-              </p>
+              </Text>
             </button>
           </Tooltip>
         </div>
       ) : (
-        <p title={name} className={`${prefix}--file-filename`} id={name}>
+        <Text
+          ref={textRef}
+          as="p"
+          title={name}
+          className={`${prefix}--file-filename`}
+          id={filterSpaceName(name)}>
           {name}
-        </p>
+        </Text>
       )}
 
       <div className={`${prefix}--file-container-item`}>
@@ -137,7 +150,11 @@ function FileUploaderItem({
             iconDescription={iconDescription}
             status={status}
             invalid={invalid}
-            aria-describedby={`${name}-id-error`}
+            aria-describedby={
+              invalid && errorSubject
+                ? `${filterSpaceName(name)}-id-error`
+                : undefined
+            }
             onKeyDown={(evt) => {
               if (matches(evt as unknown as Event, [keys.Enter, keys.Space])) {
                 if (status === 'edit') {
@@ -158,14 +175,14 @@ function FileUploaderItem({
         <div
           className={`${prefix}--form-requirement`}
           role="alert"
-          id={`${name}-id-error`}>
-          <div className={`${prefix}--form-requirement__title`}>
+          id={`${filterSpaceName(name)}-id-error`}>
+          <Text as="div" className={`${prefix}--form-requirement__title`}>
             {errorSubject}
-          </div>
+          </Text>
           {errorBody && (
-            <p className={`${prefix}--form-requirement__supplement`}>
+            <Text as="p" className={`${prefix}--form-requirement__supplement`}>
               {errorBody}
-            </p>
+            </Text>
           )}
         </div>
       )}
@@ -220,11 +237,6 @@ FileUploaderItem.propTypes = {
    * Unique identifier for the file object
    */
   uuid: PropTypes.string,
-};
-
-FileUploaderItem.defaultProps = {
-  status: 'uploading',
-  onDelete: () => {},
 };
 
 export default FileUploaderItem;

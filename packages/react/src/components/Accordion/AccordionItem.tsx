@@ -87,7 +87,7 @@ interface AccordionItemProps {
    * The callback function to run on the `onAnimationEnd`
    * event for the list item.
    */
-  handleAnimationEnd?: AnimationEventHandler<HTMLLIElement>;
+  handleAnimationEnd?: AnimationEventHandler<HTMLElement>;
 }
 
 interface AccordionToggleProps {
@@ -118,7 +118,6 @@ function AccordionItem({
 }: PropsWithChildren<AccordionItemProps>) {
   const [isOpen, setIsOpen] = useState(open);
   const [prevIsOpen, setPrevIsOpen] = useState(open);
-  const [animation, setAnimation] = useState('');
   const accordionState = useContext(AccordionContext);
 
   const disabledIsControlled = typeof controlledDisabled === 'boolean';
@@ -130,25 +129,35 @@ function AccordionItem({
   const prefix = usePrefix();
   const className = cx({
     [`${prefix}--accordion__item`]: true,
-    [`${prefix}--accordion__item--active`]: isOpen,
-    [`${prefix}--accordion__item--${animation}`]: animation,
+    [`${prefix}--accordion__item--active`]: isOpen && !disabled,
     [`${prefix}--accordion__item--disabled`]: disabled,
     [customClassName]: !!customClassName,
   });
 
   const Toggle = renderToggle || renderExpando; // remove renderExpando in next major release
 
+  const content = React.useCallback(
+    (node: HTMLDivElement) => {
+      if (!node) {
+        return;
+      }
+      if (isOpen) {
+        // accordion closes
+        node.style.maxBlockSize = '';
+      }
+    },
+    [isOpen]
+  );
+
   if (open !== prevIsOpen) {
-    setAnimation(isOpen ? 'collapsing' : 'expanding');
     setIsOpen(open);
     setPrevIsOpen(open);
   }
 
   // When the AccordionItem heading is clicked, toggle the open state of the
   // panel
-  function onClick(event) {
+  function onClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const nextValue = !isOpen;
-    setAnimation(isOpen ? 'collapsing' : 'expanding');
     setIsOpen(nextValue);
     if (onHeadingClick) {
       // TODO: normalize signature, potentially:
@@ -168,11 +177,10 @@ function AccordionItem({
     if (handleAnimationEnd) {
       handleAnimationEnd(event);
     }
-    setAnimation('');
   }
 
   return (
-    <li className={className} {...rest} onAnimationEnd={onAnimationEnd}>
+    <li className={className} {...rest}>
       <Toggle
         disabled={disabled}
         aria-controls={id}
@@ -186,8 +194,14 @@ function AccordionItem({
           {title}
         </Text>
       </Toggle>
-      <div id={id} className={`${prefix}--accordion__content`}>
-        {children}
+      <div
+        ref={content}
+        hidden={!isOpen}
+        className={`${prefix}--accordion__wrapper`}
+        onTransitionEnd={onAnimationEnd}>
+        <div id={id} className={`${prefix}--accordion__content`}>
+          {children}
+        </div>
       </div>
     </li>
   );

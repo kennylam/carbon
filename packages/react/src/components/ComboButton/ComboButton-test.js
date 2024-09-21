@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-node-access */
 /**
  * Copyright IBM Corp. 2023
  *
@@ -9,7 +10,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { MenuItem } from '../Menu';
+import { MenuItem, MenuItemSelectable, MenuItemRadioGroup } from '../Menu';
 
 import { ComboButton } from './';
 
@@ -89,11 +90,11 @@ describe('ComboButton', () => {
     describe('supports props.tooltipAlignment', () => {
       const alignments = [
         'top',
-        'top-left',
-        'top-right',
+        'top-start',
+        'top-end',
         'bottom',
-        'bottom-left',
-        'bottom-right',
+        'bottom-start',
+        'bottom-end',
         'left',
         'right',
       ];
@@ -106,9 +107,34 @@ describe('ComboButton', () => {
             </ComboButton>
           );
 
-          // eslint-disable-next-line testing-library/no-node-access
           expect(container.firstChild.lastChild).toHaveClass(
             `${prefix}--popover--${alignment}`
+          );
+        });
+      });
+    });
+
+    describe('supports props.menuAlignment', () => {
+      const alignments = [
+        'top',
+        'top-start',
+        'top-end',
+        'bottom',
+        'bottom-start',
+        'bottom-end',
+      ];
+
+      alignments.forEach((alignment) => {
+        it(`menuAlignment="${alignment}"`, async () => {
+          render(
+            <ComboButton label="Primary action" menuAlignment={alignment}>
+              <MenuItem label="Additional action" />
+            </ComboButton>
+          );
+
+          await userEvent.click(screen.getAllByRole('button')[1]);
+          expect(document.querySelector('ul.cds--menu')).toHaveClass(
+            `${prefix}--combo-button__${alignment}`
           );
         });
       });
@@ -125,7 +151,6 @@ describe('ComboButton', () => {
 
       const triggerButton = screen.getAllByRole('button')[1];
       const tooltipId = triggerButton.getAttribute('aria-labelledby');
-      // eslint-disable-next-line testing-library/no-node-access
       const tooltip = document.getElementById(tooltipId);
 
       expect(tooltip).toHaveTextContent(t());
@@ -155,10 +180,75 @@ describe('ComboButton', () => {
 
       await userEvent.click(screen.getAllByRole('button')[1]);
 
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-      expect(screen.getByRole('menuitem')).toHaveTextContent(
-        /^Additional action$/
+      expect(document.querySelector('ul.cds--menu')).toBeInTheDocument();
+      expect(
+        document.querySelector('.cds--menu-item__label')
+      ).toHaveTextContent(/^Additional action$/);
+    });
+
+    it('warns when MenuItemSelectable is used in children', async () => {
+      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <ComboButton label="Primary action">
+          <MenuItemSelectable label="Option" />
+        </ComboButton>
       );
+
+      await userEvent.click(screen.getAllByRole('button')[1]);
+
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
+
+    it('warns when MenuItemRadioGoup is used in children', async () => {
+      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <ComboButton label="Primary action">
+          <MenuItemRadioGroup
+            label="Options"
+            items={['Option 1', 'Option 2']}
+          />
+        </ComboButton>
+      );
+
+      await userEvent.click(screen.getAllByRole('button')[1]);
+
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
+
+    it('warns when a nested Menu is used in children', async () => {
+      const spy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <ComboButton label="Primary action">
+          <MenuItem label="Submenu">
+            <MenuItem label="Action" />
+          </MenuItem>
+        </ComboButton>
+      );
+
+      await userEvent.click(screen.getAllByRole('button')[1]);
+
+      expect(spy).toHaveBeenCalled();
+      spy.mockRestore();
+    });
+
+    it('supports ellipsis in ComboButton by checking the className', async () => {
+      render(
+        <ComboButton label="Primary action super long text to enable ellipsis">
+          <MenuItem label="Submenu">
+            <MenuItem label="Action" />
+          </MenuItem>
+        </ComboButton>
+      );
+
+      expect(
+        screen.getByTitle('Primary action super long text to enable ellipsis')
+          .parentElement
+      ).toHaveClass(`${prefix}--combo-button__primary-action`);
     });
   });
 });

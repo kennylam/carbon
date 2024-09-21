@@ -10,32 +10,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ChevronDown } from '@carbon/icons-react';
 import { usePrefix } from '../../internal/usePrefix';
+import { TranslateWithId } from '../../types/common';
 
-export const translationIds = {
-  'close.menu': 'close.menu',
-  'open.menu': 'open.menu',
+export type ListBoxMenuIconTranslationKey = 'close.menu' | 'open.menu';
+
+const defaultTranslations: Record<ListBoxMenuIconTranslationKey, string> = {
+  'close.menu': 'Close menu',
+  'open.menu': 'Open menu',
 };
 
-const defaultTranslations = {
-  [translationIds['close.menu']]: 'Close menu',
-  [translationIds['open.menu']]: 'Open menu',
-};
+const defaultTranslateWithId = (id: ListBoxMenuIconTranslationKey): string =>
+  defaultTranslations[id];
 
-const defaultTranslateWithId = (id: string) => defaultTranslations[id];
-
-export interface ListBoxMenuIconProps {
+export interface ListBoxMenuIconProps
+  extends TranslateWithId<ListBoxMenuIconTranslationKey> {
   /**
    * Specify whether the menu is currently open, which will influence the
    * direction of the menu icon
    */
   isOpen: boolean;
-
-  /**
-   * i18n hook used to provide the appropriate description for the given menu
-   * icon. This function takes in an id defined in `translationIds` and should
-   * return a string message for that given message id.
-   */
-  translateWithId?(messageId: string, args?: Record<string, unknown>): string;
 }
 
 export type ListBoxMenuIconComponent = React.FC<ListBoxMenuIconProps>;
@@ -71,14 +64,10 @@ ListBoxMenuIcon.propTypes = {
 
   /**
    * i18n hook used to provide the appropriate description for the given menu
-   * icon. This function takes in an id defined in `translationIds` and should
+   * icon. This function takes a ListBoxMenuIconTranslationKey and should
    * return a string message for that given message id.
    */
-  translateWithId: PropTypes.func.isRequired,
-};
-
-ListBoxMenuIcon.defaultProps = {
-  translateWithId: defaultTranslateWithId,
+  translateWithId: PropTypes.func,
 };
 
 export default ListBoxMenuIcon;

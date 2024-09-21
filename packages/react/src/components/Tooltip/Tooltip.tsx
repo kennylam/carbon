@@ -7,17 +7,20 @@
 
 import cx from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { Popover, PopoverAlignment, PopoverContent } from '../Popover';
 import { keys, match } from '../../internal/keyboard';
 import { useDelayedState } from '../../internal/useDelayedState';
 import { useId } from '../../internal/useId';
-import {
-  useNoInteractiveChildren,
-  getInteractiveContent,
-} from '../../internal/useNoInteractiveChildren';
+import { useNoInteractiveChildren } from '../../internal/useNoInteractiveChildren';
 import { usePrefix } from '../../internal/usePrefix';
 import { type PolymorphicProps } from '../../types/common';
+import useIsomorphicEffect from '../../internal/useIsomorphicEffect';
+
+/**
+ * Event types that trigger a "drag" to stop.
+ */
+const DRAG_STOP_EVENT_TYPES = new Set(['mouseup', 'touchend', 'touchcancel']);
 
 interface TooltipBaseProps {
   /**
@@ -96,32 +99,38 @@ function Tooltip<T extends React.ElementType>({
   closeOnActivation = false,
   ...rest
 }: TooltipProps<T>) {
-  const containerRef = useRef<HTMLElement>(null);
   const tooltipRef = useRef<HTMLSpanElement>(null);
   const [open, setOpen] = useDelayedState(defaultOpen);
+  const [isDragging, setIsDragging] = useState(false);
+  const [focusByMouse, setFocusByMouse] = useState(false);
+  const [isPointerIntersecting, setIsPointerIntersecting] = useState(false);
   const id = useId('tooltip');
   const prefix = usePrefix();
   const child = React.Children.only(children);
 
   const triggerProps = {
-    onFocus: () => setOpen(true),
-    onBlur: () => setOpen(false),
+    onFocus: () => !focusByMouse && setOpen(true),
+    onBlur: () => {
+      setOpen(false);
+      setFocusByMouse(false);
+    },
     onClick: () => closeOnActivation && setOpen(false),
     // This should be placed on the trigger in case the element is disabled
     onMouseEnter,
+    onMouseLeave,
+    onMouseDown,
+    onMouseMove: onMouseMove,
+    onTouchStart: onDragStart,
   };
 
   function getChildEventHandlers(childProps: any) {
-    const eventHandlerFunctions = [
-      'onFocus',
-      'onBlur',
-      'onClick',
-      'onMouseEnter',
-    ];
+    const eventHandlerFunctions = Object.keys(triggerProps).filter((prop) =>
+      prop.startsWith('on')
+    );
     const eventHandlers = {};
     eventHandlerFunctions.forEach((functionName) => {
       eventHandlers[functionName] = (evt: React.SyntheticEvent) => {
-        triggerProps[functionName]();
+        triggerProps[functionName](evt);
         if (childProps?.[functionName]) {
           childProps?.[functionName](evt);
         }
@@ -136,27 +145,82 @@ function Tooltip<T extends React.ElementType>({
     triggerProps['aria-describedby'] = id;
   }
 
-  function onKeyDown(event: React.KeyboardEvent) {
-    if (open && match(event, keys.Escape)) {
-      event.stopPropagation();
-      setOpen(false);
+  const onKeyDown = useCallback(
+    (event: React.SyntheticEvent | Event) => {
+      if (open && match(event, keys.Escape)) {
+        event.stopPropagation();
+        setOpen(false);
+      }
+      if (
+        open &&
+        closeOnActivation &&
+        (match(event, keys.Enter) || match(event, keys.Space))
+      ) {
+        setOpen(false);
+      }
+    },
+    [closeOnActivation, open, setOpen]
+  );
+
+  useIsomorphicEffect(() => {
+    if (!open) {
+      return undefined;
     }
-    if (
-      open &&
-      closeOnActivation &&
-      (match(event, keys.Enter) || match(event, keys.Space))
-    ) {
-      setOpen(false);
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (match(event, keys.Escape)) {
+        onKeyDown(event);
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open, onKeyDown]);
+
+  function onMouseEnter() {
+    // Interactive Tags should not support onMouseEnter
+    if (!rest?.onMouseEnter) {
+      setIsPointerIntersecting(true);
+      setOpen(true, enterDelayMs);
     }
   }
 
-  function onMouseEnter() {
-    setOpen(true, enterDelayMs);
+  function onMouseDown() {
+    setFocusByMouse(true);
+    onDragStart();
   }
 
   function onMouseLeave() {
+    setIsPointerIntersecting(false);
+    if (isDragging) {
+      return;
+    }
     setOpen(false, leaveDelayMs);
   }
+
+  function onMouseMove(evt) {
+    if (evt.buttons === 1) {
+      setIsDragging(true);
+    } else {
+      setIsDragging(false);
+    }
+  }
+
+  function onDragStart() {
+    setIsDragging(true);
+  }
+
+  const onDragStop = useCallback(() => {
+    setIsDragging(false);
+    // Close the tooltip, unless the mouse pointer is within the bounds of the
+    // trigger.
+    if (!isPointerIntersecting) {
+      setOpen(false, leaveDelayMs);
+    }
+  }, [isPointerIntersecting, leaveDelayMs, setOpen]);
 
   useNoInteractiveChildren(
     tooltipRef,
@@ -165,17 +229,21 @@ function Tooltip<T extends React.ElementType>({
   );
 
   useEffect(() => {
-    if (containerRef !== null && containerRef.current) {
-      const interactiveContent = getInteractiveContent(
-        containerRef.current as HTMLElement
-      );
-      if (!interactiveContent) {
-        setOpen(false);
-      }
+    if (isDragging) {
+      // Register drag stop handlers.
+      DRAG_STOP_EVENT_TYPES.forEach((eventType) => {
+        document.addEventListener(eventType, onDragStop);
+      });
     }
-  });
+    return () => {
+      DRAG_STOP_EVENT_TYPES.forEach((eventType) => {
+        document.removeEventListener(eventType, onDragStop);
+      });
+    };
+  }, [isDragging, onDragStop]);
 
   return (
+    // @ts-ignore-error Popover throws a TS error everytime is imported
     <Popover
       {...rest}
       align={align}
@@ -184,8 +252,7 @@ function Tooltip<T extends React.ElementType>({
       highContrast
       onKeyDown={onKeyDown}
       onMouseLeave={onMouseLeave}
-      open={open}
-      ref={containerRef}>
+      open={open}>
       <div className={`${prefix}--tooltip-trigger__wrapper`}>
         {child !== undefined
           ? React.cloneElement(child, {
@@ -198,7 +265,7 @@ function Tooltip<T extends React.ElementType>({
         aria-hidden={open ? 'false' : 'true'}
         className={`${prefix}--tooltip-content`}
         id={id}
-        ref={tooltipRef}
+        onMouseEnter={onMouseEnter}
         role="tooltip">
         {label || description}
       </PopoverContent>
@@ -212,20 +279,30 @@ Tooltip.propTypes = {
    */
   align: PropTypes.oneOf([
     'top',
-    'top-left',
-    'top-right',
+    'top-left', // deprecated use top-start instead
+    'top-right', // deprecated use top-end instead
 
     'bottom',
-    'bottom-left',
-    'bottom-right',
+    'bottom-left', // deprecated use bottom-start instead
+    'bottom-right', // deprecated use bottom-end instead
 
     'left',
-    'left-bottom',
-    'left-top',
+    'left-bottom', // deprecated use left-end instead
+    'left-top', // deprecated use left-start instead
 
     'right',
-    'right-bottom',
-    'right-top',
+    'right-bottom', // deprecated use right-end instead
+    'right-top', // deprecated use right-start instead
+
+    // new values to match floating-ui
+    'top-start',
+    'top-end',
+    'bottom-start',
+    'bottom-end',
+    'left-end',
+    'left-start',
+    'right-end',
+    'right-start',
   ]),
 
   /**

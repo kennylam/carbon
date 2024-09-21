@@ -19,7 +19,7 @@ export interface TableToolbarMenuProps
   children: React.ReactNode;
 
   /**
-   * Provide an optional class name for the toolbar menu
+   * Provide an optional class name for the toolbar menu trigger button
    */
   className?: string;
 
@@ -29,22 +29,32 @@ export interface TableToolbarMenuProps
   iconDescription?: string;
 
   /**
+   * Provide an optional class name for the toolbar menu
+   */
+  menuOptionsClass?: string;
+
+  /**
    * Optional prop to allow overriding the default menu icon
    */
-  renderIcon?: React.ReactNode;
+  renderIcon?: any;
 }
 
 const TableToolbarMenu: React.FC<TableToolbarMenuProps> = ({
   className,
-  renderIcon,
+  renderIcon = Settings,
   iconDescription = defaultIconDescription,
   children,
+  menuOptionsClass,
   ...rest
 }) => {
   const prefix = usePrefix();
   const toolbarActionClasses = cx(
     className,
     `${prefix}--toolbar-action ${prefix}--overflow-menu`
+  );
+  const menuOptionsClasses = cx(
+    menuOptionsClass,
+    `${prefix}--toolbar-action__menu`
   );
   return (
     <OverflowMenu
@@ -53,16 +63,12 @@ const TableToolbarMenu: React.FC<TableToolbarMenuProps> = ({
       className={toolbarActionClasses}
       title={iconDescription}
       iconDescription={iconDescription}
+      menuOptionsClass={menuOptionsClasses}
       flipped
       {...rest}>
       {children}
     </OverflowMenu>
   );
-};
-
-TableToolbarMenu.defaultProps = {
-  renderIcon: Settings,
-  iconDescription: defaultIconDescription,
 };
 
 TableToolbarMenu.propTypes = {
@@ -76,7 +82,12 @@ TableToolbarMenu.propTypes = {
   /**
    * The description of the menu icon.
    */
-  iconDescription: PropTypes.string.isRequired,
+  iconDescription: PropTypes.string,
+
+  /**
+   * Provide an optional class name for the toolbar menu
+   */
+  menuOptionsClass: PropTypes.string,
 
   /**
    * Optional prop to allow overriding the default menu icon

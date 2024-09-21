@@ -9,6 +9,7 @@ import React from 'react';
 import TextInput from '../TextInput';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
+import { AILabel } from '../../AILabel';
 
 const prefix = 'cds';
 
@@ -101,7 +102,12 @@ describe('TextInput', () => {
 
     it('should respect invalid prop', () => {
       const { container } = render(
-        <TextInput id="input-1" labelText="TextInput" invalid />
+        <TextInput
+          id="input-1"
+          labelText="TextInput"
+          invalid
+          invalidText="Invalid"
+        />
       );
 
       // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
@@ -185,7 +191,12 @@ describe('TextInput', () => {
 
     it('should respect warn prop', () => {
       const { container } = render(
-        <TextInput id="input-1" labelText="TextInput label" warn />
+        <TextInput
+          id="input-1"
+          labelText="TextInput label"
+          warn
+          warnText="Warning"
+        />
       );
 
       // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
@@ -213,6 +224,19 @@ describe('TextInput', () => {
       expect(screen.getByText('This is warning text')).toHaveClass(
         `${prefix}--form-requirement`
       );
+    });
+
+    it('should respect slug prop', () => {
+      render(
+        <TextInput
+          id="textarea-1"
+          labelText="TextArea label"
+          slug={<AILabel />}
+        />
+      );
+      expect(
+        screen.getByRole('button', { name: 'AI - Show information' })
+      ).toBeInTheDocument();
     });
   });
 

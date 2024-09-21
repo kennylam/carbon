@@ -6,9 +6,11 @@
 //
 
 @use 'accordion';
+@use 'ai-label';
 @use 'aspect-ratio';
 @use 'breadcrumb';
 @use 'button';
+@use 'chat-button';
 @use 'checkbox';
 @use 'code-snippet';
 @use 'combo-box';
@@ -58,6 +60,7 @@
 @use 'select';
 @use 'skeleton-styles';
 @use 'slider';
+@use 'slug';
 @use 'stack';
 @use 'structured-list';
 @use 'tabs';

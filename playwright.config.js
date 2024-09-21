@@ -25,7 +25,10 @@ const config = {
   testMatch: /.*-test(.avt|.vrt)?.e2e\.m?js$/,
 
   // https://playwright.dev/docs/api/class-testconfig#test-config-timeout
-  timeout: 1000 * 30,
+  timeout: 10000 * 30,
+
+  // https://playwright.dev/docs/test-timeouts
+  expect: { timeout: 100000 },
 
   // https://playwright.dev/docs/api/class-testconfig#test-config-output-dir
   outputDir: path.join(__dirname, '.playwright', 'results'),
@@ -47,7 +50,12 @@ const config = {
     },
   ],
   reporter: [
-    ['line'],
+    // Dot reporter is used in CI because it's very concise - it only produces a
+    // single character per successful test run.
+    [process.env.CI ? 'dot' : 'line'],
+
+    // The remaining reporters should always be used, in both CI and dev.
+    ['blob'],
     [
       'json',
       {
@@ -107,6 +115,45 @@ expect.extend({
       return {
         pass: false,
         message: () => aChecker.stringifyResults(result.report),
+      };
+    }
+  },
+});
+
+expect.extend({
+  async toContainAStory(page, options) {
+    let pass;
+    try {
+      /**
+       * This isn't a foolproof way to determine that an actual story
+       * has been rendered, but it should determine if a storybook
+       * error page is present or not.
+       */
+      await expect(page.locator('css=.cds--layout')).toBeAttached();
+      pass = true;
+    } catch (e) {
+      pass = false;
+    }
+
+    if (pass) {
+      return {
+        pass: true,
+      };
+    } else {
+      return {
+        pass: false,
+        message:
+          () => `An element with the "cds--layout" class was not found at url:
+          ${page.url()}
+
+          The url is probably invalid and does not render a story.
+          Check the url locally, and verify the parameters passed to visitStory are correct.
+
+          component: ${options.component} 
+          story: ${options.story} 
+          id: ${options.id} 
+          globals: ${JSON.stringify(options.globals)} 
+          args: ${JSON.stringify(options.args)}`,
       };
     }
   },

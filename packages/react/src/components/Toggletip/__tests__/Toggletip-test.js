@@ -7,7 +7,13 @@
 const prefix = 'cds';
 import React, { forwardRef } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Toggletip, ToggletipButton } from '..';
+import {
+  Toggletip,
+  ToggletipButton,
+  ToggletipContent,
+  ToggletipActions,
+} from '..';
+import { Information } from '@carbon/react/icons';
 import userEvent from '@testing-library/user-event';
 
 describe('Toggletip', () => {
@@ -101,14 +107,14 @@ describe('Toggletip', () => {
       'right',
       'top',
       'bottom',
-      'top-left',
-      'top-right',
-      'bottom-left',
-      'bottom-right',
-      'left-top',
-      'left-top',
-      'right-top',
-      'right-bottom',
+      'top-start',
+      'top-end',
+      'bottom-start',
+      'bottom-end',
+      'left-start',
+      'left-end',
+      'right-start',
+      'right-end',
     ])('should support different alignments with the `align` prop', (align) => {
       const { container } = render(
         <Toggletip data-testid="toggletip" align={align}>
@@ -174,6 +180,27 @@ describe('Toggletip', () => {
         `${prefix}--toggletip--open`
       );
       expect(container.firstChild).not.toHaveClass(`${prefix}--popover--open`);
+    });
+
+    describe('autoAlign', () => {
+      it('should render without errors when composed with ToggletipButton, ToggletipContent, ToggletipActions', async () => {
+        render(
+          <div>
+            <Toggletip align="bottom" autoAlign defaultOpen>
+              <ToggletipButton label="Show information">
+                <Information />
+              </ToggletipButton>
+              <ToggletipContent>
+                <p>Test content</p>
+                <ToggletipActions>
+                  <a href="#">Link</a>
+                  <button>Button</button>
+                </ToggletipActions>
+              </ToggletipContent>
+            </Toggletip>
+          </div>
+        );
+      });
     });
   });
 });
