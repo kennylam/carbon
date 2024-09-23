@@ -5,19 +5,24 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+// const cli = require('yargs');
+// const packageJson = require('../package.json');
 
-const cli = require('yargs');
-const packageJson = require('../package.json');
+import check from './commands/ci-check.js';
+import cli from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
+import packageJson from '../package.json' with { type: "json" };
 
-async function main({ argv }) {
-  cli
+export default async function main() {
+  const argv = cli(hideBin(process.argv)).argv;
+
+  cli(argv)
     .scriptName(packageJson.name)
     .version(packageJson.version)
     .usage('Usage: $0 [options]');
 
-  cli
-    .commandDir('commands')
+  cli(argv)
+    .command(check())
     .strict()
     .fail((message, error, yargs) => {
       if (error) {
@@ -33,7 +38,7 @@ async function main({ argv }) {
       console.log(yargs.help());
       process.exit(1);
     })
-    .parse(argv.slice(2)).argv;
+    .parse.argv;
 }
 
-module.exports = main;
+// module.exports = main;

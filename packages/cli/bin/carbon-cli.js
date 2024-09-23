@@ -9,7 +9,7 @@
 
 /* eslint-disable no-console */
 
-'use strict';
+import chalk from 'chalk';
 
 // Inspired by Create React App
 // https://github.com/facebook/create-react-app/blob/next/packages/create-react-app/index.js
@@ -21,7 +21,7 @@ process.on('unhandledRejection', (error) => {
   console.error(error);
 });
 
-var chalk = require('chalk');
+// var chalk = require('chalk');
 
 var currentNodeVersion = process.versions.node;
 var semver = currentNodeVersion.split('.');
@@ -38,7 +38,8 @@ if (major < 8) {
   process.exit(1);
 }
 
-var main = require('../src/cli');
+// var main = require('../src/cli');
+import main from '../src/cli.js';
 
 main(process).catch((error) => {
   console.error(error);

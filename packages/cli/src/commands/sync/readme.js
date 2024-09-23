@@ -5,14 +5,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+// const fs = require('fs-extra');
+// const path = require('path');
+// const prettier = require('prettier');
+// const prettierConfig = require('prettier-config-carbon');
+// const createRemark = require('remark');
+// const monorepo = require('./remark/remark-monorepo');
 
-const fs = require('fs-extra');
-const path = require('path');
-const prettier = require('prettier');
-const prettierConfig = require('prettier-config-carbon');
-const createRemark = require('remark');
-const monorepo = require('./remark/remark-monorepo');
+import { pathExists, readFile, writeFile } from 'fs-extra';
+import * as path from 'path';
+import prettier from 'prettier';
+import prettierConfig from 'prettier-config-carbon';
+import createRemark from 'remark';
+import monorepo from './remark/remark-monorepo';
 
 const packageDenyList = new Set([
   'carbon-components',
@@ -21,7 +26,9 @@ const packageDenyList = new Set([
   '@carbon/styles',
 ]);
 
-function run({ root, packagePaths }) {
+export const name = 'readme';
+
+export default function run({ root, packagePaths }) {
   const remark = createRemark().use(monorepo, {
     root: root.directory,
   });
@@ -35,13 +42,13 @@ function run({ root, packagePaths }) {
       .filter((pkg) => !packageDenyList.has(pkg.packageJson.name))
       .map(async ({ packagePath }) => {
         const README_PATH = path.join(packagePath, 'README.md');
-        if (!(await fs.pathExists(README_PATH))) {
+        if (!(await pathExists(README_PATH))) {
           return;
         }
 
-        const readme = await fs.readFile(README_PATH, 'utf8');
+        const readme = await readFile(README_PATH, 'utf8');
         const file = await process(remark, packagePath, readme);
-        await fs.writeFile(
+        await writeFile(
           README_PATH,
           prettier.format(String(file), prettierOptions)
         );
@@ -61,7 +68,7 @@ function process(remark, cwd, contents) {
   });
 }
 
-module.exports = {
-  name: 'readme',
-  run,
-};
+// module.exports = {
+//   name: 'readme',
+//   run,
+// };

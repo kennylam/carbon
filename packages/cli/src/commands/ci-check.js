@@ -9,11 +9,30 @@
 
 'use strict';
 
-const { reporter } = require('@carbon/cli-reporter');
-const { exec } = require('child-process-promise');
-const { workspace } = require('../workspace');
+// const { reporter } = require('@carbon/cli-reporter');
+// const { exec } = require('child-process-promise');
+// const { workspace } = require('../workspace');
 
-async function check(args, env) {
+import { reporter } from '@carbon/cli-reporter';
+import { exec } from 'child-process-promise';
+import { workspace } from '../workspace.js';
+import yargs from 'yargs/yargs';
+
+// export const ciChecks = {
+//   command: 'ci-checks',
+//   desc: 'run CI checks',
+//   builder: {},
+//   handler: workspace(check),
+// };
+
+exports.command = 'ci-checks';
+exports.desc = 'run CI checks';
+exports.builder = {};
+exports.handler = workspace(check);
+
+yargs.command(require('ci-checks')).help().parse();
+
+export default async function check(args, env) {
   reporter.info('Running checks in CI...');
 
   const options = {
@@ -43,9 +62,9 @@ async function check(args, env) {
   }
 }
 
-module.exports = {
-  command: 'ci-check',
-  desc: 'run CI checks',
-  builder: {},
-  handler: workspace(check),
-};
+// module.exports = {
+//   command: 'ci-check',
+//   desc: 'run CI checks',
+//   builder: {},
+//   handler: workspace(check),
+// };
