@@ -174,6 +174,7 @@ export default function Home() {
                     {...fileUploaderEvents}
                     id="file-1"
                     iconDescription="Clear uploaded file"
+                    filenameStatus="edit"
                     labelDescription="Choose Files..."
                   />
                 </FormGroup>
