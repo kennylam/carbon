@@ -18,6 +18,7 @@ $css--plex: true !default;
 
 .#{$prefix}--menu-item {
   @include type-style('body-short-01');
+
   display: grid;
   align-items: center;
   block-size: 2rem;
@@ -27,6 +28,7 @@ $css--plex: true !default;
   grid-template-columns: 1fr max-content;
   padding-inline: $spacing-05;
   transition: background-color $duration-fast-01 motion(standard, productive);
+
   &:focus {
     @include focus-outline('outline');
   }
@@ -57,6 +59,7 @@ $supported-sizes: (
     block-size: $value;
   }
 }
+
 .#{$prefix}--menu-item__label {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -64,7 +67,7 @@ $supported-sizes: (
 }
 
 .#{$prefix}--menu-item__icon {
-  display: none;
+  display: var(--child-icon-property, none);
 }
 
 .#{$prefix}--menu--with-icons .#{$prefix}--menu-item__icon {
@@ -73,10 +76,6 @@ $supported-sizes: (
 
 .#{$prefix}--menu-item__shortcut {
   display: flex;
-}
-
-.#{$prefix}--menu-item__icon {
-  display: var(--child-icon-property, none);
 }
 
 .#{$prefix}--menu--with-icons > .#{$prefix}--menu-item,
@@ -101,13 +100,14 @@ $supported-sizes: (
   background-color: $layer;
   color: $text-disabled;
 }
+
 .#{$prefix}--menu-item--danger:focus,
 .#{$prefix}--menu-item--danger:hover {
   background-color: button-tokens.$button-danger-primary;
   color: $text-on-color;
 }
-// MenuItemDivider
 
+// MenuItemDivider
 .#{$prefix}--menu-item-divider {
   display: block;
   background-color: $border-subtle;
@@ -115,10 +115,12 @@ $supported-sizes: (
   inline-size: 100%;
   margin-block: $spacing-02;
 }
+
 .#{$prefix}--menu-item-group > ul,
 .#{$prefix}--menu-item-radio-group > ul {
   @include component-reset;
 }
+
 .#{$prefix}--menu-item,
 .#{$prefix}--menu-item-radio-group > ul > .#{$prefix}--menu-item,
 .#{$prefix}--menu-item-group > ul > .#{$prefix}--menu-item {

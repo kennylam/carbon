@@ -19,7 +19,7 @@ import { MenuContext, menuDefaultState } from './menu-context';
 import CDSmenuItem from './menu-item';
 
 /**
- * Menu.
+ * Menu
  *
  * @element cds-menu
  */
@@ -27,13 +27,16 @@ type activeItemType = {
   item: CDSmenuItem;
   parent: HTMLElement | null;
 };
+
 @customElement(`${prefix}-menu`)
 class CDSMenu extends HostListenerMixin(LitElement) {
   @provide({ context: MenuContext })
   @consume({ context: MenuContext, subscribe: true })
   context = menuDefaultState;
 
-  readonly spacing: number = 8; // distance to keep to window edges, in px
+  // distance to keep to window edges, in px
+  readonly spacing: number = 8;
+
   /**
    * Parent state.
    */
@@ -45,11 +48,13 @@ class CDSMenu extends HostListenerMixin(LitElement) {
    */
   @state()
   items: Element[] | undefined = [];
+
   /**
    * Active list Items.
    */
   @state()
   activeitems: activeItemType[] = [];
+
   /**
    * Items.
    */
@@ -61,31 +66,37 @@ class CDSMenu extends HostListenerMixin(LitElement) {
    */
   @property({ type: HTMLElement })
   containerRef;
+
   /**
    * Label for the menu.
    */
   @property({ type: String })
   label;
+
   /**
    * class for the menu.
    */
   @property({ type: String })
   className = '';
+
   /**
    * Parent state.
    */
   @property({ type: Boolean })
   isChild = false;
+
   /**
    * Action button width.
    */
   @property()
   actionButtonWidth;
+
   /**
    * Checks if document direction is rtl.
    */
   @property({ type: Boolean })
   isRtl = false;
+
   /**
    * Checks if Menu is root menu or not.
    */
@@ -103,41 +114,49 @@ class CDSMenu extends HostListenerMixin(LitElement) {
    */
   @property({ type: Boolean })
   open = true;
+
   /**
    * Active element in the DOM .
    */
   @property({ type: HTMLElement })
   focusreturn;
+
   /**
    * Position of the Menu .
    */
   @property()
   position = [-1, -1];
+
   /**
    * Size attribute .
    */
   @property()
   size: 'xs' | 'sm' | 'md' | 'lg' = 'sm';
+
   /**
    * Mode attribute .
    */
   @property()
   mode: 'full' | 'basic' = 'full';
+
   /**
    * Size of the Menu .
    */
   @property()
   menuSize;
+
   /**
    * Specify how the menu should align with the button element
    */
   @property({ type: String })
   menuAlignment;
+
   /**
    * Position of the Menu in X axis .
    */
   @property()
   x: number | number[] = 0;
+
   /**
    * Position of the Menu in Y axis .
    */
@@ -155,6 +174,7 @@ class CDSMenu extends HostListenerMixin(LitElement) {
       this._handleOpen();
     }
   }
+
   firstUpdated() {
     this.isRtl = this.direction === 'rtl';
     this.isRoot = this.context.isRoot;
@@ -222,6 +242,7 @@ class CDSMenu extends HostListenerMixin(LitElement) {
       this._focusItem(e);
     }
   };
+
   _focusItem = (e: KeyboardEvent | undefined) => {
     let currentItem: number;
     if (document.activeElement?.tagName !== 'CDS-MENU') {

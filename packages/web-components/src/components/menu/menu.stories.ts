@@ -87,6 +87,7 @@ export const Default = {
     `;
   },
 };
+
 export const Playground = {
   args,
   argTypes,
@@ -128,6 +129,7 @@ export const Playground = {
     </cds-menu>`;
   },
 };
+
 const meta = {
   title: 'Components/Menu',
 };

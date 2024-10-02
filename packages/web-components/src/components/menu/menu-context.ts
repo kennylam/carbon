@@ -8,6 +8,7 @@
  */
 
 import { createContext } from '@lit/context';
+
 export type StateType = {
   isRoot: boolean;
   mode: 'full' | 'basic';
