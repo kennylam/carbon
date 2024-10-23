@@ -10,6 +10,7 @@ import React from 'react';
 import classNames from 'classnames';
 import InlineCheckbox from '../InlineCheckbox';
 import RadioButton from '../RadioButton';
+import { useId } from '../../internal/useId';
 import { usePrefix } from '../../internal/usePrefix';
 import deprecate from '../../prop-types/deprecate';
 
@@ -30,7 +31,7 @@ export interface TableSelectRowProps {
   /**
    * Specify whether this row is selected, or not
    */
-  checked: boolean;
+  checked?: boolean;
 
   /**
    * The CSS class names of the cell that wraps the underlying input control
@@ -85,9 +86,10 @@ const TableSelectRow = ({
   className,
 }: TableSelectRowProps) => {
   const prefix = usePrefix();
+  const uniqueNameId = useId();
   const selectionInputProps = {
     id,
-    name,
+    name: name ? name : uniqueNameId,
     onClick: onSelect,
     onChange,
     checked,
@@ -127,7 +129,7 @@ TableSelectRow.propTypes = {
   /**
    * Specify whether this row is selected, or not
    */
-  checked: PropTypes.bool.isRequired,
+  checked: PropTypes.bool,
 
   /**
    * The CSS class names of the cell that wraps the underlying input control

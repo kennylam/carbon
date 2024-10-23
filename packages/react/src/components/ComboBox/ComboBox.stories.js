@@ -5,11 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 
 import { WithLayer } from '../../../.storybook/templates/WithLayer';
 
 import ComboBox from '../ComboBox';
+import Button from '../Button';
+import { AILabel, AILabelContent, AILabelActions } from '../AILabel';
+import { IconButton } from '../IconButton';
+import { View, FolderOpen, Folders } from '@carbon/icons-react';
 import mdx from './ComboBox.mdx';
 
 const items = [
@@ -61,6 +65,42 @@ export default {
   },
 };
 
+export const DownshiftActionsTest = () => {
+  const downshiftActions = useRef();
+
+  return (
+    <div style={{ width: 300 }}>
+      <ComboBox
+        onChange={() => {}}
+        id="carbon-combobox"
+        items={items}
+        itemToString={(item) => (item ? item.text : '')}
+        titleText="ComboBox title"
+        helperText="Combobox helper text"
+        downshiftActions={downshiftActions}
+        downshiftProps={{
+          onStateChange: (changes) => {
+            console.log('onStateChange changes', changes);
+
+            if (changes.selectedItem === null) {
+              downshiftActions?.current?.openMenu?.();
+              return;
+            }
+            if (changes?.isOpen && changes?.inputValue === 'Option 1') {
+              downshiftActions?.current?.setInputValue?.('');
+              return;
+            }
+            if (!changes?.isOpen && changes?.inputValue !== 'Option 1') {
+              downshiftActions?.current?.setInputValue?.('Option 1');
+              return;
+            }
+          },
+        }}
+      />
+    </div>
+  );
+};
+
 export const Default = () => (
   <div style={{ width: 300 }}>
     <ComboBox
@@ -88,6 +128,30 @@ export const AllowCustomValue = (args) => {
         items={['Apple', 'Orange', 'Banana', 'Pineapple', 'Raspberry', 'Lime']}
         titleText="ComboBox title"
         helperText="Combobox helper text"
+      />
+    </div>
+  );
+};
+
+export const AutocompleteWithTypeahead = (args) => {
+  return (
+    <div style={{ width: 300 }}>
+      <ComboBox
+        allowCustomValue
+        onChange={args.onChange}
+        helperText="Combobox helper text"
+        id="carbon-combobox"
+        items={[
+          'Apple',
+          'Apricot',
+          'Avocado',
+          'Banana',
+          'Blackberry',
+          'Blueberry',
+          'Cantaloupe',
+        ]}
+        titleText="ComboBox title"
+        typeahead
       />
     </div>
   );
@@ -129,6 +193,97 @@ export const _WithLayer = () => (
   </WithLayer>
 );
 
+const aiLabel = (
+  <AILabel className="slug-container">
+    <AILabelContent>
+      <div>
+        <p className="secondary">AI Explained</p>
+        <h1>84%</h1>
+        <p className="secondary bold">Confidence score</p>
+        <p className="secondary">
+          Lorem ipsum dolor sit amet, di os consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut fsil labore et dolore magna aliqua.
+        </p>
+        <hr />
+        <p className="secondary">Model type</p>
+        <p className="bold">Foundation model</p>
+      </div>
+      <AILabelActions>
+        <IconButton kind="ghost" label="View">
+          <View />
+        </IconButton>
+        <IconButton kind="ghost" label="Open Folder">
+          <FolderOpen />
+        </IconButton>
+        <IconButton kind="ghost" label="Folders">
+          <Folders />
+        </IconButton>
+        <Button>View details</Button>
+      </AILabelActions>
+    </AILabelContent>
+  </AILabel>
+);
+
+export const withAILabel = () => (
+  <div style={{ width: 300 }}>
+    <ComboBox
+      onChange={() => {}}
+      id="carbon-combobox"
+      items={items}
+      itemToString={(item) => (item ? item.text : '')}
+      titleText="ComboBox title"
+      helperText="Combobox helper text"
+      slug={aiLabel}
+    />
+  </div>
+);
+
+export const _fullyControlled = () => {
+  const options = [
+    {
+      id: 'option-1',
+      text: 'Option 1',
+    },
+    {
+      id: 'option-2',
+      text: 'Option 2',
+    },
+    {
+      id: 'option-3',
+      text: 'Option 3',
+    },
+  ];
+  const [value, setValue] = useState(options[0]);
+  const onChange = ({ selectedItem }) => {
+    setValue(selectedItem);
+  };
+
+  return (
+    <div>
+      <ComboBox
+        onChange={onChange}
+        id="carbon-combobox"
+        items={options}
+        selectedItem={value}
+        itemToString={(item) => (item ? item.text : '')}
+        titleText="Fully Controlled ComboBox title"
+        helperText="Combobox helper text"
+      />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <Button onClick={() => setValue(null)}>Reset</Button>
+        <Button onClick={() => setValue(options[0])}>Option 1</Button>
+        <Button onClick={() => setValue(options[1])}>Option 2</Button>
+        <Button onClick={() => setValue(options[2])}>Option 3</Button>
+      </div>
+    </div>
+  );
+};
+
 export const Playground = (args) => (
   <div style={{ width: 300 }}>
     <ComboBox
@@ -141,6 +296,10 @@ export const Playground = (args) => (
     />
   </div>
 );
+
+AutocompleteWithTypeahead.argTypes = {
+  onChange: { action: 'onChange' },
+};
 
 Playground.argTypes = {
   ['aria-label']: {
