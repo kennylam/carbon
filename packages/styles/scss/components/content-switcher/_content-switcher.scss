@@ -18,21 +18,16 @@
 
 @mixin content-switcher {
   .#{$prefix}--content-switcher {
-    @include layout.use('size', $default: 'md', $min: 'sm', $max: 'lg');
-    @include layout.use('density', $default: 'normal');
-
     display: flex;
     justify-content: space-evenly;
     block-size: layout.size('height');
     inline-size: 100%;
+
+    @include layout.use('size', $default: 'md', $min: 'sm', $max: 'lg');
+    @include layout.use('density', $default: 'normal');
   }
 
   .#{$prefix}--content-switcher-btn {
-    @include reset;
-    @include font-family('sans');
-    @include focus-outline('reset');
-    @include type-style('body-compact-01');
-
     position: relative;
     display: inline-flex;
     overflow: hidden;
@@ -46,6 +41,11 @@
     text-decoration: none;
     transition: all $duration-moderate-01 motion(standard, productive);
     white-space: nowrap;
+
+    @include font-family('sans');
+    @include focus-outline('reset');
+    @include type-style('body-compact-01');
+    @include reset;
 
     &::after {
       position: absolute;
@@ -72,9 +72,7 @@
     &:focus {
       z-index: 3;
       border-color: $focus;
-      box-shadow:
-        inset 0 0 0 2px $focus,
-        inset 0 0 0 3px $focus-inset;
+      box-shadow: inset 0 0 0 2px $focus, inset 0 0 0 3px $focus-inset;
     }
 
     &:focus::after {

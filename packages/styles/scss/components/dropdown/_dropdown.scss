@@ -49,9 +49,6 @@
   }
 
   .#{$prefix}--dropdown {
-    @include reset;
-    @include focus-outline('reset');
-
     position: relative;
     display: block;
     border: none;
@@ -64,6 +61,9 @@
     list-style: none;
     outline: 2px solid transparent;
     transition: background-color $duration-fast-01 motion(standard, productive);
+
+    @include focus-outline('reset');
+    @include reset;
 
     &:hover {
       background-color: $field-hover;
@@ -102,8 +102,6 @@
   }
 
   .#{$prefix}--dropdown--invalid {
-    @include focus-outline('invalid');
-
     .#{$prefix}--dropdown-text {
       padding-inline-end: convert.to-rem(56px);
     }
@@ -113,6 +111,8 @@
       color: $text-error;
       max-block-size: convert.to-rem(200px);
     }
+
+    @include focus-outline('invalid');
   }
 
   .#{$prefix}--dropdown__invalid-icon {
@@ -132,11 +132,11 @@
   }
 
   .#{$prefix}--dropdown--open .#{$prefix}--dropdown-list {
-    @include box-shadow;
-
     // 40px item height * 5.5 items shown
     max-block-size: convert.to-rem(220px);
     transition: max-height $duration-fast-02 motion(entrance, productive);
+
+    @include box-shadow;
   }
 
   .#{$prefix}--dropdown--light {
@@ -175,8 +175,6 @@
   }
 
   .#{$prefix}--dropdown-text {
-    @include type-style('body-compact-01');
-
     display: block;
     overflow: hidden;
     // Account for the border in `.cds--dropdown`
@@ -185,14 +183,11 @@
     padding-inline: $spacing-05 convert.to-rem(42px);
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include type-style('body-compact-01');
   }
 
   .#{$prefix}--dropdown-list {
-    @include reset;
-    @include focus-outline('reset');
-    @include box-shadow;
-    @include type-style('body-compact-01');
-
     position: absolute;
     z-index: z('dropdown');
     display: flex;
@@ -204,6 +199,11 @@
     list-style: none;
     max-block-size: 0;
     transition: max-height $duration-fast-02 motion(standard, productive);
+
+    @include focus-outline('reset');
+    @include box-shadow;
+    @include type-style('body-compact-01');
+    @include reset;
   }
 
   // V11: Possibly deprecate
@@ -219,8 +219,7 @@
   .#{$prefix}--dropdown-item {
     position: relative;
     opacity: 0;
-    transition:
-      visibility $duration-fast-01 motion(standard, productive),
+    transition: visibility $duration-fast-01 motion(standard, productive),
       opacity $duration-fast-01 motion(standard, productive),
       background-color $duration-fast-01 motion(standard, productive);
     visibility: inherit;
@@ -247,8 +246,6 @@
   }
 
   .#{$prefix}--dropdown-link {
-    @include focus-outline('reset');
-
     display: block;
     overflow: hidden;
     padding: convert.to-rem(11px) 0;
@@ -262,6 +259,8 @@
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    @include focus-outline('reset');
 
     &:hover {
       border-color: transparent;
@@ -281,10 +280,10 @@
 
   .#{$prefix}--dropdown--focused,
   .#{$prefix}--dropdown-link:focus {
-    @include focus-outline('outline');
-
     padding: convert.to-rem(11px) convert.to-rem(16px);
     margin: 0;
+
+    @include focus-outline('outline');
   }
 
   // We don't want to apply focus styles via focus selector when using the aria-activedescendant structure
@@ -299,11 +298,11 @@
   // Need added weight for item that is :focused and .cds--dropdown--focused
   .#{$prefix}--dropdown-list[aria-activedescendant]
     .#{$prefix}--dropdown--focused:focus {
-    // copied from default focus styles
-    @include focus-outline('outline');
-
     padding: convert.to-rem(11px) convert.to-rem(16px);
     margin: 0;
+
+    // copied from default focus styles
+    @include focus-outline('outline');
   }
 
   // Don't want to allow multiple elements have a "selected" style. Not sure why active

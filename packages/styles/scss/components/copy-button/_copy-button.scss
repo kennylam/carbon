@@ -19,8 +19,6 @@
 
 @mixin copy-button {
   .#{$prefix}--copy-btn {
-    @include reset;
-
     position: relative;
     display: flex;
     align-items: center;
@@ -39,25 +37,25 @@
     }
 
     &::before {
-      @include tooltip--caret;
-
       display: none;
+
+      @include tooltip--caret;
     }
 
     .#{$prefix}--copy-btn__feedback {
-      @include tooltip--content('icon');
-
       display: none;
       overflow: visible;
       box-sizing: content-box;
       margin: auto;
       clip: auto;
+
+      @include tooltip--content('icon');
     }
 
     &:focus {
-      @include focus-outline('outline');
-
       outline-color: $focus;
+
+      @include focus-outline('outline');
     }
 
     &.#{$prefix}--copy-btn--animating::before,
@@ -91,4 +89,6 @@
   .#{$prefix}--copy {
     font-size: 0;
   }
+
+  @include reset;
 }

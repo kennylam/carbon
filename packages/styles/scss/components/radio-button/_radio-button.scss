@@ -32,11 +32,11 @@ $radio-border-width: 1px !default;
 /// @group radio-button
 @mixin radio-button {
   .#{$prefix}--radio-button-group {
-    @include reset;
-
     position: relative;
     display: flex;
     align-items: center;
+
+    @include reset;
   }
 
   // Remove spacing above collection of radio buttons if label is present
@@ -63,11 +63,11 @@ $radio-border-width: 1px !default;
   }
 
   .#{$prefix}--radio-button {
-    @include visually-hidden;
-
     margin-block-start: 0.9rem;
     margin-inline-start: 0.63rem;
     visibility: inherit;
+
+    @include visually-hidden;
   }
 
   .#{$prefix}--radio-button__label {
@@ -78,14 +78,12 @@ $radio-border-width: 1px !default;
   }
 
   .#{$prefix}--radio-button__label-text {
-    @include type.type-style('body-compact-01');
-
     flex: 1;
+
+    @include type.type-style('body-compact-01');
   }
 
   .#{$prefix}--radio-button__appearance {
-    @include reset;
-
     flex-shrink: 0;
     border: $radio-border-width solid $icon-primary;
     border-radius: 50%;
@@ -94,6 +92,8 @@ $radio-border-width: 1px !default;
     inline-size: convert.to-rem(18px);
     margin-block: convert.to-rem(1px) convert.to-rem(2px);
     margin-inline: convert.to-rem(2px) convert.to-rem(10px);
+
+    @include reset;
   }
 
   .#{$prefix}--radio-button-group--vertical
@@ -235,11 +235,10 @@ $radio-border-width: 1px !default;
 
   // Skeleton State
   .#{$prefix}--radio-button__label.#{$prefix}--skeleton {
-    @include skeleton;
-
     block-size: convert.to-rem(18px);
-
     inline-size: convert.to-rem(100px);
+
+    @include skeleton;
   }
 
   .#{$prefix}--radio-button__label.#{$prefix}--skeleton

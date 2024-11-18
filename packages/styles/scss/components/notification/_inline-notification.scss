@@ -24,8 +24,6 @@
 /// @group notification
 @mixin inline-notification {
   .#{$prefix}--inline-notification {
-    @include reset;
-
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -49,6 +47,8 @@
     @include breakpoint(max) {
       max-inline-size: convert.to-rem(832px);
     }
+
+    @include reset;
   }
 
   .#{$prefix}--inline-notification:not(
@@ -202,15 +202,15 @@
   }
 
   .#{$prefix}--inline-notification__title {
-    @include type-style('heading-compact-01');
-
     margin-inline-end: $spacing-02;
+
+    @include type-style('heading-compact-01');
   }
 
   .#{$prefix}--inline-notification__subtitle {
-    @include type-style('body-compact-01');
-
     word-break: break-word;
+
+    @include type-style('body-compact-01');
   }
 
   .#{$prefix}--inline-notification__action-button.#{$prefix}--btn--ghost {
@@ -260,8 +260,6 @@
   }
 
   .#{$prefix}--inline-notification__close-button {
-    @include focus-outline('reset');
-
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -277,9 +275,14 @@
     inset-inline-end: 0;
     max-inline-size: convert.to-rem(48px);
     min-inline-size: convert.to-rem(48px);
-    transition:
-      outline $duration-fast-02 motion(standard, productive),
+    transition: outline $duration-fast-02 motion(standard, productive),
       background-color $duration-fast-02 motion(standard, productive);
+
+    @include focus-outline('reset');
+
+    @include breakpoint(md) {
+      position: static;
+    }
 
     &:focus {
       outline: 2px solid $focus-inverse;
@@ -288,10 +291,6 @@
 
     .#{$prefix}--inline-notification__close-icon {
       fill: $icon-inverse;
-    }
-
-    @include breakpoint(md) {
-      position: static;
     }
   }
 

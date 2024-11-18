@@ -37,11 +37,11 @@
 
   // TODO: sync with type
   .#{$prefix}--file--label {
-    @include reset;
-    @include type-style('heading-compact-01');
-
     color: $text-primary;
     margin-block-end: $spacing-03;
+
+    @include type-style('heading-compact-01');
+    @include reset;
   }
 
   .#{$prefix}--file--label--disabled {
@@ -108,11 +108,11 @@
   }
 
   .#{$prefix}--label-description {
-    @include reset;
-    @include type-style('body-compact-01');
-
     color: $text-secondary;
     margin-block-end: $spacing-05;
+
+    @include type-style('body-compact-01');
+    @include reset;
   }
 
   .#{$prefix}--label-description--disabled {
@@ -166,18 +166,19 @@
     }
 
     .#{$prefix}--file-filename {
-      @include type-style('body-compact-01');
-
       overflow: hidden;
       margin-inline-start: $spacing-05;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      @include type-style('body-compact-01');
     }
 
     .#{$prefix}--file-filename-container-wrap {
       margin-block-start: 1px;
       max-inline-size: 17.5rem;
       padding-inline-start: $spacing-05;
+
       @include breakpoint-down(410px) {
         max-inline-size: 13.5rem;
       }
@@ -203,8 +204,6 @@
     }
 
     .#{$prefix}--file-filename-button {
-      @include type-style('body-compact-01');
-
       overflow: hidden;
       padding: 0;
       border: none;
@@ -220,7 +219,10 @@
       @document url-prefix() {
         inline-size: -moz-available;
       }
+
+      @include type-style('body-compact-01');
     }
+
     .#{$prefix}--file-filename-button:focus {
       outline: revert;
     }
@@ -238,18 +240,18 @@
 
   // TODO: deprecate this block
   .#{$prefix}--file__selected-file--invalid__wrapper {
-    @include focus-outline('invalid');
-
     background-color: $layer;
     margin-block-end: $spacing-03;
     max-inline-size: convert.to-rem(320px);
     outline-width: 1px;
+
+    @include focus-outline('invalid');
   }
 
   .#{$prefix}--file__selected-file--invalid {
-    @include focus-outline('invalid');
-
     padding: convert.to-rem(12px) 0;
+
+    @include focus-outline('invalid');
   }
 
   .#{$prefix}--file__selected-file--invalid.#{$prefix}--file__selected-file--sm {
@@ -279,9 +281,9 @@
     .#{$prefix}--form-requirement__title,
   .#{$prefix}--file__selected-file--invalid
     .#{$prefix}--form-requirement__supplement {
-    @include type-style('label-01');
-
     padding: 0 $spacing-05;
+
+    @include type-style('label-01');
   }
 
   .#{$prefix}--file__selected-file--invalid
@@ -296,14 +298,14 @@
 
   // TODO: deprecate
   .#{$prefix}--file__selected-file--invalid + .#{$prefix}--form-requirement {
-    @include type-style('label-01');
-
     display: block;
     overflow: visible;
     padding: $spacing-03 $spacing-05;
     color: $text-error;
     font-weight: 400;
     max-block-size: convert.to-rem(200px);
+
+    @include type-style('label-01');
   }
 
   .#{$prefix}--file__selected-file--invalid
@@ -382,9 +384,6 @@
   }
 
   .#{$prefix}--file__drop-container {
-    @include button-reset.reset;
-    @include type-style('body-compact-01');
-
     display: flex;
     overflow: hidden;
     align-items: flex-start;
@@ -392,6 +391,9 @@
     padding: $spacing-05;
     border: 1px dashed $border-strong;
     block-size: convert.to-rem(96px);
+
+    @include button-reset.reset;
+    @include type-style('body-compact-01');
   }
 
   .#{$prefix}--file__drop-container--drag-over {

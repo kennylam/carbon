@@ -81,8 +81,6 @@ $list-box-menu-width: convert.to-rem(300px);
   }
 
   .#{$prefix}--list-box {
-    @include reset;
-
     position: relative;
     border: none;
     background-color: $field;
@@ -93,6 +91,8 @@ $list-box-menu-width: convert.to-rem(300px);
     inline-size: $list-box-width;
     max-block-size: convert.to-rem(40px);
     transition: all $duration-fast-01 motion(standard, productive);
+
+    @include reset;
 
     &:hover {
       background-color: $field-hover;
@@ -306,8 +306,6 @@ $list-box-menu-width: convert.to-rem(300px);
 
   // The field we use for input, showing selection, etc.
   .#{$prefix}--list-box__field {
-    @include button-reset.reset;
-
     position: relative;
     display: inline-flex;
     overflow: hidden;
@@ -321,6 +319,8 @@ $list-box-menu-width: convert.to-rem(300px);
     text-overflow: ellipsis;
     vertical-align: top;
     white-space: nowrap;
+
+    @include button-reset.reset;
   }
 
   .#{$prefix}--list-box__field:focus {
@@ -389,19 +389,17 @@ $list-box-menu-width: convert.to-rem(300px);
 
   // Label for a `list-box__field`
   .#{$prefix}--list-box__label {
-    @include type-style('body-compact-01');
-
     overflow: hidden;
     color: $text-primary;
     text-overflow: ellipsis;
     user-select: none;
     white-space: nowrap;
+
+    @include type-style('body-compact-01');
   }
 
   // Menu status inside of a `list-box__field`
   .#{$prefix}--list-box__menu-icon {
-    @include button-reset.reset($width: false);
-
     position: absolute;
     display: flex;
     align-items: center;
@@ -412,6 +410,8 @@ $list-box-menu-width: convert.to-rem(300px);
     inset-inline-end: $spacing-04;
     outline: none;
     transition: transform $duration-fast-01 motion(standard, productive);
+
+    @include button-reset.reset($width: false);
   }
 
   .#{$prefix}--list-box__menu-icon > svg {
@@ -426,8 +426,6 @@ $list-box-menu-width: convert.to-rem(300px);
 
   // Selection indicator for a `list-box__field`
   .#{$prefix}--list-box__selection {
-    @include button-reset.reset($width: false);
-
     position: absolute;
     display: flex;
     align-items: center;
@@ -441,6 +439,8 @@ $list-box-menu-width: convert.to-rem(300px);
     transform: translateY(-50%);
     transition: background-color $duration-fast-01 motion(standard, productive);
     user-select: none;
+
+    @include button-reset.reset($width: false);
 
     &:focus {
       @include focus-outline('outline');
@@ -461,8 +461,6 @@ $list-box-menu-width: convert.to-rem(300px);
 
   // Modifier for a selection to show that multiple selections have been made
   .#{$prefix}--list-box__selection--multi {
-    @include type-style('label-01');
-
     position: static;
     display: flex;
     align-items: center;
@@ -479,6 +477,8 @@ $list-box-menu-width: convert.to-rem(300px);
     // Align with hover circle of X button
     padding-inline-end: convert.to-rem(2px);
     transform: none;
+
+    @include type-style('label-01');
   }
 
   .#{$prefix}--list-box__selection--multi > svg {
@@ -495,10 +495,10 @@ $list-box-menu-width: convert.to-rem(300px);
   }
 
   .#{$prefix}--list-box--disabled .#{$prefix}--list-box__selection--multi {
-    @include tag-theme($text-disabled, $layer);
-
     > svg {
       fill: $icon-disabled;
+
+      @include tag-theme($text-disabled, $layer);
 
       &:hover {
         background-color: initial;
@@ -512,8 +512,6 @@ $list-box-menu-width: convert.to-rem(300px);
 
   // Descendant of a `list-box` that displays a list of options to select
   .#{$prefix}--list-box__menu {
-    @include box-shadow();
-
     position: absolute;
     z-index: z('dropdown');
     display: none;
@@ -522,6 +520,8 @@ $list-box-menu-width: convert.to-rem(300px);
     inset-inline: 0;
     overflow-y: auto;
     transition: max-height $duration-fast-02 motion(standard, productive);
+
+    @include box-shadow();
 
     &:focus {
       // remove default browser focus in firefox
@@ -557,14 +557,14 @@ $list-box-menu-width: convert.to-rem(300px);
 
   // Descendant of a `list-box__menu` that represents a selection for a control
   .#{$prefix}--list-box__menu-item {
-    @include type-style('body-compact-01');
-
     position: relative;
     block-size: convert.to-rem(40px);
     color: $text-secondary;
     cursor: pointer;
     transition: background $duration-fast-01 motion(standard, productive);
     user-select: none;
+
+    @include type-style('body-compact-01');
 
     &:hover {
       background-color: $layer-hover;
@@ -656,9 +656,6 @@ $list-box-menu-width: convert.to-rem(300px);
   }
 
   .#{$prefix}--list-box__menu-item__option {
-    @include component-reset.reset;
-    @include focus-outline('reset');
-
     display: block;
     overflow: hidden;
     padding: convert.to-rem(11px) 0;
@@ -673,17 +670,19 @@ $list-box-menu-width: convert.to-rem(300px);
     padding-inline-end: $spacing-06;
     text-decoration: none;
     text-overflow: ellipsis;
-    transition:
-      border-color $duration-fast-01 motion(standard, productive),
+    transition: border-color $duration-fast-01 motion(standard, productive),
       color $duration-fast-01 motion(standard, productive);
     white-space: nowrap;
 
-    &:focus {
-      @include focus-outline('outline');
+    @include component-reset.reset;
+    @include focus-outline('reset');
 
+    &:focus {
       padding: convert.to-rem(11px) convert.to-rem(16px);
       border-color: transparent;
       margin: 0;
+
+      @include focus-outline('outline');
     }
 
     &:hover {
@@ -776,9 +775,9 @@ $list-box-menu-width: convert.to-rem(300px);
   }
 
   .#{$prefix}--list-box__menu-item--highlighted {
-    @include focus-outline('outline');
-
     color: $text-primary;
+
+    @include focus-outline('outline');
   }
 
   .#{$prefix}--list-box__menu-item--highlighted

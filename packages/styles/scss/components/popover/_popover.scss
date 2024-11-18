@@ -129,6 +129,16 @@ $popover-caret-height: custom-property.get-var(
 
   // Popover content
   .#{$prefix}--popover-content {
+    position: absolute;
+    z-index: z('floating');
+    display: none;
+    border-radius: $popover-border-radius;
+    background-color: $popover-background-color;
+    color: $popover-text-color;
+    inline-size: max-content;
+    max-inline-size: convert.to-rem(368px);
+    pointer-events: auto;
+
     // The layout.redefine-tokens is been included here because it is been redifined in _tag.scss
     @include layout.redefine-tokens(
       (
@@ -141,17 +151,8 @@ $popover-caret-height: custom-property.get-var(
         ),
       )
     );
-    @include component-reset.reset;
 
-    position: absolute;
-    z-index: z('floating');
-    display: none;
-    border-radius: $popover-border-radius;
-    background-color: $popover-background-color;
-    color: $popover-text-color;
-    inline-size: max-content;
-    max-inline-size: convert.to-rem(368px);
-    pointer-events: auto;
+    @include component-reset.reset;
   }
 
   .#{$prefix}--popover--open
@@ -874,14 +875,14 @@ $popover-caret-height: custom-property.get-var(
   }
 
   .#{$prefix}--popover--tab-tip__button {
-    @include button-reset.reset;
-
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     block-size: convert.to-rem(32px);
     inline-size: convert.to-rem(32px);
+
+    @include button-reset.reset;
 
     &:focus {
       @include focus-outline('outline');

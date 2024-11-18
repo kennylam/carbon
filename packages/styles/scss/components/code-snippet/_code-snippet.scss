@@ -65,8 +65,6 @@ $copy-btn-feedback: $background-inverse !default;
 
   // Inline Code Snippet
   .#{$prefix}--snippet--inline {
-    @include reset;
-
     position: relative;
     display: inline;
     padding: 0;
@@ -75,6 +73,18 @@ $copy-btn-feedback: $background-inverse !default;
     background-color: $layer;
     color: $text-primary;
     cursor: pointer;
+
+    .#{$prefix}--copy-btn__feedback {
+      display: none;
+      overflow: visible;
+      box-sizing: content-box;
+      margin: auto;
+      clip: auto;
+
+      @include tooltip--content('icon');
+    }
+
+    @include reset;
 
     &:hover {
       background-color: $layer-hover;
@@ -90,21 +100,10 @@ $copy-btn-feedback: $background-inverse !default;
     }
 
     &::before {
-      @include tooltip--caret;
-
       display: none;
-
       border: none;
-    }
 
-    .#{$prefix}--copy-btn__feedback {
-      @include tooltip--content('icon');
-
-      display: none;
-      overflow: visible;
-      box-sizing: content-box;
-      margin: auto;
-      clip: auto;
+      @include tooltip--caret;
     }
   }
 
@@ -266,8 +265,6 @@ $copy-btn-feedback: $background-inverse !default;
   }
 
   .#{$prefix}--copy-btn {
-    @include reset;
-
     display: flex;
     overflow: visible;
     align-items: center;
@@ -278,20 +275,22 @@ $copy-btn-feedback: $background-inverse !default;
     cursor: pointer;
     outline: none;
 
-    &:focus {
-      @include focus-outline('outline');
+    @include reset;
 
+    &:focus {
       outline-color: $focus;
+
+      @include focus-outline('outline');
     }
   }
 
   // TODO: remove copy button styles above
   .#{$prefix}--snippet .#{$prefix}--popover-container {
-    @include font-family('sans');
-
     position: absolute;
     inset-block-start: 0;
     inset-inline-end: 0;
+
+    @include font-family('sans');
   }
 
   // Overrides for codesnippet copy btn
@@ -322,9 +321,6 @@ $copy-btn-feedback: $background-inverse !default;
 
   // Show more / less button
   .#{$prefix}--snippet-btn--expand {
-    @include type-style('body-compact-01');
-    @include font-family('sans');
-
     position: absolute;
     z-index: 10;
     display: inline-flex;
@@ -337,6 +333,9 @@ $copy-btn-feedback: $background-inverse !default;
     color: $text-primary;
     inset-block-end: 0;
     inset-inline-end: 0;
+
+    @include type-style('body-compact-01');
+    @include font-family('sans');
   }
 
   .#{$prefix}--snippet-btn--expand .#{$prefix}--snippet-btn--text {
@@ -365,9 +364,9 @@ $copy-btn-feedback: $background-inverse !default;
   }
 
   .#{$prefix}--snippet-btn--expand:focus {
-    @include focus-outline('outline');
-
     border-color: transparent;
+
+    @include focus-outline('outline');
   }
 
   .#{$prefix}--snippet--expand
@@ -529,12 +528,12 @@ $copy-btn-feedback: $background-inverse !default;
   }
 
   .#{$prefix}--snippet.#{$prefix}--skeleton span {
-    @include skeleton;
-
     display: block;
     block-size: 1rem;
     inline-size: 100%;
     margin-block-start: 0.5rem;
+
+    @include skeleton;
 
     &:first-child {
       margin: 0;

@@ -50,15 +50,15 @@ $input-label-weight: 400 !default;
   }
 
   .#{$prefix}--label {
-    @include reset;
-    @include type-style('label-01');
-
     display: inline-block;
     color: $text-secondary;
     font-weight: $input-label-weight;
     line-height: 1rem;
     margin-block-end: $spacing-03;
     vertical-align: baseline;
+
+    @include type-style('label-01');
+    @include reset;
   }
 
   .#{$prefix}--label .#{$prefix}--toggletip-label {
@@ -76,11 +76,11 @@ $input-label-weight: 400 !default;
   }
 
   .#{$prefix}--label + .#{$prefix}--tooltip .#{$prefix}--tooltip__trigger {
-    @include button-reset.reset();
-
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include button-reset.reset();
     @include type-style('label-01');
   }
 
@@ -109,11 +109,10 @@ $input-label-weight: 400 !default;
 
   // Skeleton State
   .#{$prefix}--label.#{$prefix}--skeleton {
-    @include skeleton;
-
     block-size: convert.to-rem(14px);
-
     inline-size: convert.to-rem(75px);
+
+    @include skeleton;
   }
 
   input[type='number'] {
@@ -199,13 +198,13 @@ $input-label-weight: 400 !default;
   }
 
   .#{$prefix}--form-requirement {
-    @include reset;
-    @include type-style('label-01');
-
     display: none;
     overflow: hidden;
     margin: $spacing-02 0 0;
     max-block-size: 0;
+
+    @include type-style('label-01');
+    @include reset;
   }
 
   .#{$prefix}--select--inline .#{$prefix}--form__helper-text {
@@ -213,14 +212,14 @@ $input-label-weight: 400 !default;
   }
 
   .#{$prefix}--form__helper-text {
-    @include type-style('helper-text-01');
-
     z-index: 0;
     color: $text-secondary;
     // Added to prevent error text from displaying under helper text in Safari (#6392)
     inline-size: 100%;
     margin-block-start: $spacing-02;
     opacity: 1;
+
+    @include type-style('helper-text-01');
   }
 
   .#{$prefix}--label--disabled,

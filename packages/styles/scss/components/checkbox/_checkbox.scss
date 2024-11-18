@@ -45,19 +45,17 @@
   // Visually, we'll hide the checkbox input and create our own styled version
   // to match the specs.
   .#{$prefix}--checkbox {
-    @include visually-hidden;
     //even though its hidden, positioning is for native validation to be aligned to checkbox
     inset-block-start: 1.25rem;
     inset-inline-start: 0.7rem;
+
+    @include visually-hidden;
   }
 
   // The label corresponds to the content inside of the `label` tag. Since we're
   // creating our own checkbox style, we'll need to position this in order to
   // accommodate the spacing needed for the checkbox.
   .#{$prefix}--checkbox-label {
-    @include reset;
-    @include type-style('body-compact-01');
-
     position: relative;
     display: flex;
     cursor: pointer;
@@ -65,6 +63,9 @@
     padding-block-start: convert.to-rem(1px);
     padding-inline-start: convert.to-rem(20px);
     user-select: none;
+
+    @include type-style('body-compact-01');
+    @include reset;
   }
 
   .#{$prefix}--checkbox-label-text {
@@ -335,13 +336,13 @@
   }
 
   .#{$prefix}--checkbox-label-text.#{$prefix}--skeleton {
-    @include skeleton;
-
     // Add extra spacing when label is present
     block-size: $spacing-05;
     inline-size: convert.to-rem(100px);
     margin-block: convert.to-rem(1px) 0;
     margin-inline: convert.to-rem(6px) 0;
+
+    @include skeleton;
   }
 
   //-----------------------------------------------

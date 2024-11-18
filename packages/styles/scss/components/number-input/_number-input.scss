@@ -25,12 +25,12 @@
 /// @group number-input
 @mixin number-input {
   .#{$prefix}--number {
-    @include reset;
-
     position: relative;
     display: flex;
     flex-direction: column;
     inline-size: 100%;
+
+    @include reset;
   }
 
   .#{$prefix}--number
@@ -40,9 +40,6 @@
   }
 
   .#{$prefix}--number input[type='number'] {
-    @include type-style('body-compact-01');
-    @include focus-outline('reset');
-
     display: inline-flex;
     box-sizing: border-box;
     border: 0;
@@ -60,9 +57,11 @@
     inline-size: 100%;
     min-inline-size: 9.375rem;
     padding-inline: $spacing-05 $spacing-12;
-    transition:
-      background-color $duration-fast-01 motion(standard, productive),
+    transition: background-color $duration-fast-01 motion(standard, productive),
       outline $duration-fast-01 motion(standard, productive);
+
+    @include type-style('body-compact-01');
+    @include focus-outline('reset');
 
     &:focus {
       @include focus-outline('outline');
@@ -134,8 +133,6 @@
   }
 
   .#{$prefix}--number__controls {
-    @include reset;
-
     position: absolute;
     display: flex;
     flex-direction: row;
@@ -147,11 +144,11 @@
     inset-block-start: 50%;
     inset-inline-end: 0;
     transform: translateY(-50%);
+
+    @include reset;
   }
 
   .#{$prefix}--number__control-btn {
-    @include button-reset.reset;
-
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -162,6 +159,8 @@
     svg {
       fill: currentColor;
     }
+
+    @include button-reset.reset;
 
     &:focus {
       @include focus-outline;
@@ -565,21 +564,21 @@
       :has(~ .#{$prefix}--slug--revert)
     ),
   .#{$prefix}--number__input-wrapper--slug input[type='number']:disabled {
-    @include ai-gradient;
-
     padding-inline-end: convert.to-rem(145px);
+
+    @include ai-gradient;
   }
 
   // Skeleton State
 
   .#{$prefix}--number.#{$prefix}--skeleton {
-    @include skeleton;
-
     inline-size: 100%;
 
     input[type='number'] {
       display: none;
     }
+
+    @include skeleton;
   }
 
   .#{$prefix}--number.#{$prefix}--skeleton.#{$prefix}--number--sm {

@@ -46,12 +46,12 @@
   $select-icon-left-position: $spacing-05
 ) {
   .#{$prefix}--pagination-nav {
-    @include reset;
+    line-height: 0;
+
     @include type-style('body-compact-01');
     @include layout.use('size', $default: 'lg', $min: 'sm', $max: 'lg');
     @include layout.use('density', $default: 'normal');
-
-    line-height: 0;
+    @include reset;
   }
 
   .#{$prefix}--pagination-nav__list {
@@ -73,9 +73,6 @@
   }
 
   .#{$prefix}--pagination-nav__page {
-    @include type-style('body-compact-01');
-    @include button-reset.reset($width: false);
-
     position: relative;
     display: block;
     // subtract 0.875rem to account for font-size 14px
@@ -88,10 +85,13 @@
     outline: 0;
     text-align: center;
     text-decoration: none;
-    transition:
-      background-color $duration-fast-02 motion(standard, productive),
+    transition: background-color $duration-fast-02 motion(standard, productive),
       color $duration-fast-02 motion(standard, productive);
     user-select: none;
+
+    @include type-style('body-compact-01');
+    @include button-reset.reset($width: false);
+    @include pseudo-underline();
 
     &:hover {
       background-color: $background-color-hover;
@@ -109,8 +109,6 @@
       outline: none;
       pointer-events: none;
     }
-
-    @include pseudo-underline();
 
     &.#{$prefix}--pagination-nav__page--active {
       background-color: $background-color-active;
@@ -155,13 +153,13 @@
     inset-block-start: 0;
     pointer-events: none;
 
-    @include pseudo-underline();
-
     .#{$prefix}--pagination-nav__page--active + & {
       .#{$prefix}--pagination-nav__select-icon {
         display: none;
       }
     }
+
+    @include pseudo-underline();
   }
 
   .#{$prefix}--pagination-nav__select-icon {

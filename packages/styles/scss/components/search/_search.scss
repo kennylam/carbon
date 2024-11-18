@@ -40,10 +40,6 @@
   }
 
   .#{$prefix}--search-input {
-    @include reset;
-    @include type.type-style('body-compact-01');
-    @include focus-outline('reset');
-
     order: 1;
     padding: 0 $spacing-08;
     border: none;
@@ -54,9 +50,12 @@
 
     inline-size: 100%;
     text-overflow: ellipsis;
-    transition:
-      background-color $duration-fast-02 motion(standard, productive),
+    transition: background-color $duration-fast-02 motion(standard, productive),
       outline $duration-fast-02 motion(standard, productive);
+
+    @include type.type-style('body-compact-01');
+    @include focus-outline('reset');
+    @include reset;
 
     &:focus {
       @include focus-outline('outline');
@@ -125,8 +124,6 @@
   }
 
   .#{$prefix}--search-magnifier-icon {
-    @include reset;
-
     position: absolute;
     z-index: 2;
     block-size: convert.to-rem(16px);
@@ -136,15 +133,17 @@
     inset-inline-start: $spacing-05;
     pointer-events: none;
     transform: translateY(-50%);
+
+    @include reset;
   }
 
   .#{$prefix}--search-close {
-    @include button-reset.reset(false);
-    @include focus-outline('reset');
-
     position: absolute;
     inset-block-start: 0;
     inset-inline-end: 0;
+
+    @include button-reset.reset(false);
+    @include focus-outline('reset');
 
     &::before {
       position: absolute;
@@ -200,8 +199,7 @@
     fill: $icon-primary;
     inline-size: convert.to-rem(40px);
     opacity: 1;
-    transition:
-      opacity $duration-fast-02 motion(standard, productive),
+    transition: opacity $duration-fast-02 motion(standard, productive),
       background-color $duration-fast-02 motion(standard, productive),
       outline $duration-fast-02 motion(standard, productive),
       border $duration-fast-02 motion(standard, productive);
@@ -306,9 +304,9 @@
   .#{$prefix}--search--lg.#{$prefix}--skeleton .#{$prefix}--search-input,
   .#{$prefix}--search--md.#{$prefix}--skeleton .#{$prefix}--search-input,
   .#{$prefix}--search--sm.#{$prefix}--skeleton .#{$prefix}--search-input {
-    @include skeleton;
-
     inline-size: 100%;
+
+    @include skeleton;
 
     &::placeholder {
       color: transparent;
@@ -326,8 +324,7 @@
   .#{$prefix}--search--expandable .#{$prefix}--search-input {
     padding: 0;
     inline-size: 0;
-    transition:
-      padding $duration-fast-01 motion(standard, productive),
+    transition: padding $duration-fast-01 motion(standard, productive),
       width 0s linear $duration-fast-01;
 
     &::placeholder {
