@@ -2014,7 +2014,7 @@ __metadata:
     "@rollup/plugin-babel": "npm:^6.0.0"
     "@rollup/plugin-commonjs": "npm:^28.0.0"
     "@rollup/plugin-node-resolve": "npm:^15.0.0"
-    "@rollup/plugin-typescript": "npm:^11.0.0"
+    "@rollup/plugin-typescript": "npm:^12.1.2"
     "@stackblitz/sdk": "npm:^1.11.0"
     "@storybook/addon-a11y": "npm:^8.4.5"
     "@storybook/addon-actions": "npm:^8.4.5"
@@ -2028,7 +2028,7 @@ __metadata:
     "@storybook/react": "npm:^8.4.5"
     "@storybook/react-webpack5": "npm:^8.4.5"
     "@storybook/theming": "npm:^8.4.5"
-    "@types/react-is": "npm:~18.3.0"
+    "@types/react-is": "npm:~19.0.0"
     autoprefixer: "npm:^10.4.0"
     babel-loader: "npm:^9.0.0"
     babel-plugin-dev-expression: "npm:^0.2.3"
@@ -2069,7 +2069,7 @@ __metadata:
     stream-browserify: "npm:^3.0.0"
     style-loader: "npm:^4.0.0"
     tabbable: "npm:^6.2.0"
-    typescript-config-carbon: "npm:^0.3.0"
+    typescript-config-carbon: "npm:^1.0.0"
     use-resize-observer: "npm:^6.0.0"
     webpack: "npm:^5.65.0"
     webpack-dev-server: "npm:^5.0.0"
@@ -2215,7 +2215,7 @@ __metadata:
     "@ibm/telemetry-js": "npm:^1.6.1"
     esbuild: "npm:^0.24.0"
     rimraf: "npm:^6.0.0"
-    typescript: "npm:^4.8.4"
+    typescript: "npm:^5.7.3"
     typescript-config-carbon: "npm:^0.3.0"
   peerDependencies:
     react: ^16.8.6 || ^17.0.1 || ^18.2.0
@@ -2229,7 +2229,7 @@ __metadata:
     "@ibm/telemetry-js": "npm:^1.6.1"
     esbuild: "npm:^0.24.0"
     rimraf: "npm:^6.0.0"
-    typescript: "npm:^4.8.4"
+    typescript: "npm:^5.7.3"
     typescript-config-carbon: "npm:^0.3.0"
   languageName: unknown
   linkType: soft
@@ -2252,7 +2252,7 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^15.0.0"
     "@rollup/plugin-replace": "npm:^6.0.0"
     "@rollup/plugin-terser": "npm:^0.4.4"
-    "@rollup/plugin-typescript": "npm:^11.0.0"
+    "@rollup/plugin-typescript": "npm:^12.1.2"
     "@rollup/pluginutils": "npm:^5.0.0"
     "@storybook/addon-essentials": "npm:^8.4.5"
     "@storybook/addon-links": "npm:^8.4.5"
@@ -2287,7 +2287,7 @@ __metadata:
     storybook-addon-accessibility-checker: "npm:^3.1.61-rc.3"
     temp: "npm:^0.9.0"
     tslib: "npm:^2.6.3"
-    typescript-config-carbon: "npm:^0.2.0"
+    typescript-config-carbon: "npm:^1.0.0"
     vite: "npm:^5.0.7"
     web-component-analyzer: "npm:2.0.0"
   languageName: unknown
@@ -5684,14 +5684,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-typescript@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "@rollup/plugin-typescript@npm:11.0.0"
+"@rollup/plugin-typescript@npm:^12.1.2":
+  version: 12.1.2
+  resolution: "@rollup/plugin-typescript@npm:12.1.2"
   dependencies:
-    "@rollup/pluginutils": "npm:^5.0.1"
+    "@rollup/pluginutils": "npm:^5.1.0"
     resolve: "npm:^1.22.1"
   peerDependencies:
-    rollup: ^2.14.0||^3.0.0
+    rollup: ^2.14.0||^3.0.0||^4.0.0
     tslib: "*"
     typescript: ">=3.7.0"
   peerDependenciesMeta:
@@ -5699,7 +5699,7 @@ __metadata:
       optional: true
     tslib:
       optional: true
-  checksum: 10/ea240f1fd656329a088fa54eb3f0e3a8b9d9f47cc1c99fcdbf6bccb531763d8c767c7b43c666295d3ae30112576dc464a1f30d0257a5d740863c3ddee11f8070
+  checksum: 10/1fd201b9430125686bcdb3eecfa4f8d9d5005a9d454f2d733c0fdc0f58e28f772209ecbfe4f5d1a42a2a7ac25746a5f37d15897d695326eaea0fe3a30857375d
   languageName: node
   linkType: hard
 
@@ -5716,6 +5716,22 @@ __metadata:
     rollup:
       optional: true
   checksum: 10/da24956c4f7ec0aed63a2dd6c6dd64d8ad90155918056e69adda6fbb7b96c607300079805bc63f2e64e33ba256802367301a578d020a22262f408bde98ca3643
+  languageName: node
+  linkType: hard
+
+"@rollup/pluginutils@npm:^5.1.0":
+  version: 5.1.4
+  resolution: "@rollup/pluginutils@npm:5.1.4"
+  dependencies:
+    "@types/estree": "npm:^1.0.0"
+    estree-walker: "npm:^2.0.2"
+    picomatch: "npm:^4.0.2"
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: 10/598f628988af25541a9a6c6ef154aaf350f8be3238884e500cc0e47138684071abe490563c953f9bda9e8b113ecb1f99c11abfb9dbaf4f72cdd62e257a673fa3
   languageName: node
   linkType: hard
 
@@ -7335,6 +7351,15 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: 10/c7c9303a76902ecc2bd38a27047da8ffb9d5a19fe6e1f785e13698e7641e7afff0c6a49ddf1c22fb20b58f4fb689d83a887641f62db4ec2fdea3d04124a84023
+  languageName: node
+  linkType: hard
+
+"@types/react-is@npm:~19.0.0":
+  version: 19.0.0
+  resolution: "@types/react-is@npm:19.0.0"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10/c56e39e88558a71bc0b1deaa84cce9d5c84d6522057b73690d099b0763898203ec29a91563431e83b5086c49ac64a239fe993c50a4f008d6fbfc551587db5895
   languageName: node
   linkType: hard
 
@@ -26687,31 +26712,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-config-carbon@npm:^0.2.0":
-  version: 0.2.1
-  resolution: "typescript-config-carbon@npm:0.2.1"
+"typescript-config-carbon@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "typescript-config-carbon@npm:0.3.0"
   dependencies:
     typescript: "npm:^4.8.4"
-  checksum: 10/74adc73b35663defbe80734f1f44f50b9c56b5e4d837acc6507453a840edcd55728fadf9af0e60896fad0ae73dd9cec506acad1fd6cbb2c9430f9a73b9c0f683
+  checksum: 10/5005775359277b2e185214a908e66752f34838e323daefee5bb04abb58ecac750aedb9b57d1cd2187a6c6e8704ed4ec02eca74983452936b17428faaa897c066
   languageName: node
   linkType: hard
 
-"typescript-config-carbon@npm:^0.3.0, typescript-config-carbon@workspace:config/typescript-config-carbon":
+"typescript-config-carbon@npm:^1.0.0, typescript-config-carbon@workspace:config/typescript-config-carbon":
   version: 0.0.0-use.local
   resolution: "typescript-config-carbon@workspace:config/typescript-config-carbon"
   dependencies:
     rimraf: "npm:^6.0.0"
-    typescript: "npm:^4.8.4"
+    typescript: "npm:^5.7.3"
   languageName: unknown
   linkType: soft
 
-"typescript@npm:5.5.4, typescript@npm:>=3 < 6":
+"typescript@npm:5.5.4":
   version: 5.5.4
   resolution: "typescript@npm:5.5.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/1689ccafef894825481fc3d856b4834ba3cc185a9c2878f3c76a9a1ef81af04194849840f3c69e7961e2312771471bb3b460ca92561e1d87599b26c37d0ffb6f
+  languageName: node
+  linkType: hard
+
+"typescript@npm:>=3 < 6, typescript@npm:^5.7.3":
+  version: 5.7.3
+  resolution: "typescript@npm:5.7.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/6a7e556de91db3d34dc51cd2600e8e91f4c312acd8e52792f243c7818dfadb27bae677175fad6947f9c81efb6c57eb6b2d0c736f196a6ee2f1f7d57b74fc92fa
   languageName: node
   linkType: hard
 
@@ -26735,13 +26770,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.5.4#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A5.5.4#optional!builtin<compat/typescript>":
   version: 5.5.4
   resolution: "typescript@patch:typescript@npm%3A5.5.4#optional!builtin<compat/typescript>::version=5.5.4&hash=379a07"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/746fdd0865c5ce4f15e494c57ede03a9e12ede59cfdb40da3a281807853fe63b00ef1c912d7222143499aa82f18b8b472baa1830df8804746d09b55f6cf5b1cc
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A>=3 < 6#optional!builtin<compat/typescript>, typescript@patch:typescript@npm%3A^5.7.3#optional!builtin<compat/typescript>":
+  version: 5.7.3
+  resolution: "typescript@patch:typescript@npm%3A5.7.3#optional!builtin<compat/typescript>::version=5.7.3&hash=cef18b"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/3ac7b7e3e899273d2fbdce6e24b93d4d53a705ad7a7e4cc83b4c57bcb6d25948abcd2a21994f6b9c73ab03960f395aae95f0458de292a66ce0134233261714c3
   languageName: node
   linkType: hard
 

@@ -316,7 +316,7 @@ export interface FilterableMultiSelectProps<ItemType>
 }
 
 const FilterableMultiSelect = React.forwardRef(function FilterableMultiSelect<
-  ItemType,
+  ItemType extends {} = any,
 >(
   {
     autoAlign = false,

@@ -297,573 +297,563 @@ export interface MultiSelectProps<ItemType>
   warnText?: ReactNode;
 }
 
-const MultiSelect = React.forwardRef(
-  <ItemType,>(
-    {
-      autoAlign = false,
-      className: containerClassName,
-      decorator,
-      id,
-      items,
-      itemToElement,
-      itemToString = defaultItemToString,
-      titleText = false,
-      hideLabel,
-      helperText,
-      label,
-      type = 'default',
-      size,
-      disabled = false,
-      initialSelectedItems = [],
-      sortItems = defaultSortItems as MultiSelectProps<ItemType>['sortItems'],
-      compareItems = defaultCompareItems,
-      clearSelectionText = 'To clear selection, press Delete or Backspace',
-      clearAnnouncement = 'all items have been cleared',
-      clearSelectionDescription = 'Total items selected: ',
-      light,
-      invalid,
-      invalidText,
-      warn,
-      warnText,
-      useTitleInItem,
-      translateWithId,
-      downshiftProps,
-      open = false,
-      selectionFeedback = 'top-after-reopen',
-      onChange,
-      onMenuChange,
-      direction = 'bottom',
-      selectedItems: selected,
-      readOnly,
-      locale = 'en',
-      slug,
-    }: MultiSelectProps<ItemType>,
-    ref: ForwardedRef<HTMLButtonElement>
-  ) => {
-    const filteredItems = useMemo(() => {
-      return items.filter((item) => {
-        if (typeof item === 'object' && item !== null) {
-          for (const key in item) {
-            if (Object.hasOwn(item, key) && item[key] === undefined) {
-              return false; // Return false if any property has an undefined value
-            }
+const MultiSelect = React.forwardRef(function MultiSelect<
+  ItemType extends {} = any,
+>(
+  {
+    autoAlign = false,
+    className: containerClassName,
+    decorator,
+    id,
+    items,
+    itemToElement,
+    itemToString = defaultItemToString,
+    titleText = false,
+    hideLabel,
+    helperText,
+    label,
+    type = 'default',
+    size,
+    disabled = false,
+    initialSelectedItems = [],
+    sortItems = defaultSortItems as MultiSelectProps<ItemType>['sortItems'],
+    compareItems = defaultCompareItems,
+    clearSelectionText = 'To clear selection, press Delete or Backspace',
+    clearAnnouncement = 'all items have been cleared',
+    clearSelectionDescription = 'Total items selected: ',
+    light,
+    invalid,
+    invalidText,
+    warn,
+    warnText,
+    useTitleInItem,
+    translateWithId,
+    downshiftProps,
+    open = false,
+    selectionFeedback = 'top-after-reopen',
+    onChange,
+    onMenuChange,
+    direction = 'bottom',
+    selectedItems: selected,
+    readOnly,
+    locale = 'en',
+    slug,
+  }: MultiSelectProps<ItemType>,
+  ref: React.ForwardedRef<HTMLButtonElement>
+) {
+  const filteredItems = useMemo(() => {
+    return items.filter((item) => {
+      if (typeof item === 'object' && item !== null) {
+        for (const key in item) {
+          if (Object.hasOwn(item, key) && item[key] === undefined) {
+            return false; // Return false if any property has an undefined value
           }
         }
-        return true; // Return true if item is not an object with undefined values
+      }
+      return true; // Return true if item is not an object with undefined values
+    });
+  }, [items]);
+
+  let selectAll = filteredItems.some((item) => (item as any).isSelectAll);
+  if ((selected ?? []).length > 0 && selectAll) {
+    console.warn(
+      'Warning: `selectAll` should not be used when `selectedItems` is provided. Please pass either `selectAll` or `selectedItems`, not both.'
+    );
+    selectAll = false;
+  }
+  const prefix = usePrefix();
+  const { isFluid } = useContext(FormContext);
+  const multiSelectInstanceId = useId();
+  const [isFocused, setIsFocused] = useState(false);
+  const [inputFocused, setInputFocused] = useState(false);
+  const [isOpen, setIsOpen] = useState(open || false);
+  const [prevOpenProp, setPrevOpenProp] = useState(open);
+  const [topItems, setTopItems] = useState([]);
+  const [itemsCleared, setItemsCleared] = useState(false);
+
+  const enableFloatingStyles =
+    useFeatureFlag('enable-v12-dynamic-floating-styles') || autoAlign;
+
+  const { refs, floatingStyles, middlewareData } = useFloating(
+    enableFloatingStyles
+      ? {
+          placement: direction,
+
+          // The floating element is positioned relative to its nearest
+          // containing block (usually the viewport). It will in many cases also
+          // “break” the floating element out of a clipping ancestor.
+          // https://floating-ui.com/docs/misc#clipping
+          strategy: 'fixed',
+
+          // Middleware order matters, arrow should be last
+          middleware: [
+            autoAlign && flip({ crossAxis: false }),
+            floatingSize({
+              apply({ rects, elements }) {
+                Object.assign(elements.floating.style, {
+                  width: `${rects.reference.width}px`,
+                });
+              },
+            }),
+            autoAlign && hide(),
+          ],
+          whileElementsMounted: autoUpdate,
+        }
+      : {}
+  );
+
+  useLayoutEffect(() => {
+    if (enableFloatingStyles) {
+      const updatedFloatingStyles = {
+        ...floatingStyles,
+        visibility: middlewareData.hide?.referenceHidden ? 'hidden' : 'visible',
+      };
+      Object.keys(updatedFloatingStyles).forEach((style) => {
+        if (refs.floating.current) {
+          refs.floating.current.style[style] = updatedFloatingStyles[style];
+        }
       });
-    }, [items]);
+    }
+  }, [
+    enableFloatingStyles,
+    floatingStyles,
+    refs.floating,
+    middlewareData,
+    open,
+  ]);
 
-    let selectAll = filteredItems.some((item) => (item as any).isSelectAll);
-    if ((selected ?? []).length > 0 && selectAll) {
-      console.warn(
-        'Warning: `selectAll` should not be used when `selectedItems` is provided. Please pass either `selectAll` or `selectedItems`, not both.'
+  const {
+    selectedItems: controlledSelectedItems,
+    onItemChange,
+    clearSelection,
+  } = useSelection({
+    disabled,
+    initialSelectedItems,
+    onChange,
+    selectedItems: selected,
+    selectAll,
+    filteredItems,
+  });
+
+  const sortOptions = {
+    selectedItems: controlledSelectedItems,
+    itemToString,
+    compareItems,
+    locale,
+  };
+
+  const selectProps: UseSelectProps<ItemType> = {
+    stateReducer,
+    isOpen,
+    itemToString: (filteredItems) => {
+      return (
+        (Array.isArray(filteredItems) &&
+          filteredItems
+            .map(function (item) {
+              return itemToString(item);
+            })
+            .join(', ')) ||
+        ''
       );
-      selectAll = false;
-    }
-    const prefix = usePrefix();
-    const { isFluid } = useContext(FormContext);
-    const multiSelectInstanceId = useId();
-    const [isFocused, setIsFocused] = useState(false);
-    const [inputFocused, setInputFocused] = useState(false);
-    const [isOpen, setIsOpen] = useState(open || false);
-    const [prevOpenProp, setPrevOpenProp] = useState(open);
-    const [topItems, setTopItems] = useState([]);
-    const [itemsCleared, setItemsCleared] = useState(false);
+    },
+    selectedItem: controlledSelectedItems,
+    items: filteredItems as ItemType[],
+    isItemDisabled(item, _index) {
+      return (item as any)?.disabled;
+    },
+    ...downshiftProps,
+  };
 
-    const enableFloatingStyles =
-      useFeatureFlag('enable-v12-dynamic-floating-styles') || autoAlign;
+  const {
+    getToggleButtonProps,
+    getLabelProps,
+    getMenuProps,
+    getItemProps,
+    selectedItem,
+    highlightedIndex,
+    setHighlightedIndex,
+  } = useSelect<ItemType>(selectProps);
 
-    const { refs, floatingStyles, middlewareData } = useFloating(
-      enableFloatingStyles
-        ? {
-            placement: direction,
-
-            // The floating element is positioned relative to its nearest
-            // containing block (usually the viewport). It will in many cases also
-            // “break” the floating element out of a clipping ancestor.
-            // https://floating-ui.com/docs/misc#clipping
-            strategy: 'fixed',
-
-            // Middleware order matters, arrow should be last
-            middleware: [
-              autoAlign && flip({ crossAxis: false }),
-              floatingSize({
-                apply({ rects, elements }) {
-                  Object.assign(elements.floating.style, {
-                    width: `${rects.reference.width}px`,
-                  });
-                },
-              }),
-              autoAlign && hide(),
-            ],
-            whileElementsMounted: autoUpdate,
-          }
-        : {}
-    );
-
-    useLayoutEffect(() => {
-      if (enableFloatingStyles) {
-        const updatedFloatingStyles = {
-          ...floatingStyles,
-          visibility: middlewareData.hide?.referenceHidden
-            ? 'hidden'
-            : 'visible',
-        };
-        Object.keys(updatedFloatingStyles).forEach((style) => {
-          if (refs.floating.current) {
-            refs.floating.current.style[style] = updatedFloatingStyles[style];
-          }
-        });
-      }
-    }, [
-      enableFloatingStyles,
-      floatingStyles,
-      refs.floating,
-      middlewareData,
-      open,
-    ]);
-
-    const {
-      selectedItems: controlledSelectedItems,
-      onItemChange,
-      clearSelection,
-    } = useSelection({
-      disabled,
-      initialSelectedItems,
-      onChange,
-      selectedItems: selected,
-      selectAll,
-      filteredItems,
-    });
-
-    const sortOptions = {
-      selectedItems: controlledSelectedItems,
-      itemToString,
-      compareItems,
-      locale,
-    };
-
-    const selectProps: UseSelectProps<ItemType> = {
-      stateReducer,
-      isOpen,
-      itemToString: (filteredItems) => {
-        return (
-          (Array.isArray(filteredItems) &&
-            filteredItems
-              .map(function (item) {
-                return itemToString(item);
-              })
-              .join(', ')) ||
-          ''
-        );
-      },
-      selectedItem: controlledSelectedItems,
-      items: filteredItems as ItemType[],
-      isItemDisabled(item, _index) {
-        return (item as any)?.disabled;
-      },
-      ...downshiftProps,
-    };
-
-    const {
-      getToggleButtonProps,
-      getLabelProps,
-      getMenuProps,
-      getItemProps,
-      selectedItem,
-      highlightedIndex,
-      setHighlightedIndex,
-    } = useSelect<ItemType>(selectProps);
-
-    const toggleButtonProps = getToggleButtonProps({
-      onFocus: () => {
-        setInputFocused(true);
-      },
-      onBlur: () => {
-        setInputFocused(false);
-      },
-      onKeyDown: (e) => {
-        if (!disabled) {
-          if ((match(e, keys.Delete) || match(e, keys.Escape)) && !isOpen) {
-            clearSelection();
-            e.stopPropagation();
-          }
-
-          if (!isOpen && match(e, keys.Delete) && selectedItems.length > 0) {
-            setItemsCleared(true);
-          }
-
-          if (
-            (match(e, keys.Space) ||
-              match(e, keys.ArrowDown) ||
-              match(e, keys.Enter)) &&
-            !isOpen
-          ) {
-            setHighlightedIndex(0);
-            setItemsCleared(false);
-            setIsOpenWrapper(true);
-          }
+  const toggleButtonProps = getToggleButtonProps({
+    onFocus: () => {
+      setInputFocused(true);
+    },
+    onBlur: () => {
+      setInputFocused(false);
+    },
+    onKeyDown: (e) => {
+      if (!disabled) {
+        if ((match(e, keys.Delete) || match(e, keys.Escape)) && !isOpen) {
+          clearSelection();
+          e.stopPropagation();
         }
-      },
-    });
-    const mergedRef = mergeRefs(toggleButtonProps.ref, ref);
 
-    const selectedItems = selectedItem as ItemType[];
+        if (!isOpen && match(e, keys.Delete) && selectedItems.length > 0) {
+          setItemsCleared(true);
+        }
 
-    /**
-     * wrapper function to forward changes to consumer
-     */
-    const setIsOpenWrapper = (open) => {
-      setIsOpen(open);
-      if (onMenuChange) {
-        onMenuChange(open);
+        if (
+          (match(e, keys.Space) ||
+            match(e, keys.ArrowDown) ||
+            match(e, keys.Enter)) &&
+          !isOpen
+        ) {
+          setHighlightedIndex(0);
+          setItemsCleared(false);
+          setIsOpenWrapper(true);
+        }
       }
-    };
+    },
+  });
+  const mergedRef = mergeRefs(toggleButtonProps.ref, ref);
 
-    /**
-     * programmatically control this `open` prop
-     */
-    if (prevOpenProp !== open) {
-      setIsOpenWrapper(open);
-      setPrevOpenProp(open);
+  const selectedItems = (selectedItem ?? []) as ItemType[];
+
+  /**
+   * wrapper function to forward changes to consumer
+   */
+  const setIsOpenWrapper = (open) => {
+    setIsOpen(open);
+    if (onMenuChange) {
+      onMenuChange(open);
+    }
+  };
+
+  /**
+   * programmatically control this `open` prop
+   */
+  if (prevOpenProp !== open) {
+    setIsOpenWrapper(open);
+    setPrevOpenProp(open);
+  }
+
+  const inline = type === 'inline';
+  const showWarning = !invalid && warn;
+
+  const wrapperClasses = cx(
+    `${prefix}--multi-select__wrapper`,
+    `${prefix}--list-box__wrapper`,
+    containerClassName,
+    {
+      [`${prefix}--multi-select__wrapper--inline`]: inline,
+      [`${prefix}--list-box__wrapper--inline`]: inline,
+      [`${prefix}--multi-select__wrapper--inline--invalid`]: inline && invalid,
+      [`${prefix}--list-box__wrapper--inline--invalid`]: inline && invalid,
+      [`${prefix}--list-box__wrapper--fluid--invalid`]: isFluid && invalid,
+      [`${prefix}--list-box__wrapper--fluid--focus`]:
+        !isOpen && isFluid && isFocused,
+      [`${prefix}--list-box__wrapper--slug`]: slug,
+      [`${prefix}--list-box__wrapper--decorator`]: decorator,
+    }
+  );
+  const titleClasses = cx(`${prefix}--label`, {
+    [`${prefix}--label--disabled`]: disabled,
+    [`${prefix}--visually-hidden`]: hideLabel,
+  });
+  const helperId = !helperText
+    ? undefined
+    : `multiselect-helper-text-${multiSelectInstanceId}`;
+  const fieldLabelId = `multiselect-field-label-${multiSelectInstanceId}`;
+  const helperClasses = cx(`${prefix}--form__helper-text`, {
+    [`${prefix}--form__helper-text--disabled`]: disabled,
+  });
+
+  const className = cx(`${prefix}--multi-select`, {
+    [`${prefix}--multi-select--invalid`]: invalid,
+    [`${prefix}--multi-select--invalid--focused`]: invalid && inputFocused,
+    [`${prefix}--multi-select--warning`]: showWarning,
+    [`${prefix}--multi-select--inline`]: inline,
+    [`${prefix}--multi-select--selected`]:
+      selectedItems && selectedItems.length > 0,
+    [`${prefix}--list-box--up`]: direction === 'top',
+    [`${prefix}--multi-select--readonly`]: readOnly,
+    [`${prefix}--autoalign`]: enableFloatingStyles,
+    [`${prefix}--multi-select--selectall`]: selectAll,
+  });
+
+  // needs to be capitalized for react to render it correctly
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const ItemToElement = itemToElement!;
+
+  if (selectionFeedback === 'fixed') {
+    sortOptions.selectedItems = [];
+  } else if (selectionFeedback === 'top-after-reopen') {
+    sortOptions.selectedItems = topItems;
+  }
+
+  function stateReducer(state, actionAndChanges) {
+    const { changes, props, type } = actionAndChanges;
+    const { highlightedIndex } = changes;
+
+    if (changes.isOpen && !isOpen) {
+      setTopItems(controlledSelectedItems);
     }
 
-    const inline = type === 'inline';
-    const showWarning = !invalid && warn;
-
-    const wrapperClasses = cx(
-      `${prefix}--multi-select__wrapper`,
-      `${prefix}--list-box__wrapper`,
-      containerClassName,
-      {
-        [`${prefix}--multi-select__wrapper--inline`]: inline,
-        [`${prefix}--list-box__wrapper--inline`]: inline,
-        [`${prefix}--multi-select__wrapper--inline--invalid`]:
-          inline && invalid,
-        [`${prefix}--list-box__wrapper--inline--invalid`]: inline && invalid,
-        [`${prefix}--list-box__wrapper--fluid--invalid`]: isFluid && invalid,
-        [`${prefix}--list-box__wrapper--fluid--focus`]:
-          !isOpen && isFluid && isFocused,
-        [`${prefix}--list-box__wrapper--slug`]: slug,
-        [`${prefix}--list-box__wrapper--decorator`]: decorator,
-      }
-    );
-    const titleClasses = cx(`${prefix}--label`, {
-      [`${prefix}--label--disabled`]: disabled,
-      [`${prefix}--visually-hidden`]: hideLabel,
-    });
-    const helperId = !helperText
-      ? undefined
-      : `multiselect-helper-text-${multiSelectInstanceId}`;
-    const fieldLabelId = `multiselect-field-label-${multiSelectInstanceId}`;
-    const helperClasses = cx(`${prefix}--form__helper-text`, {
-      [`${prefix}--form__helper-text--disabled`]: disabled,
-    });
-
-    const className = cx(`${prefix}--multi-select`, {
-      [`${prefix}--multi-select--invalid`]: invalid,
-      [`${prefix}--multi-select--invalid--focused`]: invalid && inputFocused,
-      [`${prefix}--multi-select--warning`]: showWarning,
-      [`${prefix}--multi-select--inline`]: inline,
-      [`${prefix}--multi-select--selected`]:
-        selectedItems && selectedItems.length > 0,
-      [`${prefix}--list-box--up`]: direction === 'top',
-      [`${prefix}--multi-select--readonly`]: readOnly,
-      [`${prefix}--autoalign`]: enableFloatingStyles,
-      [`${prefix}--multi-select--selectall`]: selectAll,
-    });
-
-    // needs to be capitalized for react to render it correctly
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const ItemToElement = itemToElement!;
-
-    if (selectionFeedback === 'fixed') {
-      sortOptions.selectedItems = [];
-    } else if (selectionFeedback === 'top-after-reopen') {
-      sortOptions.selectedItems = topItems;
-    }
-
-    function stateReducer(state, actionAndChanges) {
-      const { changes, props, type } = actionAndChanges;
-      const { highlightedIndex } = changes;
-
-      if (changes.isOpen && !isOpen) {
-        setTopItems(controlledSelectedItems);
-      }
-
-      switch (type) {
-        case ToggleButtonKeyDownSpaceButton:
-        case ToggleButtonKeyDownEnter:
-          if (changes.selectedItem === undefined) {
-            break;
-          }
-          if (Array.isArray(changes.selectedItem)) {
-            break;
-          }
-          onItemChange(changes.selectedItem);
-          return { ...changes, highlightedIndex: state.highlightedIndex };
-        case ToggleButtonBlur:
-        case ToggleButtonKeyDownEscape:
-          setIsOpenWrapper(false);
+    switch (type) {
+      case ToggleButtonKeyDownSpaceButton:
+      case ToggleButtonKeyDownEnter:
+        if (changes.selectedItem === undefined) {
           break;
-        case ToggleButtonClick:
-          setIsOpenWrapper(changes.isOpen || false);
+        }
+        if (Array.isArray(changes.selectedItem)) {
+          break;
+        }
+        onItemChange(changes.selectedItem);
+        return { ...changes, highlightedIndex: state.highlightedIndex };
+      case ToggleButtonBlur:
+      case ToggleButtonKeyDownEscape:
+        setIsOpenWrapper(false);
+        break;
+      case ToggleButtonClick:
+        setIsOpenWrapper(changes.isOpen || false);
+        return {
+          ...changes,
+          highlightedIndex: controlledSelectedItems.length > 0 ? 0 : undefined,
+        };
+      case ItemClick:
+        setHighlightedIndex(changes.selectedItem);
+        onItemChange(changes.selectedItem);
+        return { ...changes, highlightedIndex: state.highlightedIndex };
+      case MenuMouseLeave:
+        return { ...changes, highlightedIndex: state.highlightedIndex };
+      case FunctionSetHighlightedIndex:
+        if (!isOpen) {
           return {
             ...changes,
-            highlightedIndex:
-              controlledSelectedItems.length > 0 ? 0 : undefined,
+            highlightedIndex: 0,
           };
-        case ItemClick:
-          setHighlightedIndex(changes.selectedItem);
-          onItemChange(changes.selectedItem);
-          return { ...changes, highlightedIndex: state.highlightedIndex };
-        case MenuMouseLeave:
-          return { ...changes, highlightedIndex: state.highlightedIndex };
-        case FunctionSetHighlightedIndex:
-          if (!isOpen) {
-            return {
-              ...changes,
-              highlightedIndex: 0,
-            };
-          } else {
-            return {
-              ...changes,
-              highlightedIndex: filteredItems.indexOf(highlightedIndex),
-            };
-          }
-        case ToggleButtonKeyDownArrowDown:
-        case ToggleButtonKeyDownArrowUp:
-        case ToggleButtonKeyDownPageDown:
-        case ToggleButtonKeyDownPageUp:
-          if (highlightedIndex > -1) {
-            const itemArray = document.querySelectorAll(
-              `li.${prefix}--list-box__menu-item[role="option"]`
-            );
-            props.scrollIntoView(itemArray[highlightedIndex]);
-          }
-          if (highlightedIndex === -1) {
-            return {
-              ...changes,
-              highlightedIndex: 0,
-            };
-          }
-          return changes;
-        case ItemMouseMove:
-          return { ...changes, highlightedIndex: state.highlightedIndex };
-      }
-      return changes;
+        } else {
+          return {
+            ...changes,
+            highlightedIndex: filteredItems.indexOf(highlightedIndex),
+          };
+        }
+      case ToggleButtonKeyDownArrowDown:
+      case ToggleButtonKeyDownArrowUp:
+      case ToggleButtonKeyDownPageDown:
+      case ToggleButtonKeyDownPageUp:
+        if (highlightedIndex > -1) {
+          const itemArray = document.querySelectorAll(
+            `li.${prefix}--list-box__menu-item[role="option"]`
+          );
+          props.scrollIntoView(itemArray[highlightedIndex]);
+        }
+        if (highlightedIndex === -1) {
+          return {
+            ...changes,
+            highlightedIndex: 0,
+          };
+        }
+        return changes;
+      case ItemMouseMove:
+        return { ...changes, highlightedIndex: state.highlightedIndex };
     }
+    return changes;
+  }
 
-    const multiSelectFieldWrapperClasses = cx(
-      `${prefix}--list-box__field--wrapper`,
-      {
-        [`${prefix}--list-box__field--wrapper--input-focused`]: inputFocused,
-      }
-    );
+  const multiSelectFieldWrapperClasses = cx(
+    `${prefix}--list-box__field--wrapper`,
+    {
+      [`${prefix}--list-box__field--wrapper--input-focused`]: inputFocused,
+    }
+  );
 
-    const handleFocus = (evt: React.FocusEvent<HTMLDivElement>) => {
-      evt.target.classList.contains(`${prefix}--tag__close-icon`)
-        ? setIsFocused(false)
-        : setIsFocused(evt.type === 'focus' ? true : false);
-    };
+  const handleFocus = (evt: React.FocusEvent<HTMLDivElement>) => {
+    evt.target.classList.contains(`${prefix}--tag__close-icon`)
+      ? setIsFocused(false)
+      : setIsFocused(evt.type === 'focus' ? true : false);
+  };
 
-    const readOnlyEventHandlers = readOnly
-      ? {
-          onClick: (evt: React.MouseEvent<HTMLButtonElement>) => {
-            // NOTE: does not prevent click
+  const readOnlyEventHandlers = readOnly
+    ? {
+        onClick: (evt: React.MouseEvent<HTMLButtonElement>) => {
+          // NOTE: does not prevent click
+          evt.preventDefault();
+          // focus on the element as per readonly input behavior
+          if (mergedRef.current !== undefined) {
+            mergedRef.current.focus();
+          }
+        },
+        onKeyDown: (evt: React.KeyboardEvent<HTMLButtonElement>) => {
+          const selectAccessKeys = ['ArrowDown', 'ArrowUp', ' ', 'Enter'];
+          // This prevents the select from opening for the above keys
+          if (selectAccessKeys.includes(evt.key)) {
             evt.preventDefault();
-            // focus on the element as per readonly input behavior
-            if (mergedRef.current !== undefined) {
-              mergedRef.current.focus();
-            }
-          },
-          onKeyDown: (evt: React.KeyboardEvent<HTMLButtonElement>) => {
-            const selectAccessKeys = ['ArrowDown', 'ArrowUp', ' ', 'Enter'];
-            // This prevents the select from opening for the above keys
-            if (selectAccessKeys.includes(evt.key)) {
-              evt.preventDefault();
-            }
-          },
-        }
-      : {};
+          }
+        },
+      }
+    : {};
 
-    // AILabel always size `mini`
-    let normalizedDecorator = React.isValidElement(slug ?? decorator)
-      ? (slug ?? decorator)
-      : null;
-    if (
-      normalizedDecorator &&
-      normalizedDecorator['type']?.displayName === 'AILabel'
-    ) {
-      normalizedDecorator = React.cloneElement(
-        normalizedDecorator as React.ReactElement<any>,
-        {
-          size: 'mini',
-        }
-      );
-    }
-
-    const itemsSelectedText =
-      selectedItems.length > 0 &&
-      selectedItems.map((item) => (item as selectedItemType)?.text);
-
-    const selectedItemsLength = selectAll
-      ? selectedItems.filter((item: any) => !item.isSelectAll).length
-      : selectedItems.length;
-
-    // Memoize the value of getMenuProps to avoid an infinite loop
-    const menuProps = useMemo(
-      () =>
-        getMenuProps({
-          ref: enableFloatingStyles ? refs.setFloating : null,
-        }),
-      [enableFloatingStyles, getMenuProps, refs.setFloating]
-    );
-
-    return (
-      <div className={wrapperClasses}>
-        <label className={titleClasses} {...getLabelProps()}>
-          {titleText && titleText}
-          {selectedItems.length > 0 && (
-            <span className={`${prefix}--visually-hidden`}>
-              {clearSelectionDescription} {selectedItems.length}{' '}
-              {itemsSelectedText},{clearSelectionText}
-            </span>
-          )}
-        </label>
-        <ListBox
-          onFocus={isFluid ? handleFocus : undefined}
-          onBlur={isFluid ? handleFocus : undefined}
-          type={type}
-          size={size}
-          className={className}
-          disabled={disabled}
-          light={light}
-          invalid={invalid}
-          invalidText={invalidText}
-          warn={warn}
-          warnText={warnText}
-          isOpen={isOpen}
-          id={id}>
-          {invalid && (
-            <WarningFilled className={`${prefix}--list-box__invalid-icon`} />
-          )}
-          {showWarning && (
-            <WarningAltFilled
-              className={`${prefix}--list-box__invalid-icon ${prefix}--list-box__invalid-icon--warning`}
-            />
-          )}
-          <div
-            className={multiSelectFieldWrapperClasses}
-            ref={enableFloatingStyles ? refs.setReference : null}>
-            {selectedItems.length > 0 && (
-              <ListBox.Selection
-                readOnly={readOnly}
-                clearSelection={
-                  !disabled && !readOnly ? clearSelection : noopFn
-                }
-                selectionCount={selectedItemsLength}
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                translateWithId={translateWithId!}
-                disabled={disabled}
-              />
-            )}
-            <button
-              type="button"
-              className={`${prefix}--list-box__field`}
-              disabled={disabled}
-              aria-disabled={disabled || readOnly}
-              aria-describedby={
-                !inline && !invalid && !warn && helperText
-                  ? helperId
-                  : undefined
-              }
-              {...toggleButtonProps}
-              ref={mergedRef}
-              {...readOnlyEventHandlers}>
-              <span id={fieldLabelId} className={`${prefix}--list-box__label`}>
-                {label}
-              </span>
-              <ListBox.MenuIcon
-                isOpen={isOpen}
-                translateWithId={translateWithId}
-              />
-            </button>
-            {slug ? (
-              normalizedDecorator
-            ) : decorator ? (
-              <div className={`${prefix}--list-box__inner-wrapper--decorator`}>
-                {normalizedDecorator}
-              </div>
-            ) : (
-              ''
-            )}
-          </div>
-          <ListBox.Menu {...menuProps}>
-            {isOpen &&
-              sortItems!(
-                filteredItems,
-                sortOptions as SortItemsOptions<ItemType>
-              ).map((item, index) => {
-                const isChecked =
-                  selectedItems.filter((selected) => isEqual(selected, item))
-                    .length > 0;
-
-                const isIndeterminate =
-                  selectedItems.length !== 0 &&
-                  item['isSelectAll'] &&
-                  !isChecked;
-
-                const itemProps = getItemProps({
-                  item,
-                  // we don't want Downshift to set aria-selected for us
-                  // we also don't want to set 'false' for reader verbosity's sake
-                  ['aria-selected']: isChecked,
-                });
-                const itemText = itemToString(item);
-
-                return (
-                  <ListBox.MenuItem
-                    key={itemProps.id}
-                    isActive={isChecked && !item['isSelectAll']}
-                    aria-label={itemText}
-                    isHighlighted={highlightedIndex === index}
-                    title={itemText}
-                    disabled={itemProps['aria-disabled']}
-                    {...itemProps}>
-                    <div className={`${prefix}--checkbox-wrapper`}>
-                      <Checkbox
-                        id={`${itemProps.id}__checkbox`}
-                        labelText={
-                          itemToElement ? (
-                            <ItemToElement key={itemProps.id} {...item} />
-                          ) : (
-                            itemText
-                          )
-                        }
-                        checked={isChecked}
-                        title={useTitleInItem ? itemText : undefined}
-                        indeterminate={isIndeterminate}
-                        disabled={disabled}
-                      />
-                    </div>
-                  </ListBox.MenuItem>
-                );
-              })}
-          </ListBox.Menu>
-          {itemsCleared && (
-            <span aria-live="assertive" aria-label={clearAnnouncement} />
-          )}
-        </ListBox>
-        {!inline && !invalid && !warn && helperText && (
-          <div id={helperId} className={helperClasses}>
-            {helperText}
-          </div>
-        )}
-      </div>
+  // AILabel always size `mini`
+  let normalizedDecorator = React.isValidElement(slug ?? decorator)
+    ? (slug ?? decorator)
+    : null;
+  if (
+    normalizedDecorator &&
+    normalizedDecorator['type']?.displayName === 'AILabel'
+  ) {
+    normalizedDecorator = React.cloneElement(
+      normalizedDecorator as React.ReactElement<any>,
+      {
+        size: 'mini',
+      }
     );
   }
-);
+
+  const itemsSelectedText =
+    selectedItems.length > 0 &&
+    selectedItems.map((item) => (item as unknown as selectedItemType)?.text);
+
+  const selectedItemsLength = selectAll
+    ? selectedItems.filter((item: any) => !item.isSelectAll).length
+    : selectedItems.length;
+
+  // Memoize the value of getMenuProps to avoid an infinite loop
+  const menuProps = useMemo(
+    () =>
+      getMenuProps({
+        ref: enableFloatingStyles ? refs.setFloating : null,
+      }),
+    [enableFloatingStyles, getMenuProps, refs.setFloating]
+  );
+
+  return (
+    <div className={wrapperClasses}>
+      <label className={titleClasses} {...getLabelProps()}>
+        {titleText && titleText}
+        {selectedItems.length > 0 && (
+          <span className={`${prefix}--visually-hidden`}>
+            {clearSelectionDescription} {selectedItems.length}{' '}
+            {itemsSelectedText},{clearSelectionText}
+          </span>
+        )}
+      </label>
+      <ListBox
+        onFocus={isFluid ? handleFocus : undefined}
+        onBlur={isFluid ? handleFocus : undefined}
+        type={type}
+        size={size}
+        className={className}
+        disabled={disabled}
+        light={light}
+        invalid={invalid}
+        invalidText={invalidText}
+        warn={warn}
+        warnText={warnText}
+        isOpen={isOpen}
+        id={id}>
+        {invalid && (
+          <WarningFilled className={`${prefix}--list-box__invalid-icon`} />
+        )}
+        {showWarning && (
+          <WarningAltFilled
+            className={`${prefix}--list-box__invalid-icon ${prefix}--list-box__invalid-icon--warning`}
+          />
+        )}
+        <div
+          className={multiSelectFieldWrapperClasses}
+          ref={enableFloatingStyles ? refs.setReference : null}>
+          {selectedItems.length > 0 && (
+            <ListBox.Selection
+              readOnly={readOnly}
+              clearSelection={!disabled && !readOnly ? clearSelection : noopFn}
+              selectionCount={selectedItemsLength}
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              translateWithId={translateWithId!}
+              disabled={disabled}
+            />
+          )}
+          <button
+            type="button"
+            className={`${prefix}--list-box__field`}
+            disabled={disabled}
+            aria-disabled={disabled || readOnly}
+            aria-describedby={
+              !inline && !invalid && !warn && helperText ? helperId : undefined
+            }
+            {...toggleButtonProps}
+            ref={mergedRef}
+            {...readOnlyEventHandlers}>
+            <span id={fieldLabelId} className={`${prefix}--list-box__label`}>
+              {label}
+            </span>
+            <ListBox.MenuIcon
+              isOpen={isOpen}
+              translateWithId={translateWithId}
+            />
+          </button>
+          {slug ? (
+            normalizedDecorator
+          ) : decorator ? (
+            <div className={`${prefix}--list-box__inner-wrapper--decorator`}>
+              {normalizedDecorator}
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
+        <ListBox.Menu {...menuProps}>
+          {isOpen &&
+            sortItems!(
+              filteredItems,
+              sortOptions as SortItemsOptions<ItemType>
+            ).map((item, index) => {
+              const isChecked =
+                selectedItems.filter((selected) => isEqual(selected, item))
+                  .length > 0;
+
+              const isIndeterminate =
+                selectedItems.length !== 0 && item['isSelectAll'] && !isChecked;
+
+              const itemProps = getItemProps({
+                item,
+                // we don't want Downshift to set aria-selected for us
+                // we also don't want to set 'false' for reader verbosity's sake
+                ['aria-selected']: isChecked,
+              });
+              const itemText = itemToString(item);
+
+              return (
+                <ListBox.MenuItem
+                  key={itemProps.id}
+                  isActive={isChecked && !item['isSelectAll']}
+                  aria-label={itemText}
+                  isHighlighted={highlightedIndex === index}
+                  title={itemText}
+                  disabled={itemProps['aria-disabled']}
+                  {...itemProps}>
+                  <div className={`${prefix}--checkbox-wrapper`}>
+                    <Checkbox
+                      id={`${itemProps.id}__checkbox`}
+                      labelText={
+                        itemToElement ? (
+                          <ItemToElement key={itemProps.id} {...item} />
+                        ) : (
+                          itemText
+                        )
+                      }
+                      checked={isChecked}
+                      title={useTitleInItem ? itemText : undefined}
+                      indeterminate={isIndeterminate}
+                      disabled={disabled}
+                    />
+                  </div>
+                </ListBox.MenuItem>
+              );
+            })}
+        </ListBox.Menu>
+        {itemsCleared && (
+          <span aria-live="assertive" aria-label={clearAnnouncement} />
+        )}
+      </ListBox>
+      {!inline && !invalid && !warn && helperText && (
+        <div id={helperId} className={helperClasses}>
+          {helperText}
+        </div>
+      )}
+    </div>
+  );
+});
 
 type MultiSelectComponentProps<ItemType> = React.PropsWithChildren<
   MultiSelectProps<ItemType>
@@ -933,7 +923,9 @@ MultiSelect.propTypes = {
    * change, and in some cases they can not be shimmed by Carbon to shield you
    * from potentially breaking changes.
    */
-  downshiftProps: PropTypes.object as React.Validator<UseSelectProps<unknown>>,
+  downshiftProps: PropTypes.object as React.Validator<
+    Partial<UseSelectProps<ItemType>>
+  >,
 
   /**
    * Provide helper text that is used alongside the control label for

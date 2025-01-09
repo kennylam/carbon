@@ -242,7 +242,6 @@ export const ModalFooter = React.forwardRef<HTMLElement, ModalFooterProps>(
         // @ts-expect-error: Invalid derived types, will be fine once explicit types are added
         ref={ref}
         aria-busy={loadingActive}>
-        {/* @ts-expect-error: Invalid derived types, will be fine once explicit types are added */}
         <SecondaryButtonSet {...secondaryButtonProps} />
         {primaryButtonText && (
           <Button
