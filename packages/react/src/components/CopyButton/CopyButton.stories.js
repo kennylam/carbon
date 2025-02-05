@@ -23,6 +23,28 @@ export default {
 export const Default = (args) => <CopyButton {...args} />;
 
 Default.argTypes = {
+  align: {
+    options: [
+      'top',
+      'top-start',
+      'top-end',
+
+      'bottom',
+      'bottom-start',
+      'bottom-end',
+
+      'left',
+      'left-end',
+      'left-start',
+
+      'right',
+      'right-end',
+      'right-start',
+    ],
+    control: {
+      type: 'select',
+    },
+  },
   className: {
     table: {
       disable: true,
