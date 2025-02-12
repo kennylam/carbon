@@ -56,6 +56,22 @@ export const Default = {
   `,
 };
 
+export const CustomPrefix = {
+  argTypes: controls,
+  args: defaultArgs,
+  render: ({ disabled, href, inline, size, visited, onClick }) => html`
+    <cdsfoo-link
+      ?disabled="${disabled}"
+      href="${ifDefined(href)}"
+      size="${ifDefined(size)}"
+      ?inline="${inline}"
+      ?visited="${visited}"
+      @click="${onClick}">
+      Link
+    </cdsfoo-link>
+  `,
+};
+
 export const Inline = {
   render: () => html`
     <cds-link inline href="#"
