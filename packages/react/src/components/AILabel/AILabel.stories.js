@@ -14,6 +14,67 @@ import { IconButton } from '../IconButton';
 import mdx from './AILabel.mdx';
 import './ailabel-story.scss';
 
+const sizes = ['mini', '2xs', 'xs', 'sm', 'md', 'lg', 'xl'];
+
+const defaultArgs = {
+  showAILabelActions: {
+    control: {
+      type: 'boolean',
+    },
+    description: 'Playground only - toggle to show the callout toolbar',
+  },
+  align: {
+    options: [
+      'top',
+      'top-start',
+      'top-end',
+
+      'bottom',
+      'bottom-start',
+      'bottom-end',
+
+      'left',
+      'left-end',
+      'left-start',
+
+      'right',
+      'right-end',
+      'right-start',
+    ],
+    control: { type: 'select' },
+  },
+  AILabelContent: {
+    table: {
+      disable: true,
+    },
+  },
+  children: {
+    table: {
+      disable: true,
+    },
+  },
+  className: {
+    table: {
+      disable: true,
+    },
+  },
+  onRevertClick: {
+    table: {
+      disable: true,
+    },
+  },
+  revertActive: {
+    table: {
+      disable: true,
+    },
+  },
+  revertLabel: {
+    table: {
+      disable: true,
+    },
+  },
+};
+
 export default {
   title: 'Components/AILabel',
   component: AILabel,
@@ -43,203 +104,58 @@ export const Default = () => {
   return (
     <>
       <div className="ai-label-container ai-label-container-example">
-        <AILabel autoAlign size="mini">
-          <AILabelContent>{aiContent}</AILabelContent>
-        </AILabel>
-        <AILabel autoAlign size="2xs">
-          <AILabelContent>{aiContent}</AILabelContent>
-        </AILabel>
-        <AILabel autoAlign size="xs">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign size="sm">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign size="md">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign size="lg">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign size="xl">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
+        {sizes.map((size, i) => (
+          <AILabel autoAlign size={size} key={i}>
+            <AILabelContent>{aiContent}</AILabelContent>
+          </AILabel>
+        ))}
       </div>
       <div className="ai-label-container ai-label-container-example">
-        <AILabel autoAlign kind="inline" size="sm">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign kind="inline" size="md">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign kind="inline" size="lg">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
+        {sizes.slice(3, 6).map((size, i) => (
+          <AILabel autoAlign kind="inline" size={size} key={i}>
+            <AILabelContent>
+              {aiContent}
+              <AILabelActions>
+                <IconButton kind="ghost" label="View">
+                  <View />
+                </IconButton>
+                <IconButton kind="ghost" label="Open Folder">
+                  <FolderOpen />
+                </IconButton>
+                <IconButton kind="ghost" label="Folders">
+                  <Folders />
+                </IconButton>
+                <Button>View details</Button>
+              </AILabelActions>
+            </AILabelContent>
+          </AILabel>
+        ))}
       </div>
       <div className="ai-label-container ai-label-container-example">
-        <AILabel autoAlign kind="inline" size="sm" textLabel="Text goes here">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign kind="inline" size="md" textLabel="Text goes here">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
-        <AILabel autoAlign kind="inline" size="lg" textLabel="Text goes here">
-          <AILabelContent>
-            {aiContent}
-            <AILabelActions>
-              <IconButton kind="ghost" label="View">
-                <View />
-              </IconButton>
-              <IconButton kind="ghost" label="Open Folder">
-                <FolderOpen />
-              </IconButton>
-              <IconButton kind="ghost" label="Folders">
-                <Folders />
-              </IconButton>
-              <Button>View details</Button>
-            </AILabelActions>
-          </AILabelContent>
-        </AILabel>
+        {sizes.slice(3, 6).map((size, i) => (
+          <AILabel
+            autoAlign
+            kind="inline"
+            size={size}
+            key={i}
+            textLabel="Text goes here">
+            <AILabelContent>
+              {aiContent}
+              <AILabelActions>
+                <IconButton kind="ghost" label="View">
+                  <View />
+                </IconButton>
+                <IconButton kind="ghost" label="Open Folder">
+                  <FolderOpen />
+                </IconButton>
+                <IconButton kind="ghost" label="Folders">
+                  <Folders />
+                </IconButton>
+                <Button>View details</Button>
+              </AILabelActions>
+            </AILabelContent>
+          </AILabel>
+        ))}
       </div>
     </>
   );
@@ -287,42 +203,7 @@ export const ExplainabilityPopover = (args) => {
 };
 
 ExplainabilityPopover.argTypes = {
-  showAILabelActions: {
-    control: {
-      type: 'boolean',
-    },
-    description: 'Playground only - toggle to show the callout toolbar',
-  },
-  align: {
-    options: [
-      'top',
-      'top-start',
-      'top-end',
-
-      'bottom',
-      'bottom-start',
-      'bottom-end',
-
-      'left',
-      'left-end',
-      'left-start',
-
-      'right',
-      'right-end',
-      'right-start',
-    ],
-    control: { type: 'select' },
-  },
-  revertActive: {
-    table: {
-      disable: true,
-    },
-  },
-  AILabelContent: {
-    table: {
-      disable: true,
-    },
-  },
+  ...defaultArgs,
   aiText: {
     table: {
       disable: true,
@@ -338,27 +219,7 @@ ExplainabilityPopover.argTypes = {
       disable: true,
     },
   },
-  children: {
-    table: {
-      disable: true,
-    },
-  },
-  className: {
-    table: {
-      disable: true,
-    },
-  },
   kind: {
-    table: {
-      disable: true,
-    },
-  },
-  onRevertClick: {
-    table: {
-      disable: true,
-    },
-  },
-  revertLabel: {
     table: {
       disable: true,
     },
@@ -433,60 +294,5 @@ export const Playground = (args) => {
 };
 
 Playground.argTypes = {
-  showAILabelActions: {
-    control: {
-      type: 'boolean',
-    },
-    description: 'Playground only - toggle to show the callout toolbar',
-  },
-  align: {
-    options: [
-      'top',
-      'top-start',
-      'top-end',
-
-      'bottom',
-      'bottom-start',
-      'bottom-end',
-
-      'left',
-      'left-end',
-      'left-start',
-
-      'right',
-      'right-end',
-      'right-start',
-    ],
-    control: { type: 'select' },
-  },
-  AILabelContent: {
-    table: {
-      disable: true,
-    },
-  },
-  children: {
-    table: {
-      disable: true,
-    },
-  },
-  className: {
-    table: {
-      disable: true,
-    },
-  },
-  onRevertClick: {
-    table: {
-      disable: true,
-    },
-  },
-  revertActive: {
-    table: {
-      disable: true,
-    },
-  },
-  revertLabel: {
-    table: {
-      disable: true,
-    },
-  },
+  ...defaultArgs,
 };
