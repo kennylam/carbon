@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const prefix = 'cds';
+const prefix = process.env.CUSTOM_PREFIX ? process.env.CUSTOM_PREFIX : 'cds';
 
 /**
  * A selector selecting tabbable nodes.

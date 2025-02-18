@@ -78,8 +78,15 @@ export default function LitSCSS({
         data: finalContent,
       });
 
+      const customPrefix = css
+        .toString()
+        .replace(
+          /cds/g,
+          process.env.CUSTOM_PREFIX ? process.env.CUSTOM_PREFIX : 'cds'
+        );
+
       return {
-        code: transformToTemplate(await preprocessor(css.toString(), id)),
+        code: transformToTemplate(await preprocessor(customPrefix, id)),
         map: {
           mappings: '',
         },
