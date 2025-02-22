@@ -7,7 +7,7 @@
 
 'use strict';
 
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 class ConsoleReporter {
   constructor({
@@ -53,7 +53,6 @@ class ConsoleReporter {
   }
 }
 
-module.exports = {
-  ConsoleReporter,
-  reporter: new ConsoleReporter(),
-};
+const reporter = new ConsoleReporter();
+
+export { ConsoleReporter, reporter };

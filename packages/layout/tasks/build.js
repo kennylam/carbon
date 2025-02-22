@@ -9,20 +9,22 @@
 
 'use strict';
 
-require('core-js/features/array/flat-map');
-
-const { reporter } = require('@carbon/cli-reporter');
-const { types: t, generate } = require('@carbon/scss-generator');
-const fs = require('fs-extra');
-const path = require('path');
-const {
+import 'core-js/actual/array/flat-map';
+import { reporter } from '@carbon/cli-reporter';
+import { types as t, generate } from '@carbon/scss-generator';
+import fs from 'fs-extra';
+import path, { dirname } from 'path';
+import {
   container,
   iconSize,
   spacing,
   fluidSpacing,
   sizes,
   layout,
-} = require('../lib');
+} from '../lib';
+
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = dirname(__filename);
 
 async function build() {
   reporter.info('Building scss files for layout...');
