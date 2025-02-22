@@ -7,7 +7,7 @@
 
 'use strict';
 
-const prettier = require('prettier2');
+import prettier2 from 'prettier2';
 
 const prettierOptions = {
   parser: 'scss',
@@ -39,7 +39,7 @@ function createPrinter(definitions) {
     },
 
     get() {
-      return prettier.format(buffer.join(''), prettierOptions);
+      return prettier2.format(buffer.join(''), prettierOptions);
     },
 
     maybeNewline() {
@@ -73,6 +73,4 @@ function padLeft(level) {
   return '  '.repeat(level);
 }
 
-module.exports = {
-  createPrinter,
-};
+export { createPrinter };

@@ -76,7 +76,7 @@ function arrayOf(checkType) {
   };
 }
 
-module.exports = {
+export {
   assertAny,
   assertDefined,
   assertOneOf,

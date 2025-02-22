@@ -72,6 +72,4 @@ function defineType(type, { fields = {}, generate } = {}) {
   };
 }
 
-module.exports = {
-  defineType,
-};
+export default defineType;

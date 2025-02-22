@@ -7,11 +7,7 @@
 
 'use strict';
 
-const { definitions, types } = require('./types');
-const { generate } = require('./generate');
+import { definitions, types } from './types/index.js';
+import generate from './generate/index.js';
 
-module.exports = {
-  definitions,
-  generate,
-  types,
-};
+export { definitions, generate, types };

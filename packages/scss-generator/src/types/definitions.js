@@ -7,14 +7,14 @@
 
 'use strict';
 
-const {
+import {
   assertAny,
   assertOneOf,
   assertType,
   assertValueType,
   arrayOf,
-} = require('./assert');
-const { defineType } = require('./type');
+} from './assert.js';
+import defineType from './type.js';
 
 //-------------------------------------------------------------------------------
 // Comments
@@ -791,7 +791,7 @@ const Newline = defineType('Newline', {
   },
 });
 
-module.exports = {
+export {
   Assignment,
   AssignmentPattern,
   AtContent,

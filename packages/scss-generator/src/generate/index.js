@@ -7,8 +7,8 @@
 
 'use strict';
 
-const { definitions } = require('../types');
-const { createPrinter } = require('./printer');
+import { definitions } from '../types/index.js';
+import { createPrinter } from './printer.js';
 
 function generate(ast) {
   const printer = createPrinter(definitions);
@@ -20,6 +20,4 @@ function generate(ast) {
   };
 }
 
-module.exports = {
-  generate,
-};
+export default generate;
