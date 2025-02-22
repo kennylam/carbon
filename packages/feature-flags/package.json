@@ -5,6 +5,7 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "module": "es/index.js",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/carbon-design-system/carbon.git",
@@ -37,7 +38,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.7",
-    "@babel/generator": "^7.24.7",
+    "@babel/generator": "^7.26.9",
     "@babel/preset-env": "^7.24.7",
     "@babel/template": "^7.24.7",
     "@babel/types": "^7.24.7",

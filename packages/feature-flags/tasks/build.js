@@ -7,14 +7,19 @@
 
 'use strict';
 
-const { default: babelGenerate } = require('@babel/generator');
-const { default: template } = require('@babel/template');
-const babelTypes = require('@babel/types');
-const { types: t, generate } = require('@carbon/scss-generator');
-const { camelCase, constantCase } = require('change-case');
-const fs = require('fs-extra');
-const yaml = require('js-yaml');
-const path = require('path');
+import _generate from '@babel/generator';
+import _template from '@babel/template';
+import babelTypes from '@babel/types';
+import { types as t, generate as carbonGenerate } from '@carbon/scss-generator';
+import { camelCase, constantCase } from 'change-case';
+import fs from 'fs-extra';
+import yaml from 'js-yaml';
+import path, { dirname } from 'path';
+
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = dirname(__filename);
+const generate = _generate.default;
+const template = _template.default;
 
 async function main() {
   const featureFlagsPath = path.resolve(__dirname, '../feature-flags.yml');
@@ -67,7 +72,7 @@ function buildSassModule(featureFlags) {
       ),
     }),
   ]);
-  const { code } = generate(stylesheet);
+  const { code } = carbonGenerate(stylesheet);
   return code;
 }
 
@@ -152,7 +157,7 @@ function buildJavaScriptModule(featureFlags) {
       ),
     ])
   );
-  const { code } = babelGenerate(file);
+  const { code } = generate(file);
 
   return `${javascriptBanner}${code}`;
 }
