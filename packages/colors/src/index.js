@@ -5,5 +5,5 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export * from './colors';
-export * from './rgb';
+export * from './colors.js';
+export * from './rgb.js';
