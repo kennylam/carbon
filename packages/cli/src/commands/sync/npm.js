@@ -5,10 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 const defaultIgnorePatterns = [
   '**/__mocks__/**',
@@ -17,7 +15,7 @@ const defaultIgnorePatterns = [
   '**/tasks/**',
 ];
 
-function run({ packagePaths }) {
+export function run({ packagePaths }) {
   return Promise.all(
     packagePaths.map(async ({ packagePath }) => {
       const ignorePath = path.join(packagePath, '.npmignore');
@@ -37,7 +35,7 @@ function run({ packagePaths }) {
   );
 }
 
-module.exports = {
+export default {
   name: 'npm',
   run,
 };

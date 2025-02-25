@@ -5,13 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const glob = require('fast-glob');
-const fs = require('fs-extra');
-const path = require('path');
-const { createLogger } = require('../logger');
-const { createJson, createMarkdown } = require('./sassdoc/tools');
+import glob from 'fast-glob';
+import fs from 'fs-extra';
+import path from 'path';
+import { createLogger } from '../logger';
+import { createJson, createMarkdown } from './sassdoc/tools';
 
 const logger = createLogger('sassdoc');
 
@@ -59,7 +57,7 @@ async function sassdoc({
   logger.stop();
 }
 
-module.exports = {
+export default {
   command: 'sassdoc <glob>',
   desc: 'generate sassdoc as markdown',
   builder(yargs) {

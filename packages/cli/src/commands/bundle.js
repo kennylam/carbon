@@ -5,15 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const path = require('path');
-const { createLogger } = require('../logger');
-const bundlers = require('./bundle/bundlers');
+import path from 'path';
+import { createLogger } from '../logger';
+import bundlers from './bundle/bundlers';
 
 const logger = createLogger('bundle');
 
-async function bundle({ entrypoint, name, globals }) {
+const bundle = async ({ entrypoint, name, globals }) => {
   logger.start('bundle');
 
   const cwd = process.cwd();
@@ -39,29 +37,29 @@ async function bundle({ entrypoint, name, globals }) {
   }
 
   logger.stop();
-}
-
-module.exports = {
-  command: 'bundle <entrypoint>',
-  desc: 'bundle the given .js entrypoint',
-  builder(yargs) {
-    yargs.positional('entrypoint', {
-      type: 'string',
-      describe: 'the entrypoint Javascript file',
-    });
-
-    yargs.options({
-      n: {
-        alias: 'name',
-        describe: 'the name of the module for the UMD build',
-        type: 'string',
-      },
-      g: {
-        alias: 'globals',
-        describe: 'global module names',
-        type: 'string',
-      },
-    });
-  },
-  handler: bundle,
 };
+
+export const command = 'bundle <entrypoint>';
+export const desc = 'bundle the given .js entrypoint';
+
+export const builder = (yargs) => {
+  yargs.positional('entrypoint', {
+    type: 'string',
+    describe: 'the entrypoint Javascript file',
+  });
+
+  yargs.options({
+    n: {
+      alias: 'name',
+      describe: 'the name of the module for the UMD build',
+      type: 'string',
+    },
+    g: {
+      alias: 'globals',
+      describe: 'global module names',
+      type: 'string',
+    },
+  });
+};
+
+export const handler = bundle;

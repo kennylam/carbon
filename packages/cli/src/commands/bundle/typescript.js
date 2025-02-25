@@ -5,21 +5,19 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const { babel } = require('@rollup/plugin-babel');
-const commonjs = require('@rollup/plugin-commonjs');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const typescript = require('@rollup/plugin-typescript');
-const fs = require('fs-extra');
-const path = require('path');
-const { rollup } = require('rollup');
-const { loadBaseTsCompilerOpts } = require('typescript-config-carbon');
-const {
+import { babel } from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
+import fs from 'fs-extra';
+import path from 'path';
+import { rollup } from 'rollup';
+import { loadBaseTsCompilerOpts } from 'typescript-config-carbon';
+import {
   formatGlobals,
   findPackageFolder,
   formatDependenciesIntoGlobals,
-} = require('./utils');
+} from './utils';
 
 async function bundle(entrypoint, options) {
   const globals = options.globals ? formatGlobals(options.globals) : {};
@@ -96,6 +94,7 @@ async function bundle(entrypoint, options) {
           }),
         ],
       });
+
       const outputOptions = {
         exports: 'auto',
         file,
@@ -115,4 +114,4 @@ async function bundle(entrypoint, options) {
   );
 }
 
-module.exports = bundle;
+export default bundle;

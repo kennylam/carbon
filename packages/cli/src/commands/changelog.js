@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const clipboard = require('clipboardy');
-const { prompt } = require('inquirer');
-const { generate } = require('../changelog');
-const { fetchLatestFromUpstream } = require('../git');
-const { createLogger, displayBanner } = require('../logger');
-const { getPackages } = require('../workspace');
+import clipboard from 'clipboardy';
+import { prompt } from 'inquirer';
+import { generate } from '../changelog';
+import { fetchLatestFromUpstream } from '../git';
+import { createLogger, displayBanner } from '../logger';
+import { getPackages } from '../workspace';
 
 const logger = createLogger('changelog');
 
@@ -23,7 +21,7 @@ const logger = createLogger('changelog');
  * v10.5.1..master or v10.5.0..v10.5.1
  * @returns {void}
  */
-async function changelog({ range }) {
+const changelog = async ({ range }) => {
   displayBanner();
 
   logger.start('Fetching latest git information from upstream');
@@ -55,16 +53,16 @@ async function changelog({ range }) {
     // eslint-disable-next-line no-console
     console.log(changelog);
   }
-}
-
-module.exports = {
-  command: 'changelog <range>',
-  desc: 'generate the changelog for the given git tag range',
-  builder(yargs) {
-    yargs.positional('range', {
-      describe: 'the git tag range to generate a changelog for',
-      type: 'string',
-    });
-  },
-  handler: changelog,
 };
+
+export const command = 'changelog <range>';
+export const desc = 'generate the changelog for the given git tag range';
+
+export const builder = (yargs) => {
+  yargs.positional('range', {
+    describe: 'the git tag range to generate a changelog for',
+    type: 'string',
+  });
+};
+
+export const handler = changelog;

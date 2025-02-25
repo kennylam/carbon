@@ -5,11 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const prettier = require('prettier2');
-const sassdoc = require('sassdoc');
-const toc = require('markdown-toc');
+import prettier from 'prettier2';
+import sassdoc from 'sassdoc';
+import toc from 'markdown-toc';
 
 const prettierOptions = {
   parser: 'markdown',
@@ -39,7 +37,7 @@ const slugify = (title) => {
  * @param {object} config - configuration object
  * @returns {object} json object
  */
-async function createJson(sourceDir, config) {
+export async function createJson(sourceDir, config) {
   config = config || {};
 
   return sassdoc.parse(sourceDir, config).then(
@@ -58,7 +56,7 @@ async function createJson(sourceDir, config) {
  * @param {Array} arr - array with potential duplicates
  * @returns {Array} deduped array
  */
-function dedupeArray(arr) {
+export function dedupeArray(arr) {
   return arr.reduce(
     (p, item) => {
       const type = item.type || item.context.type;
@@ -81,7 +79,7 @@ function dedupeArray(arr) {
  * @param {string} type - Sassdoc type (e.g. `variable`, `mixin`)
  * @returns {string} unique Sassdoc item name
  */
-function createUniqueName(name, type) {
+export function createUniqueName(name, type) {
   return `${name} [${type}]`;
 }
 
@@ -90,7 +88,7 @@ function createUniqueName(name, type) {
  * @param {Array} group - Item's group
  * @returns {string} group name
  */
-function createGroupName(group) {
+export function createGroupName(group) {
   return !group || !group[0] || group[0] === 'undefined' ? 'general' : group[0];
 }
 
@@ -100,7 +98,7 @@ function createGroupName(group) {
  * @param {string} heading - anchor link destination
  * @returns {string} markdown anchor
  */
-function createAnchorLink(name, heading) {
+export function createAnchorLink(name, heading) {
   const anchorLink = heading
     .toLowerCase()
     .replace(/ /g, '-')
@@ -119,7 +117,7 @@ function createAnchorLink(name, heading) {
  * @param {string} item - Sassdoc item
  * @returns {string} item in markdown formatting
  */
-function createMarkdownItem(item) {
+export function createMarkdownItem(item) {
   let str = '';
 
   if (!item.context) {
@@ -308,13 +306,6 @@ ${item.example[0].code}
     });
   }
 
-  // if (item.since && item.since.length) {
-  //   metadata.push({
-  //     key: 'Since',
-  //     value: item.since[0].version,
-  //   });
-  // }
-
   if (item.link && item.link.length) {
     let subbullets = '';
 
@@ -353,7 +344,7 @@ ${item.example[0].code}
  * @param {object} config - configuration object
  * @returns {string} markdown
  */
-async function createMarkdown(sourceDir, config) {
+export async function createMarkdown(sourceDir, config) {
   config = config || {};
 
   return sassdoc.parse(sourceDir, config).then(
@@ -398,8 +389,3 @@ async function createMarkdown(sourceDir, config) {
     }
   );
 }
-
-module.exports = {
-  createJson,
-  createMarkdown,
-};

@@ -5,15 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const execa = require('execa');
-const { prompt } = require('inquirer');
-const semver = require('semver');
-const { generate } = require('../changelog');
-const { fetchLatestFromUpstream } = require('../git');
-const { createLogger, displayBanner } = require('../logger');
-const { getPackages } = require('../workspace');
+import execa from 'execa';
+import { prompt } from 'inquirer';
+import semver from 'semver';
+import { generate } from '../changelog';
+import { fetchLatestFromUpstream } from '../git';
+import { createLogger, displayBanner } from '../logger';
+import { getPackages } from '../workspace';
 
 const logger = createLogger('publish');
 // Enqueue tasks to run at the end of the command where we want to "clean-up"
@@ -219,7 +217,7 @@ async function getLastGitTag() {
   return tags[0];
 }
 
-module.exports = {
+export default {
   command: 'publish <tag>',
   desc: 'publish packages that have different versions from the package registry',
   builder(yargs) {

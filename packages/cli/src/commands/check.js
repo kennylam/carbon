@@ -5,16 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const glob = require('fast-glob');
-const path = require('path');
-const { createLogger } = require('../logger');
-const compile = require('../compile');
+import glob from 'fast-glob';
+import path from 'path';
+import { createLogger } from '../logger';
+import compile from '../compile';
 
 const logger = createLogger('check');
 
-async function check({ glob: pattern, ignore = [], list = false }) {
+const check = async ({ glob: pattern, ignore = [], list = false }) => {
   const cwd = process.cwd();
 
   logger.start('check');
@@ -49,29 +47,29 @@ async function check({ glob: pattern, ignore = [], list = false }) {
   } finally {
     logger.stop();
   }
-}
-
-module.exports = {
-  command: 'check <glob>',
-  desc: 'check that each file can be compiled',
-  builder(yargs) {
-    yargs.positional('glob', {
-      type: 'string',
-      describe: 'glob pattern for files to check',
-    });
-
-    yargs.options({
-      i: {
-        alias: 'ignore',
-        describe: 'provide a glob pattern of files to ignore',
-        type: 'string',
-      },
-      l: {
-        alias: 'list',
-        describe: 'list all the files that were compiled',
-        type: 'boolean',
-      },
-    });
-  },
-  handler: check,
 };
+
+export const command = 'check <glob>';
+export const desc = 'check that each file can be compiled';
+
+export const builder = (yargs) => {
+  yargs.positional('glob', {
+    type: 'string',
+    describe: 'glob pattern for files to check',
+  });
+
+  yargs.options({
+    i: {
+      alias: 'ignore',
+      describe: 'provide a glob pattern of files to ignore',
+      type: 'string',
+    },
+    l: {
+      alias: 'list',
+      describe: 'list all the files that were compiled',
+      type: 'boolean',
+    },
+  });
+};
+
+export const handler = check;

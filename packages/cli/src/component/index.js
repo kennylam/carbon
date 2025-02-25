@@ -5,16 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const fs = require('fs-extra');
-const path = require('path');
-const template = require('lodash.template');
+import fs from 'fs-extra';
+import path from 'path';
+import template from 'lodash.template';
 
 const TEMPLATES_DIR = path.join(__dirname, 'templates');
 const blocklist = new Set(['.DS_Store']);
 
-async function loadTemplates() {
+export async function loadTemplates() {
   const files = await fs.readdir(TEMPLATES_DIR).then((names) => {
     return names
       .filter((name) => {
@@ -41,7 +39,3 @@ async function loadTemplates() {
 
   return templates;
 }
-
-module.exports = {
-  loadTemplates,
-};

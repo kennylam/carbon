@@ -7,17 +7,15 @@
 
 /* eslint-disable no-console */
 
-'use strict';
-
-const Octokit = require('@octokit/rest');
-const { prompt } = require('inquirer');
+import { Octokit } from '@octokit/rest';
+import { prompt } from 'inquirer';
 
 const CustomOctokit = Octokit.plugin([
-  require('@octokit/plugin-throttling'),
-  require('@octokit/plugin-retry'),
+  import('@octokit/plugin-throttling'),
+  import('@octokit/plugin-retry'),
 ]);
 
-async function getGitHubClient() {
+export async function getGitHubClient() {
   let { GH_TOKEN } = process.env;
 
   if (!GH_TOKEN) {
@@ -68,5 +66,3 @@ async function getGitHubClient() {
     throw new Error('Invalid GitHub token');
   }
 }
-
-module.exports = getGitHubClient;

@@ -5,14 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import { workspace } from '../workspace';
 
-const { workspace } = require('../workspace');
+import npmTask from './sync/npm';
+import packageTask from './sync/package';
+import readmeTask from './sync/readme';
 
 const tasks = {
-  npm: require('./sync/npm'),
-  package: require('./sync/package'),
-  readme: require('./sync/readme'),
+  npm: npmTask,
+  package: packageTask,
+  readme: readmeTask,
 };
 
 async function sync(args, env) {
@@ -25,7 +27,7 @@ async function sync(args, env) {
   }
 }
 
-module.exports = {
+export default {
   command: 'sync [target]',
   desc: 'sync files across workspaces',
   builder(yargs) {

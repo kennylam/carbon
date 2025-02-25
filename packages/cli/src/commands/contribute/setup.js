@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * Copyright IBM Corp. 2019, 2023
  *
@@ -7,14 +9,12 @@
 
 /* eslint-disable no-console */
 
-'use strict';
-
-const chalk = require('chalk');
-const { exec } = require('child-process-promise');
-const { prompt } = require('inquirer');
-const path = require('path');
-const createLogger = require('progress-estimator');
-const getGitHubClient = require('./tools/getGitHubClient');
+import chalk from 'chalk';
+import { exec } from 'child-process-promise';
+import { prompt } from 'inquirer';
+import path from 'path';
+import createLogger from 'progress-estimator';
+import { getGitHubClient } from './tools/getGitHubClient';
 
 const logger = createLogger();
 
@@ -24,7 +24,7 @@ chalk.dimmed = chalk.dim.italic;
 async function setup() {
   console.log(chalk`
 {bold Hi there!} 👋
-This tools is built for people looking to contribute to carbon.`);
+This tool is built for people looking to contribute to carbon.`);
 
   if (!process.env.GH_TOKEN) {
     console.log(chalk`
@@ -225,7 +225,7 @@ const availableProjects = [
   },
 ];
 
-module.exports = {
+export default {
   command: 'setup',
   desc: 'setup your environment',
   handler: wrap(setup),

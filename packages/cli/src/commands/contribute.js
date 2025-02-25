@@ -5,12 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-module.exports = {
-  command: 'contribute <command>',
-  desc: 'get started contributing with Carbon',
-  builder(yargs) {
-    yargs.commandDir('contribute');
-  },
+export const command = 'contribute <command>';
+export const desc = 'get started contributing with Carbon';
+export const builder = (yargs) => {
+  yargs.commandDir('contribute');
 };

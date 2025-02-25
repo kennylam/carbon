@@ -5,24 +5,22 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const { paramCase } = require('change-case');
-const fs = require('fs-extra');
-const { prompt } = require('enquirer');
-const path = require('path');
-const { loadTemplates } = require('../component');
-const { createLogger } = require('../logger');
+import { paramCase } from 'change-case';
+import fs from 'fs-extra';
+import { prompt } from 'enquirer';
+import path from 'path';
+import { loadTemplates } from '../component';
+import { createLogger } from '../logger';
 
 const logger = createLogger('component');
 
-function clearConsole() {
+const clearConsole = () => {
   process.stdout.write(
     process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1B[2J\x1B[3J\x1B[H'
   );
-}
+};
 
-async function component() {
+const component = async () => {
   const templates = await loadTemplates();
   const questions = [
     {
@@ -121,10 +119,8 @@ async function component() {
   }
 
   logger.stop();
-}
-
-module.exports = {
-  command: 'component',
-  desc: '[EXPERIMENTAL] Scaffold a component in React',
-  handler: component,
 };
+
+export const command = 'component';
+export const desc = '[EXPERIMENTAL] Scaffold a component in React';
+export const handler = component;

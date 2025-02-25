@@ -5,10 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const { default: parse } = require('@commitlint/parse');
-const execa = require('execa');
+import { default as parse } from '@commitlint/parse';
+import execa from 'execa';
 
 // We keep a list of commits that are process-oriented that we never want to
 // show up in generated changelogs
@@ -36,7 +34,7 @@ const headerDenyList = new Set([
  * @param {string} latestTag
  * @returns {string}
  */
-async function generate(packages, lastTag, latestTag) {
+export async function generate(packages, lastTag, latestTag) {
   const packageCommitsInRange = await Promise.all(
     packages.map((pkg) => getCommitsInRange(pkg, `${lastTag}...${latestTag}`))
   );
@@ -138,7 +136,7 @@ function getMarkdownTitle(lastTag, latestTag) {
  * @param {string} range
  * @returns {Array}
  */
-async function getCommitsInRange(pkg, range) {
+export async function getCommitsInRange(pkg, range) {
   // Using the `rev-list` sub-command of `git` we can list out all of the commits
   // for the given range inside of the package's location. This will allow us to
   // find all the commits associated with this package that we'll display in the
@@ -211,7 +209,3 @@ async function getCommitsInRange(pkg, range) {
     commits,
   };
 }
-
-module.exports = {
-  generate,
-};

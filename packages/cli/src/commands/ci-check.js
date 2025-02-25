@@ -7,13 +7,11 @@
 
 /* eslint-disable no-console */
 
-'use strict';
+import { reporter } from '@carbon/cli-reporter';
+import { exec } from 'child-process-promise';
+import { workspace } from '../workspace';
 
-const { reporter } = require('@carbon/cli-reporter');
-const { exec } = require('child-process-promise');
-const { workspace } = require('../workspace');
-
-async function check(args, env) {
+const check = async (args, env) => {
   reporter.info('Running checks in CI...');
 
   const options = {
@@ -41,11 +39,9 @@ async function check(args, env) {
     console.log(error);
     process.exit(1);
   }
-}
-
-module.exports = {
-  command: 'ci-check',
-  desc: 'run CI checks',
-  builder: {},
-  handler: workspace(check),
 };
+
+export const command = 'ci-check';
+export const desc = 'run CI checks';
+export const builder = {};
+export const handler = workspace(check);

@@ -5,12 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import fs from 'fs-extra';
+import path from 'path';
 
-const fs = require('fs-extra');
-const path = require('path');
-
-function monorepo() {
+export default function monorepo() {
   async function transformer(tree, file) {
     const { cwd } = file;
     const localPackageJsonPath = path.join(cwd, 'package.json');
@@ -421,5 +419,3 @@ function createLicense() {
     },
   ];
 }
-
-module.exports = monorepo;

@@ -1,16 +1,12 @@
-/**
- * Copyright IBM Corp. 2019, 2023
- *
- * This source code is licensed under the Apache-2.0 license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright IBM Corp. 2019, 2023
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
 
-'use strict';
-
-const execa = require('execa');
-const fs = require('fs-extra');
-const glob = require('fast-glob');
-const path = require('path');
+import execa from 'execa';
+import fs from 'fs-extra';
+import glob from 'fast-glob';
+import path from 'path';
 
 const { root: ROOT_DIR } = path.parse(__dirname);
 const WORKSPACE_ROOT = getProjectRoot(__dirname);
@@ -45,7 +41,7 @@ const env = {
   packagePaths,
 };
 
-function workspace(fn) {
+export function workspace(fn) {
   return (...args) => fn(...args, env);
 }
 
@@ -53,7 +49,7 @@ function workspace(fn) {
  * Lists the packages for the current project using the `lerna list` command
  * @returns {Array<PackageInfo>}
  */
-async function getPackages() {
+export async function getPackages() {
   const { stdout: lernaListOutput } = await execa('yarn', [
     'lerna',
     'list',
@@ -108,8 +104,3 @@ function ancestors(directory) {
 
   return result;
 }
-
-module.exports = {
-  workspace,
-  getPackages,
-};

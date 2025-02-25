@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const fs = require('fs-extra');
-const klaw = require('klaw-sync');
-const os = require('os');
-const path = require('path');
-const replace = require('replace-in-file');
-const { createLogger } = require('../logger');
+import fs from 'fs-extra';
+import klaw from 'klaw-sync';
+import os from 'os';
+import path from 'path';
+import replace from 'replace-in-file';
+import { createLogger } from '../logger';
 
 const logger = createLogger('inline');
 const isWin = process.platform === 'win32';
@@ -153,7 +151,7 @@ function findSassModule(packageName, cwd) {
   return false;
 }
 
-module.exports = {
+export default {
   command: 'inline',
   desc: 'inline sass dependencies from package.json in a target folder',
   builder(yargs) {

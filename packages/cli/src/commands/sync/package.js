@@ -7,7 +7,7 @@
 
 'use strict';
 
-const fs = require('fs-extra');
+import fs from 'fs-extra';
 
 // This is our default set of keywords to include in each `package.json` packageJson
 const DEFAULT_KEYWORDS = [
@@ -117,7 +117,7 @@ function run({ packagePaths }) {
   );
 }
 
-module.exports = {
+export default {
   name: 'package',
   run,
 };

@@ -5,19 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const { babel } = require('@rollup/plugin-babel');
-const commonjs = require('@rollup/plugin-commonjs');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const fs = require('fs-extra');
-const path = require('path');
-const { rollup } = require('rollup');
-const {
+import { babel } from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import fs from 'fs-extra';
+import path from 'path';
+import { rollup } from 'rollup';
+import {
   formatGlobals,
   findPackageFolder,
   formatDependenciesIntoGlobals,
-} = require('./utils');
+} from './utils';
 
 async function bundle(entrypoint, options) {
   const globals = options.globals ? formatGlobals(options.globals) : {};
@@ -99,4 +97,4 @@ async function bundle(entrypoint, options) {
   );
 }
 
-module.exports = bundle;
+export default bundle;

@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const parse = require('@commitlint/parse');
-const execa = require('execa');
-const { prompt } = require('inquirer');
-const semver = require('semver');
-const { fetchLatestFromUpstream } = require('../git');
-const { createLogger, displayBanner } = require('../logger');
+import parse from '@commitlint/parse';
+import execa from 'execa';
+import { prompt } from 'inquirer';
+import semver from 'semver';
+import { fetchLatestFromUpstream } from '../git';
+import { createLogger, displayBanner } from '../logger';
 
 // All supported commit types from our conventional-changelog preset
 const types = [
@@ -288,7 +286,7 @@ async function checkIfBranchIsDirty() {
   }
 }
 
-module.exports = {
+export default {
   command: 'release [bump]',
   desc: 'run the release step for the given version bump',
   builder(yargs) {

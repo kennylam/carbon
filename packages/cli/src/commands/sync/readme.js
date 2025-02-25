@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const fs = require('fs-extra');
-const path = require('path');
-const prettier = require('prettier2');
-const prettierConfig = require('prettier-config-carbon');
-const createRemark = require('remark');
-const monorepo = require('./remark/remark-monorepo');
+import fs from 'fs-extra';
+import path from 'path';
+import prettier from 'prettier2';
+import prettierConfig from 'prettier-config-carbon';
+import createRemark from 'remark';
+import monorepo from './remark/remark-monorepo';
 
 const packageDenyList = new Set([
   'carbon-components',
@@ -21,7 +19,7 @@ const packageDenyList = new Set([
   '@carbon/styles',
 ]);
 
-function run({ root, packagePaths }) {
+export const run = async ({ root, packagePaths }) => {
   const remark = createRemark().use(monorepo, {
     root: root.directory,
   });
@@ -30,7 +28,7 @@ function run({ root, packagePaths }) {
     parser: 'markdown',
   };
 
-  return Promise.all(
+  await Promise.all(
     packagePaths
       .filter((pkg) => !packageDenyList.has(pkg.packageJson.name))
       .map(async ({ packagePath }) => {
@@ -47,9 +45,9 @@ function run({ root, packagePaths }) {
         );
       })
   );
-}
+};
 
-function process(remark, cwd, contents) {
+const process = (remark, cwd, contents) => {
   return new Promise((resolve, reject) => {
     remark.process({ cwd, contents }, (error, file) => {
       if (error) {
@@ -59,9 +57,9 @@ function process(remark, cwd, contents) {
       resolve(file);
     });
   });
-}
+};
 
-module.exports = {
+export default {
   name: 'readme',
   run,
 };

@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const javascript = require('./javascript');
-const typescript = require('./typescript');
+import javascript from './javascript.js';
+import typescript from './typescript.js';
 
 const bundlers = new Map([
   ['.js', javascript],
   ['.ts', typescript],
 ]);
 
-module.exports = bundlers;
+export default bundlers;
