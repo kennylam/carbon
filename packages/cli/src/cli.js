@@ -1,23 +1,26 @@
-/**
- * Copyright IBM Corp. 2019, 2023
- *
- * This source code is licensed under the Apache-2.0 license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// Copyright IBM Corp. 2019, 2023
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
 
-'use strict';
+import process from 'node:process';
+import yargs from 'yargs';
+import packageJson from '../package.json' with { type: 'json' };
 
-const cli = require('yargs');
-const packageJson = require('../package.json');
+const cli = yargs;
 
 async function main({ argv }) {
-  cli
+  cli(process.argv.slice(2))
     .scriptName(packageJson.name)
     .version(packageJson.version)
-    .usage('Usage: $0 [options]');
+    .usage('Usage: $0 [options]').argv;
 
-  cli
-    .commandDir('commands')
+  cli(process.argv.slice(2))
+    .commandDir('commands', {
+      visit(commandModule) {
+        return commandModule.default;
+      },
+    })
     .strict()
     .fail((message, error, yargs) => {
       if (error) {
@@ -32,8 +35,7 @@ async function main({ argv }) {
       console.log(message);
       console.log(yargs.help());
       process.exit(1);
-    })
-    .parse(argv.slice(2)).argv;
+    }).argv;
 }
 
-module.exports = main;
+export default main;

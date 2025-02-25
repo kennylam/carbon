@@ -179,5 +179,5 @@ function transform(fileInfo, api, options) {
   return root.toSource(printOptions);
 }
 
-module.exports = transform;
-module.exports.parser = 'tsx';
+export { transform };
+export const parser = 'tsx';

@@ -1731,7 +1731,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@carbon/cli-reporter@workspace:packages/cli-reporter"
   dependencies:
-    chalk: "npm:^4.1.1"
+    chalk: "npm:^5.4.1"
   languageName: unknown
   linkType: soft
 
@@ -1748,7 +1748,7 @@ __metadata:
     "@rollup/plugin-babel": "npm:^6.0.0"
     "@rollup/plugin-commonjs": "npm:^28.0.0"
     "@rollup/plugin-node-resolve": "npm:^15.0.0"
-    chalk: "npm:^4.1.1"
+    chalk: "npm:^5.4.1"
     change-case: "npm:^4.1.2"
     child-process-promise: "npm:^2.2.1"
     clipboardy: "npm:^2.1.0"
@@ -2185,7 +2185,7 @@ __metadata:
   resolution: "@carbon/upgrade@workspace:packages/upgrade"
   dependencies:
     "@ibm/telemetry-js": "npm:^1.5.0"
-    chalk: "npm:^4.1.1"
+    chalk: "npm:^5.4.1"
     change-case: "npm:^4.1.2"
     esbuild: "npm:^0.25.0"
     execa: "npm:^5.1.1"
@@ -10542,6 +10542,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk@npm:^5.4.1":
+  version: 5.4.1
+  resolution: "chalk@npm:5.4.1"
+  checksum: 10/29df3ffcdf25656fed6e95962e2ef86d14dfe03cd50e7074b06bad9ffbbf6089adbb40f75c00744d843685c8d008adaf3aed31476780312553caf07fa86e5bc7
+  languageName: node
+  linkType: hard
+
 "change-case@npm:^4.1.1, change-case@npm:^4.1.2":
   version: 4.1.2
   resolution: "change-case@npm:4.1.2"
@@ -18094,7 +18101,7 @@ __metadata:
     accessibility-checker: "npm:^3.1.78"
     axe-core: "npm:^4.3.5"
     babel-jest: "npm:^28.1.0"
-    chalk: "npm:^4.1.1"
+    chalk: "npm:^5.4.1"
     jest-circus: "npm:^28.1.0"
     jest-environment-jsdom: "npm:^28.1.0"
     jest-watch-typeahead: "npm:^2.0.0"

@@ -122,4 +122,4 @@ const transform = (fileInfo, api) => {
   return root.toSource();
 };
 
-module.exports = transform;
+export { transform };

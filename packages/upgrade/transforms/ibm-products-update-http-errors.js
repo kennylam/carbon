@@ -189,4 +189,4 @@ const transform = (file, api) => {
   return root.toSource();
 };
 
-module.exports = transform;
+export { transform };

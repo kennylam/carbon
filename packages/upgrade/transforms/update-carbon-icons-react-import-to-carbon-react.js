@@ -30,4 +30,4 @@ function transformer(file, api) {
     .toSource();
 }
 
-module.exports = transformer;
+export { transform };

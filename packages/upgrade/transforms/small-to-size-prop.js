@@ -53,4 +53,4 @@ function transform(fileInfo, api, options) {
   return root.toSource(printOptions);
 }
 
-module.exports = transform;
+export { transform };

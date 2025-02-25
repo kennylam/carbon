@@ -321,4 +321,4 @@ function warn(filepath) {
   console.log(manualCheckWarning, filepath);
 }
 
-module.exports = transform;
+export { transform };

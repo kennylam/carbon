@@ -7,7 +7,7 @@
 
 'use strict';
 
-import prettier2 from 'prettier2';
+import prettier from 'prettier2';
 
 const prettierOptions = {
   parser: 'scss',
@@ -39,7 +39,7 @@ function createPrinter(definitions) {
     },
 
     get() {
-      return prettier2.format(buffer.join(''), prettierOptions);
+      return prettier.format(buffer.join(''), prettierOptions);
     },
 
     maybeNewline() {
