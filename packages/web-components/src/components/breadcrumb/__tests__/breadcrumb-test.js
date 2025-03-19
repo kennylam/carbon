@@ -11,32 +11,32 @@ import { expect, fixture, html, triggerFocusFor } from '@open-wc/testing';
 import { sendKeys } from '@web/test-runner-commands';
 import '@carbon/web-components/es/components/breadcrumb/index.js';
 
+const breadcrumbItems = html`<cds-breadcrumb-item>
+    <cds-breadcrumb-link href="/#">Breadcrumb A</cds-breadcrumb-link>
+  </cds-breadcrumb-item>
+  <cds-breadcrumb-item>
+    <cds-breadcrumb-link href="#">Breadcrumb B</cds-breadcrumb-link>
+  </cds-breadcrumb-item>
+  <cds-breadcrumb-item>
+    <cds-breadcrumb-link href="#">Breadcrumb C</cds-breadcrumb-link>
+  </cds-breadcrumb-item>`;
+
 describe('cds-breadcrumb', function () {
-  const breadcrumbItems = html`<cds-breadcrumb-item>
-      <cds-breadcrumb-link href="/#">Breadcrumb A</cds-breadcrumb-link>
-    </cds-breadcrumb-item>
-    <cds-breadcrumb-item>
-      <cds-breadcrumb-link href="#">Breadcrumb B</cds-breadcrumb-link>
-    </cds-breadcrumb-item>
-    <cds-breadcrumb-item>
-      <cds-breadcrumb-link href="#">Breadcrumb C</cds-breadcrumb-link>
-    </cds-breadcrumb-item>`;
-
   it('should render', async () => {
-    const el = await fixture(breadcrumbItems);
-    console.log('el', el);
-    // expect(el.hasAttribute('aria-label'));
+    const el = await fixture(
+      html`<cds-breadcrumb>${breadcrumbItems}</cds-breadcrumb>`
+    );
 
-    expect(el).shadowDom.to.equalSnapshot();
+    expect(el).dom.to.equalSnapshot();
   });
 
-  // xit('should accept a `aria-label` for nav element', async () => {
-  //   const el = await fixture(
-  //     html`<cds-breadcrumb aria-label="test-label">
-  //       ${breadcrumbItems}
-  //     </cds-breadcrumb>`
-  //   );
+  it('should accept a `aria-label` for nav element', async () => {
+    const el = await fixture(
+      html`<cds-breadcrumb aria-label="test-label">
+        ${breadcrumbItems}
+      </cds-breadcrumb>`
+    );
 
-  //   expect(el.hasAttribute('aria-label', 'test-ladbel'));
-  // });
+    expect(el.getAttribute('aria-label', 'test-label'));
+  });
 });
