@@ -6,7 +6,7 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 import { selectorTabbable } from '../settings';
 
 /**
@@ -35,4 +35,4 @@ const FocusMixin = <T extends Constructor<HTMLElement>>(Base: T) =>
     }
   };
 
-export default FocusMixin;
+export default dedupeMixin(FocusMixin);

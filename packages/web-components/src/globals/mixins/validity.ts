@@ -6,6 +6,7 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import { dedupeMixin } from '@open-wc/dedupe-mixin';
 
 /**
  * Form validation status.
@@ -123,4 +124,4 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(Base: T) => {
   return ValidityMixinImpl;
 };
 
-export default ValidityMixin;
+export default dedupeMixin(ValidityMixin);

@@ -2249,6 +2249,8 @@ __metadata:
     "@juggle/resize-observer": "npm:^3.4.0"
     "@lit/context": "npm:^1.1.1"
     "@mordech/vite-lit-loader": "npm:^0.37.0"
+    "@open-wc/dedupe-mixin": "npm:^1.4.0"
+    "@open-wc/scoped-elements": "npm:^3.0.5"
     "@open-wc/testing": "npm:^4.0.0"
     "@playwright/test": "npm:^1.36.2"
     "@rollup/plugin-alias": "npm:^5.1.0"
@@ -5001,7 +5003,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-wc/scoped-elements@npm:^3.0.2":
+"@open-wc/scoped-elements@npm:^3.0.2, @open-wc/scoped-elements@npm:^3.0.5":
   version: 3.0.5
   resolution: "@open-wc/scoped-elements@npm:3.0.5"
   dependencies:
