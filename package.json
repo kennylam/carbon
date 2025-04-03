@@ -64,7 +64,7 @@
     "cross-env": "^7.0.0",
     "cross-spawn": "^7.0.0",
     "doctoc": "^2.0.0",
-    "eslint": "^9.0.0",
+    "eslint": "^9.23.0",
     "eslint-plugin-playwright": "^2.0.0",
     "fs-extra": "^11.0.0",
     "glob": "^11.0.0",
@@ -135,11 +135,6 @@
     ],
     ".all-contributorsrc": [
       "all-contributors generate"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "eslint-config-carbon/internal"
     ]
   },
   "stylelint": {

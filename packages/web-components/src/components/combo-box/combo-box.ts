@@ -71,7 +71,7 @@ class CDSComboBox extends CDSDropdown {
     );
   }
 
-  /* eslint-disable class-methods-use-this */
+   
   /**
    * The default item matching callback.
    *
@@ -87,7 +87,7 @@ class CDSComboBox extends CDSDropdown {
       item.textContent!.toLowerCase().indexOf(queryText.toLowerCase()) >= 0
     );
   }
-  /* eslint-enable class-methods-use-this */
+   
 
   /**
    * Handles `input` event on the `<input>` for filtering.

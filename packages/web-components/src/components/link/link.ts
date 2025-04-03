@@ -74,13 +74,13 @@ class CDSLink extends FocusMixin(LitElement) {
   /**
    * Handles `click` event on the `<a>`.
    */
-  // eslint-disable-next-line class-methods-use-this, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected _handleClick(_: MouseEvent) {}
 
   /**
    * @returns The inner content.
    */
-  // eslint-disable-next-line class-methods-use-this
+   
   protected _renderInner() {
     const { _hasIcon: hasIcon, _handleSlotChange: handleSlotChange } = this;
     return html`

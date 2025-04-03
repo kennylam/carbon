@@ -685,6 +685,7 @@ const ComboBox = forwardRef(
       [allowCustomValue, inputValue, onChange]
     );
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const handleToggleClick =
       (isOpen: boolean) =>
       (

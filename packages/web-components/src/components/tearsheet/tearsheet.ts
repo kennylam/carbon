@@ -40,10 +40,10 @@ interface StackState {
   all: StackHandler[];
 }
 
-// eslint-disable-next-line no-bitwise
+ 
 const PRECEDING =
   Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_POSITION_CONTAINS;
-// eslint-disable-next-line no-bitwise
+ 
 const FOLLOWING =
   Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY;
 
@@ -207,7 +207,7 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
       const comparisonResult = (target as Node).compareDocumentPosition(
         relatedTarget as Node
       );
-      // eslint-disable-next-line no-bitwise
+       
       if (relatedTarget === startSentinelNode || comparisonResult & PRECEDING) {
         await (this.constructor as typeof CDSTearsheet)._delay();
         if (
@@ -220,7 +220,7 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
           this.focus();
         }
       }
-      // eslint-disable-next-line no-bitwise
+       
       else if (
         relatedTarget === endSentinelNode ||
         comparisonResult & FOLLOWING

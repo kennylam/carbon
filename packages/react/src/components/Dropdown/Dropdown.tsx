@@ -599,7 +599,7 @@ const Dropdown = React.forwardRef(
 
     // AILabel is always size `mini`
     const normalizedDecorator = useMemo(() => {
-      let element = slug ?? decorator;
+      const element = slug ?? decorator;
       if (element && element['type']?.displayName === 'AILabel') {
         return React.cloneElement(element as React.ReactElement<any>, {
           size: 'mini',

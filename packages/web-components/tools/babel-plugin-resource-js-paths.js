@@ -7,7 +7,6 @@
 
 import { dirname, relative, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import replaceExtension from 'replace-ext';
 
 export function resourceJSPaths(babel) {
   const t = babel.types;
@@ -19,11 +18,6 @@ export function resourceJSPaths(babel) {
         const { value: source } = node.source;
         const __dirname = dirname(fileURLToPath(import.meta.url));
 
-        // if (/^\..*\.scss\?lit$/i.test(source)) {
-        //   const declaration = t.cloneNode(node);
-        //   declaration.source.value = `./${replaceExtension(source, '.css.js')}`;
-        //   path.replaceWith(declaration);
-        // } else
         if (/^@carbon\/icons\/lib/i.test(source)) {
           const filenameES = state.file.opts.filename.replace(
             /[/\\]src[/\\]/,

@@ -126,7 +126,6 @@ describe('Select', () => {
         <Select id="select" labelText="Select" inline />
       );
 
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const selectWrapper = container.querySelector(`.${prefix}--select`);
       expect(selectWrapper).toHaveClass(`${prefix}--select--inline`);
     });
@@ -136,7 +135,6 @@ describe('Select', () => {
         <Select id="select" labelText="Select" invalid />
       );
 
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const selectWrapper = container.querySelector(`.${prefix}--select`);
       // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const selectInput = container.querySelector(`.${prefix}--select-input`);
@@ -173,7 +171,6 @@ describe('Select', () => {
         <Select id="select" labelText="Select" noLabel />
       );
 
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const selectWrapper = container.querySelector('label');
 
       expect(selectWrapper).not.toBeInTheDocument();
@@ -229,7 +226,6 @@ describe('Select', () => {
         <Select id="select" labelText="Select" warn warnText="Warning" />
       );
 
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const selectWrapper = container.querySelector(`.${prefix}--select`);
 
       expect(selectWrapper).toHaveClass(`${prefix}--select--warning`);

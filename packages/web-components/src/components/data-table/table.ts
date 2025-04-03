@@ -142,7 +142,7 @@ class CDSTable extends HostListenerMixin(LitElement) {
    *   A negative value to sort `lhs` to an index lower than `rhs`
    *   A positive value to sort `rhs` to an index lower than `lhs`
    */
-  // eslint-disable-next-line class-methods-use-this
+   
   customSortRow(lhs, rhs, collator) {
     if (typeof lhs === 'number' && typeof rhs === 'number') {
       return lhs - rhs;

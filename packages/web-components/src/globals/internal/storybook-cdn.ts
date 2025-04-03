@@ -7,7 +7,7 @@
 
 import packageJson from '../../../package.json';
 
-/* eslint-disable max-len */
+ 
 
 /**
  *

@@ -584,7 +584,7 @@ const MultiSelect = React.forwardRef(
     });
 
     // needs to be capitalized for react to render it correctly
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+     
     const ItemToElement = itemToElement!;
 
     if (selectionFeedback === 'fixed') {
@@ -775,7 +775,7 @@ const MultiSelect = React.forwardRef(
                   !disabled && !readOnly ? clearSelection : noopFn
                 }
                 selectionCount={selectedItemsLength}
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                 
                 translateWithId={translateWithId!}
                 disabled={disabled}
               />

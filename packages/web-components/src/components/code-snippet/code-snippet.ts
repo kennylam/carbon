@@ -102,7 +102,7 @@ class CDSCodeSnippet extends FocusMixin(LitElement) {
     selection!.removeAllRanges();
   }
 
-  // eslint-disable-next-line class-methods-use-this
+   
   private _getCodeRefDimensions(ref) {
     const {
       clientWidth: codeClientWidth,

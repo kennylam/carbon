@@ -77,7 +77,7 @@ class CDSCopy extends CDSIconButton {
   @property({ type: Number, attribute: 'feedback-timeout' })
   feedbackTimeout = 2000;
 
-  // eslint-disable-next-line class-methods-use-this
+   
   protected _renderTooltipContent() {
     return html`
       <cds-tooltip-content>

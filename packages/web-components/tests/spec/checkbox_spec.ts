@@ -14,7 +14,7 @@ import { Playground as Default } from '../../src/components/checkbox/checkbox.st
  */
 const getValues = (formData: FormData) => {
   const values = {};
-  // eslint-disable-next-line no-restricted-syntax
+   
   for (const [key, value] of formData.entries()) {
     values[key] = value;
   }

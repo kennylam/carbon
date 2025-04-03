@@ -98,7 +98,7 @@ class CDSContentSwitcherItem extends FocusMixin(LitElement) {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
+   
   protected _renderTooltipContent() {
     return html`
       <cds-tooltip-content>

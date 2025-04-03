@@ -393,14 +393,14 @@ class CDSDropdown extends ValidityMixin(
     }
   }
 
-  /* eslint-disable class-methods-use-this */
+   
   /**
    * @returns The content preceding the trigger button.
    */
   protected _renderPrecedingLabel(): TemplateResult | void {
     return undefined;
   }
-  /* eslint-enable class-methods-use-this */
+   
 
   /**
    * @returns The main content of the trigger button.
@@ -450,14 +450,14 @@ class CDSDropdown extends ValidityMixin(
     `;
   }
 
-  /* eslint-disable class-methods-use-this */
+   
   /**
    * @returns The content following the trigger button.
    */
   protected _renderFollowingLabel(): TemplateResult | void {
     return undefined;
   }
-  /* eslint-enable class-methods-use-this */
+   
 
   /**
    * Handles event to include selected value on the parent form.

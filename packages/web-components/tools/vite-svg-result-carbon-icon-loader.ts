@@ -44,7 +44,7 @@ export default function svgResultCarbonIconLoader() {
         return null;
       }
 
-      let outcome: string | undefined = src;
+      const outcome: string | undefined = src;
       if (!id.match(svgRegex)) {
         return outcome;
       }

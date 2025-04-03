@@ -18,10 +18,10 @@ import { carbonElement as customElement } from '../../globals/decorators/carbon-
 
 export { MODAL_SIZE };
 
-// eslint-disable-next-line no-bitwise
+ 
 const PRECEDING =
   Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_POSITION_CONTAINS;
-// eslint-disable-next-line no-bitwise
+ 
 const FOLLOWING =
   Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY;
 
@@ -130,7 +130,7 @@ class CDSModal extends HostListenerMixin(LitElement) {
       const comparisonResult = (target as Node).compareDocumentPosition(
         relatedTarget as Node
       );
-      // eslint-disable-next-line no-bitwise
+       
       if (relatedTarget === startSentinelNode || comparisonResult & PRECEDING) {
         await (this.constructor as typeof CDSModal)._delay();
         if (
@@ -143,7 +143,7 @@ class CDSModal extends HostListenerMixin(LitElement) {
           this.focus();
         }
       }
-      // eslint-disable-next-line no-bitwise
+       
       else if (
         relatedTarget === endSentinelNode ||
         comparisonResult & FOLLOWING

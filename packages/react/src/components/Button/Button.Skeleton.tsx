@@ -57,7 +57,7 @@ const ButtonSkeleton: React.FC<ButtonSkeletonProps> = ({
 
   const button = <div {...commonProps} />;
 
-  const anchor = <a {...commonProps} href={href} role="button" />; // eslint-disable-line
+  const anchor = <a {...commonProps} href={href} role="button" />;  
 
   return href ? anchor : button;
 };

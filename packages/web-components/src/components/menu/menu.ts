@@ -221,11 +221,11 @@ class CDSMenu extends HostListenerMixin(LitElement) {
           activeItem.parent === null ||
           activeItem.parent.tagName === 'CDS-MENU-ITEM-RADIO-GROUP'
         ) {
-          let shadowRootActiveEl =
+          const shadowRootActiveEl =
             this._findActiveElementInShadowRoot(document);
           return shadowRootActiveEl === activeItem.item;
         } else {
-          let shadowRootActiveEl =
+          const shadowRootActiveEl =
             this._findActiveElementInShadowRoot(document);
           if (activeItem.parent.tagName === 'CDS-MENU-ITEM-SELECTABLE') {
             return shadowRootActiveEl === activeItem.item;
@@ -461,7 +461,7 @@ class CDSMenu extends HostListenerMixin(LitElement) {
       let activeItem: activeItemType;
       switch (item.tagName) {
         case 'CDS-MENU-ITEM-RADIO-GROUP': {
-          let slotElements = item.querySelectorAll(`${prefix}-menu-item`);
+          const slotElements = item.querySelectorAll(`${prefix}-menu-item`);
           if (slotElements?.length) {
             for (const entry of slotElements.entries()) {
               activeItem = {
@@ -474,7 +474,7 @@ class CDSMenu extends HostListenerMixin(LitElement) {
           break;
         }
         case 'CDS-MENU-ITEM-GROUP': {
-          let slotElements = item.shadowRoot
+          const slotElements = item.shadowRoot
             ?.querySelector('slot')
             ?.assignedElements();
           slotElements?.map((el) => {

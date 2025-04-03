@@ -62,7 +62,7 @@ class RadioButtonDelegate implements ManagedRadioButtonDelegate {
 
   set checked(checked) {
     const { host } = this._radio.getRootNode() as ShadowRoot;
-    const { eventChange } = host.constructor as typeof CDSRadioButton; // eslint-disable-line no-use-before-define
+    const { eventChange } = host.constructor as typeof CDSRadioButton;  
     (host as CDSRadioButton).checked = checked;
     this._radio.tabIndex = checked ? 0 : -1;
     host.dispatchEvent(

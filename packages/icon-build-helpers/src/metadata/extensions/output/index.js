@@ -190,9 +190,9 @@ async function parse(svg, name) {
   try {
     return convert(root.content[0]);
   } catch (error) {
-    // eslint-disable-next-line no-console
+     
     console.log(error);
-    // eslint-disable-next-line no-console
+     
     console.log(`Error parsing icon with name: ${name}`);
   }
 }

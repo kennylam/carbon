@@ -696,7 +696,7 @@ const aiLabel = (
 
 export const withAILabel = {
   render: () => {
-    const [open, setOpen] = useState(true); // eslint-disable-line
+    const [open, setOpen] = useState(true);  
     return (
       <div className="ai-label-modal">
         <Button onClick={() => setOpen(true)}>Launch modal</Button>

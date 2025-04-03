@@ -5,7 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-export default function on(element: any, ...args: any) {
+export default function on(
+  element: HTMLElement,
+  ...args: [
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions,
+  ]
+) {
   element.addEventListener(...args);
   return {
     release() {

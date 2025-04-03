@@ -29,10 +29,10 @@ import '../button/button-set-base';
 
 export { SIDE_PANEL_SIZE, SIDE_PANEL_PLACEMENT };
 
-// eslint-disable-next-line no-bitwise
+ 
 const PRECEDING =
   Node.DOCUMENT_POSITION_PRECEDING | Node.DOCUMENT_POSITION_CONTAINS;
-// eslint-disable-next-line no-bitwise
+ 
 const FOLLOWING =
   Node.DOCUMENT_POSITION_FOLLOWING | Node.DOCUMENT_POSITION_CONTAINED_BY;
 
@@ -208,7 +208,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
       const comparisonResult = (target as Node).compareDocumentPosition(
         relatedTarget as Node
       );
-      // eslint-disable-next-line no-bitwise
+       
       if (relatedTarget === startSentinelNode || comparisonResult & PRECEDING) {
         await (this.constructor as typeof CDSSidePanel)._delay();
         if (
@@ -221,7 +221,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
           this.focus();
         }
       }
-      // eslint-disable-next-line no-bitwise
+       
       else if (
         relatedTarget === endSentinelNode ||
         comparisonResult & FOLLOWING
@@ -413,7 +413,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
     this._hasSubtitle = subtitle.length > 0;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+   
   private _handleActionToolbarChange(e: Event) {
     const target = e.target as HTMLSlotElement;
     const toolbarActions = target?.assignedElements();

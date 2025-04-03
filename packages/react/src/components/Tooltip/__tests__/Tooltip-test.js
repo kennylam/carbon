@@ -36,7 +36,6 @@ describe('Tooltip', () => {
       </Tooltip>
     );
 
-    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
     const popoverContainer = container.querySelector('.cds--popover-container');
     expect(popoverContainer).toHaveClass('cds--popover--open');
   });
@@ -99,7 +98,6 @@ describe('Tooltip', () => {
       </>
     );
 
-    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
     const popoverContainer = container.querySelector('.cds--popover-container');
     const button = screen.getByRole('button');
 

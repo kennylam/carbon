@@ -45,7 +45,7 @@ interface ModelWrapperState {
 }
 
 let didWarnAboutDeprecation = false;
-let isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'production';
 
 export default class ModalWrapper extends React.Component<
   ModalWrapperProps,

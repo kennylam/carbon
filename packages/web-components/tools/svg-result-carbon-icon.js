@@ -30,10 +30,10 @@ const toString = (descriptor) => {
 const icon = (descriptor) => {
   descriptor.attrs = getAttributes(
     Object.assign(descriptor.attrs, {
-      '...': '${spread(attrs)}', // eslint-disable-line no-template-curly-in-string
+      '...': '${spread(attrs)}',  
     })
   );
-  descriptor?.content?.unshift('${children}'); // eslint-disable-line no-template-curly-in-string
+  descriptor?.content?.unshift('${children}');  
   return `({ children, ...attrs } = {}) => svg\`${toString(descriptor)}\``;
 };
 

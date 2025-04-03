@@ -762,8 +762,8 @@ export const ExpandableTile = React.forwardRef<
     children,
     decorator,
     expanded = false,
-    tileMaxHeight = 0, // eslint-disable-line
-    tilePadding = 0, // eslint-disable-line
+    tileMaxHeight = 0,  
+    tilePadding = 0,  
     onClick,
     onKeyUp,
     tileCollapsedIconText = 'Interact to expand Tile',

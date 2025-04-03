@@ -17,7 +17,7 @@ import { Playground } from '../../src/components/number-input/number-input-story
  */
 const getValues = (formData: FormData) => {
   const values = {};
-  // eslint-disable-next-line no-restricted-syntax
+   
   for (const [key, value] of formData.entries()) {
     values[key] = value;
   }
@@ -131,7 +131,7 @@ describe('cds-number-input', function () {
     // Running the same code manually in a browser works as expected.
     // Given that the rest of the test suit passes it seems reasonable that it's an issue
     // with this specific test case
-    // eslint-disable-next-line
+     
     xit('should support checking if required value exists', async function () {
       const input = elem as CDSNumberInput;
       input.value = null as any;
