@@ -16,6 +16,7 @@ export default {
   parameters: {
     controls: {
       hideNoControlsWarning: true,
+      exclude: ['badgeCount'],
     },
     docs: {
       page: mdx,
@@ -36,24 +37,15 @@ export default {
   },
 };
 
-const DefaultStory = (props) => {
-  const { align, defaultOpen, disabled, kind, label, size } = props;
+export const Default = (args) => {
   return (
     <div style={{ margin: '3rem' }}>
-      <IconButton
-        align={align}
-        defaultOpen={defaultOpen}
-        disabled={disabled}
-        kind={kind}
-        label={label}
-        size={size}>
+      <IconButton {...args}>
         <Edit />
       </IconButton>
     </div>
   );
 };
-
-export const Default = DefaultStory.bind({});
 
 Default.args = {
   align: 'bottom',
@@ -97,17 +89,15 @@ Default.argTypes = {
   },
 };
 
-export const withBadgeIndicator = (props) => {
-  const { badgeCount, disabled } = props;
+export const withBadgeIndicator = (args) => {
   return (
     <div style={{ margin: '3rem' }}>
       <IconButton
-        badgeCount={badgeCount}
-        disabled={disabled}
         label="Notification"
         kind="ghost"
         size="lg"
-        autoAlign>
+        autoAlign
+        {...args}>
         <Notification />
       </IconButton>
     </div>
@@ -116,4 +106,9 @@ export const withBadgeIndicator = (props) => {
 
 withBadgeIndicator.args = {
   badgeCount: 4,
+};
+withBadgeIndicator.parameters = {
+  controls: {
+    exclude: ['size', 'kind'],
+  },
 };

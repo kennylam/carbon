@@ -194,8 +194,59 @@
       display: flex;
     }
 
+    &:not(.#{$prefix}--tabs--contained)
+      .#{$prefix}--tabs__nav-item-label-wrapper {
+      position: relative;
+      inset-block-start: convert.to-rem(1px);
+    }
+
+    //-----------------------------
+    // Item
+    //-----------------------------
+    .#{$prefix}--tabs__nav-item {
+      @include reset;
+
+      position: relative;
+      display: flex;
+      flex: 1 0 auto;
+      padding: 0;
+      cursor: pointer;
+      transition: background-color $duration-fast-01
+        motion(standard, productive);
+    }
+
+    .#{$prefix}--tabs__nav-item + .#{$prefix}--tabs__nav-item {
+      margin-inline-start: convert.to-rem(1px);
+    }
+
+    &.#{$prefix}--tabs--contained .#{$prefix}--tabs__nav-item {
+      background-color: $layer-accent;
+      // Draws the border without affecting the inner-content
+      box-shadow: convert.to-rem(-1px) 0 0 0 $border-strong;
+      margin-inline-start: 0;
+    }
+
+    &.#{$prefix}--tabs--vertical .#{$prefix}--tabs__nav-item {
+      flex: none;
+      background-color: $layer-01;
+      block-size: $spacing-10;
+      border-block-end: 1px solid $border-subtle;
+      border-inline-end: 1px solid $border-subtle;
+      box-shadow: inset 3px 0 0 0 $border-subtle;
+      inline-size: 100%;
+      margin-inline-start: 0;
+    }
+
+    &.#{$prefix}--tabs--contained:not(.#{$prefix}--tabs--vertical)
+      .#{$prefix}--tabs__nav-item--selected
+      + div
+      + .#{$prefix}--tabs__nav-item {
+      box-shadow: convert.to-rem(-1px) 0 0 0 transparent;
+    }
+
     .#{$prefix}--tabs__nav-item .#{$prefix}--tabs__nav-link {
-      transition: color $duration-fast-01 motion(standard, productive),
+      transition:
+        color $duration-fast-01 motion(standard, productive),
         border-bottom-color $duration-fast-01 motion(standard, productive),
         outline $duration-fast-01 motion(standard, productive);
     }
@@ -300,7 +351,8 @@
       text-align: start;
       text-decoration: none;
       text-overflow: ellipsis;
-      transition: border $duration-fast-01 motion(standard, productive),
+      transition:
+        border $duration-fast-01 motion(standard, productive),
         outline $duration-fast-01 motion(standard, productive);
       white-space: nowrap;
 
@@ -555,6 +607,14 @@
       .#{$prefix}--tabs__nav-item-label {
         line-height: 0;
       }
+    }
+
+    .#{$prefix}--tabs__nav-item--icon-only:not(
+        .#{$prefix}--tabs__nav-item--icon-only__20
+      )
+      .#{$prefix}--badge-indicator {
+      margin-block-start: $spacing-02;
+      margin-inline-end: $spacing-02;
     }
 
     //-----------------------------

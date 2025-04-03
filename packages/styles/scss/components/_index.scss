@@ -1,5 +1,5 @@
 //
-// Copyright IBM Corp. 2018, 2023
+// Copyright IBM Corp. 2018, 2025
 //
 // This source code is licensed under the Apache-2.0 license found in the
 // LICENSE file in the root directory of this source tree.
@@ -25,6 +25,7 @@
 @use 'data-table/skeleton';
 @use 'data-table/sort';
 @use 'date-picker';
+@use 'dialog';
 @use 'dropdown';
 @use 'file-uploader';
 @use 'fluid-combo-box';
@@ -52,6 +53,7 @@
 @use 'notification';
 @use 'number-input';
 @use 'overflow-menu';
+@use 'page-header';
 @use 'pagination';
 @use 'pagination-nav';
 @use 'popover';
