@@ -3,6 +3,7 @@
 packages/*/build/
 packages/*/examples/*/build/
 es
+es-custom
 lib
 dist
 umd
@@ -35,6 +36,7 @@ pids
 # Editor
 .DS_Store
 *.swp
+.history/*
 .idea
 .vscode
 
@@ -61,3 +63,7 @@ blob-report
 
 # Local token
 .env
+
+# nx local buiild cache
+.nx/cache
+.nx/workspace-data

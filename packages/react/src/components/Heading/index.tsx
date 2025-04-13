@@ -6,7 +6,7 @@
  */
 
 import PropTypes from 'prop-types';
-import React, { type ElementType } from 'react';
+import React, { type ElementType, type JSX } from 'react';
 import type { PolymorphicProps } from '../../types/common';
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
@@ -17,7 +17,7 @@ type SectionBaseProps = {
   level?: HeadingLevel;
 };
 
-type SectionProps<E extends ElementType> = PolymorphicProps<
+export type SectionProps<E extends ElementType> = PolymorphicProps<
   E,
   SectionBaseProps
 >;

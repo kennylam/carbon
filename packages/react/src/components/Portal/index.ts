@@ -8,7 +8,7 @@
 import React, { useEffect, useState, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 
-interface PortalProps {
+export interface PortalProps {
   /**
    * Specify the children elements to be rendered inside of the <Portal>
    */
@@ -16,7 +16,7 @@ interface PortalProps {
   /**
    * Provide a ref for a container node to render the portal
    */
-  container?: React.RefObject<HTMLElement>;
+  container?: React.RefObject<HTMLElement | null>;
 }
 
 /**

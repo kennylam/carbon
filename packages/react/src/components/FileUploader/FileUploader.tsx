@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2023
+ * Copyright IBM Corp. 2016, 2025
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -7,10 +7,10 @@
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState, ForwardedRef, ReactElement } from 'react';
+import React, { useState, ForwardedRef, useImperativeHandle } from 'react';
 import Filename from './Filename';
 import FileUploaderButton from './FileUploaderButton';
-import { ButtonKinds } from '../../prop-types/types';
+import { ButtonKinds } from '../Button/Button';
 import { keys, matches } from '../../internal/keyboard';
 import { usePrefix } from '../../internal/usePrefix';
 import { ReactAttr } from '../../types/common';
@@ -107,8 +107,15 @@ export interface FileUploaderProps extends ReactAttr<HTMLSpanElement> {
   size?: 'sm' | 'small' | 'md' | 'field' | 'lg';
 }
 
+export interface FileUploaderHandle {
+  /**
+   * Clear internal state
+   */
+  clearFiles: () => void;
+}
+
 const FileUploader = React.forwardRef(
-  <ItemType,>(
+  (
     {
       accept,
       buttonKind,
@@ -127,7 +134,7 @@ const FileUploader = React.forwardRef(
       size,
       ...other
     }: FileUploaderProps,
-    ref: ForwardedRef<HTMLButtonElement>
+    ref: ForwardedRef<FileUploaderHandle>
   ) => {
     const fileUploaderInstanceId = useId('file-uploader');
     const [state, updateState] = useState({
@@ -135,7 +142,6 @@ const FileUploader = React.forwardRef(
     });
     const nodes: HTMLElement[] = [];
     const prefix = usePrefix();
-
     const handleChange = (evt) => {
       evt.stopPropagation();
       const filenames = Array.prototype.map.call(
@@ -169,10 +175,11 @@ const FileUploader = React.forwardRef(
       }
     };
 
-    const clearFiles = () => {
-      // A clearFiles function that resets filenames and can be referenced using a ref by the parent.
-      updateState({ fileNames: [] });
-    };
+    useImperativeHandle(ref, () => ({
+      clearFiles() {
+        updateState({ fileNames: [] });
+      },
+    }));
 
     const uploaderButton = React.createRef<HTMLLabelElement>();
     const classes = classNames({
@@ -224,7 +231,9 @@ const FileUploader = React.forwardRef(
                 <span
                   key={index}
                   className={selectedFileClasses}
-                  ref={(node) => (nodes[index] = node as HTMLSpanElement)} // eslint-disable-line
+                  ref={(node) => {
+                    nodes[index] = node as HTMLSpanElement;
+                  }} // eslint-disable-line
                   {...other}>
                   <Text as="p" className={`${prefix}--file-filename`} id={name}>
                     {name}
@@ -235,12 +244,7 @@ const FileUploader = React.forwardRef(
                       iconDescription={iconDescription}
                       status={filenameStatus}
                       onKeyDown={(evt) => {
-                        if (
-                          matches(evt as unknown as Event, [
-                            keys.Enter,
-                            keys.Space,
-                          ])
-                        ) {
+                        if (matches(evt, [keys.Enter, keys.Space])) {
                           handleClick(evt, { index, filenameStatus });
                         }
                       }}
@@ -256,7 +260,7 @@ const FileUploader = React.forwardRef(
     );
   }
 ) as {
-  <ItemType>(props: FileUploaderProps): ReactElement;
+  <ItemType>(props: FileUploaderProps): React.ReactElement<any>;
   propTypes?: any;
   contextTypes?: any;
   defaultProps?: any;
@@ -342,6 +346,6 @@ FileUploader.propTypes = {
    * sizes.
    */
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
-};
+} as PropTypes.ValidationMap<FileUploaderProps>;
 
 export default FileUploader;

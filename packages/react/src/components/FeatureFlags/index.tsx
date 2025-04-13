@@ -17,10 +17,11 @@ import React, {
   useRef,
   useState,
   ReactNode,
+  type JSX,
 } from 'react';
 import deprecate from '../../prop-types/deprecate';
 
-interface FeatureFlagsProps {
+export interface FeatureFlagsProps {
   children?: ReactNode;
   flags?: Record<string, boolean>;
   enableV12TileDefaultIcons?: boolean;
@@ -28,6 +29,7 @@ interface FeatureFlagsProps {
   enableV12Overflowmenu?: boolean;
   enableTreeviewControllable?: boolean;
   enableExperimentalFocusWrapWithoutSentinels?: boolean;
+  enableDialogElement?: boolean;
   enableV12DynamicFloatingStyles?: boolean;
 }
 /**
@@ -49,6 +51,7 @@ function FeatureFlags({
   enableV12Overflowmenu = false,
   enableTreeviewControllable = false,
   enableExperimentalFocusWrapWithoutSentinels = false,
+  enableDialogElement = false,
   enableV12DynamicFloatingStyles = false,
 }: FeatureFlagsProps): JSX.Element {
   const parentScope = useContext(FeatureFlagContext);
@@ -61,6 +64,7 @@ function FeatureFlags({
     'enable-treeview-controllable': enableTreeviewControllable,
     'enable-experimental-focus-wrap-without-sentinels':
       enableExperimentalFocusWrapWithoutSentinels,
+    'enable-dialog-element': enableDialogElement,
     'enable-v12-dynamic-floating-styles': enableV12DynamicFloatingStyles,
     ...flags,
   };
@@ -110,6 +114,7 @@ FeatureFlags.propTypes = {
   enableV12Overflowmenu: PropTypes.bool,
   enableTreeviewControllable: PropTypes.bool,
   enableExperimentalFocusWrapWithoutSentinels: PropTypes.bool,
+  enableDialogElement: PropTypes.bool,
   enableV12DynamicFloatingStyles: PropTypes.bool,
 };
 

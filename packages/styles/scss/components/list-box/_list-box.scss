@@ -99,6 +99,10 @@ $list-box-menu-width: convert.to-rem(300px);
     }
   }
 
+  .#{$prefix}--multi-select.#{$prefix}--multi-select--readonly.#{$prefix}--list-box {
+    cursor: default;
+  }
+
   .#{$prefix}--list-box--lg {
     block-size: convert.to-rem(48px);
     max-block-size: convert.to-rem(48px);
@@ -1083,18 +1087,13 @@ $list-box-menu-width: convert.to-rem(300px);
 
   .#{$prefix}--list-box__wrapper--decorator
     .#{$prefix}--list-box__field:has(.#{$prefix}--list-box__selection)
-    ~ .#{$prefix}--ai-label,
+    ~ .#{$prefix}--list-box__inner-wrapper--decorator
+    .#{$prefix}--ai-label,
   .#{$prefix}--list-box__wrapper--decorator
     .#{$prefix}--list-box--warning
     .#{$prefix}--list-box__field:has(.#{$prefix}--list-box__selection)
-    ~ .#{$prefix}--ai-label,
-  .#{$prefix}--list-box__wrapper--slug
-    .#{$prefix}--list-box__field:has(.#{$prefix}--list-box__selection)
-    ~ .#{$prefix}--ai-label,
-  .#{$prefix}--list-box__wrapper--slug
-    .#{$prefix}--list-box--warning
-    .#{$prefix}--list-box__field:has(.#{$prefix}--list-box__selection)
-    ~ .#{$prefix}--ai-label,
+    ~ .#{$prefix}--list-box__inner-wrapper--decorator
+    .#{$prefix}--ai-label,
   .#{$prefix}--list-box__wrapper--slug
     .#{$prefix}--list-box__field:has(.#{$prefix}--list-box__selection)
     ~ .#{$prefix}--ai-label,

@@ -19,7 +19,7 @@ import deprecate from '../../prop-types/deprecate';
 type ExcludedAttributes = 'value' | 'onChange' | 'locale' | 'children';
 export type ReactNodeLike =
   | ReactElementLike
-  | ReactNodeArray
+  | ReadonlyArray<ReactNode>
   | string
   | number
   | boolean
@@ -209,7 +209,7 @@ const DatePickerInput = React.forwardRef(function DatePickerInput(
 
   const datePickerInputHelperId = !helperText
     ? undefined
-    : `detepicker-input-helper-text-${datePickerInputInstanceId}`;
+    : `datepicker-input-helper-text-${datePickerInputInstanceId}`;
 
   const inputProps: any = {
     ...rest,
@@ -410,7 +410,17 @@ DatePickerInput.propTypes = {
   warnText: PropTypes.node,
 };
 
-function DatePickerIcon({ datePickerType, invalid, warn }) {
+interface DatePickerIconProps {
+  datePickerType: 'simple' | 'single' | 'range' | undefined;
+  invalid?: boolean;
+  warn?: boolean;
+}
+
+function DatePickerIcon({
+  datePickerType,
+  invalid,
+  warn,
+}: DatePickerIconProps) {
   const prefix = usePrefix();
   const { isFluid } = useContext(FormContext);
 
