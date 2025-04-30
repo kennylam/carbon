@@ -7,11 +7,11 @@
 
 'use strict';
 
+import { defineConfig, mergeConfig } from 'vite';
 import remarkGfm from 'remark-gfm';
-import fs from 'fs';
 import glob from 'fast-glob';
 import path from 'path';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import react from '@vitejs/plugin-react';
 
 // We can't use .mdx files in conjuction with `storyStoreV7`, which we are using to preload stories for CI purposes only.
 // MDX files are fine to ignore in CI mode since they don't make a difference for VRT testing
@@ -26,45 +26,14 @@ const storyGlobs = [
   '../src/**/*-story.js',
 ];
 
-const stories = glob
-  .sync(storyGlobs, {
-    ignore: ['../src/**/docs/*.mdx', '../src/**/next/docs/*.mdx'],
-    cwd: __dirname,
-  })
-  // Filters the stories by finding the paths that have a story file that ends
-  // in `-story.js` and checks to see if they also have a `.stories.js`,
-  // if so then defer to the `.stories.js`
-  .filter((match) => {
-    const filepath = path.resolve(__dirname, match);
-    const basename = path.basename(match, '.js');
-    const denylist = new Set([
-      'DataTable-basic-story',
-      'DataTable-batch-actions-story',
-      'DataTable-filtering-story',
-      'DataTable-selection-story',
-      'DataTable-sorting-story',
-      'DataTable-toolbar-story',
-      'DataTable-dynamic-content-story',
-      'DataTable-expansion-story',
-    ]);
-    if (denylist.has(basename)) {
-      return false;
-    }
-    if (basename.endsWith('-story')) {
-      const component = basename.replace(/-story$/, '');
-      const storyName = path.resolve(
-        filepath,
-        '..',
-        'next',
-        `${component}.stories.js`
-      );
-      if (fs.existsSync(storyName)) {
-        return false;
-      }
-      return true;
-    }
-    return true;
-  });
+const getAbsolutePath = (packageName) =>
+  path.dirname(require.resolve(path.join(packageName, 'package.json')));
+
+const stories = glob.sync(storyGlobs, {
+  ignore: ['../src/**/docs/*.mdx', '../src/**/next/docs/*.mdx'],
+  cwd: __dirname,
+});
+
 const config = {
   addons: [
     {
@@ -73,13 +42,12 @@ const config = {
         actions: true,
         backgrounds: false,
         controls: true,
-        docs: true,
+        docs: false,
         toolbars: true,
         viewport: true,
       },
     },
     '@storybook/addon-storysource',
-    '@storybook/addon-webpack5-compiler-babel',
     /**
      * For now, the storybook-addon-accessibility-checker fork replaces the @storybook/addon-a11y.
      * Eventually they plan to attempt to get this back into the root addon with the storybook team.
@@ -103,75 +71,41 @@ const config = {
     buildStoriesJson: true,
   },
   framework: {
-    name: '@storybook/react-webpack5',
+    name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
   stories,
   typescript: {
     reactDocgen: 'react-docgen', // Favor docgen from prop-types instead of TS interfaces
   },
-
-  webpack(config) {
-    config.module.rules.push({
-      test: /\.s?css$/,
-      sideEffects: true,
-      use: [
-        {
-          loader:
-            process.env.NODE_ENV === 'production'
-              ? MiniCssExtractPlugin.loader
-              : 'style-loader',
-        },
-        {
-          loader: 'css-loader',
-          options: {
-            importLoaders: 2,
-            sourceMap: true,
+  async viteFinal(config) {
+    return defineConfig(config, {
+      esbuild: {
+        target: 'es2022',
+        include: /\.[jt]sx?$/,
+        exclude: [],
+        loader: 'tsx',
+      },
+      optimizeDeps: {
+        esbuildOptions: {
+          loader: {
+            '.js': 'jsx',
+            '.ts': 'tsx',
           },
         },
-        {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: [
-                require('autoprefixer')({
-                  overrideBrowserslist: ['last 1 version'],
-                }),
-              ],
-            },
-            sourceMap: true,
-          },
-        },
-        {
-          loader: 'sass-loader',
-          options: {
-            implementation: require('sass'),
-            sassOptions: {
-              includePaths: [
-                path.resolve(__dirname, '..', 'node_modules'),
-                path.resolve(__dirname, '..', '..', '..', 'node_modules'),
-              ],
-              // quietDeps: true,
-            },
-            warnRuleAsWarning: true,
-            sourceMap: true,
-          },
-        },
-      ],
+      },
+      plugins: [react()],
+      resolve: {
+        preserveSymlinks: true,
+      },
     });
-    if (process.env.NODE_ENV === 'production') {
-      config.plugins.push(
-        new MiniCssExtractPlugin({
-          filename: '[name].[contenthash].css',
-        })
-      );
-    }
-    return config;
   },
+
   docs: {
     autodocs: true,
     defaultName: 'Overview',
   },
+  logLevel: 'debug',
 };
 
 export default config;
