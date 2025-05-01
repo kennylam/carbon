@@ -6,11 +6,10 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import WarningFilled16 from '@carbon/icons/lib/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/lib/warning--alt--filled/16.js';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ValidityMixin from '../../globals/mixins/validity';
 import FormMixin from '../../globals/mixins/form';
 import { prefix } from '../../globals/settings';

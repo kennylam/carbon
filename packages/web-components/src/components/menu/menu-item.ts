@@ -6,10 +6,9 @@
  */
 
 import { LitElement, PropertyValues, html } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from './menu-item.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CaretLeft16 from '@carbon/icons/lib/caret--left/16';
 import CaretRight16 from '@carbon/icons/lib/caret--right/16';
 import { consume } from '@lit/context';

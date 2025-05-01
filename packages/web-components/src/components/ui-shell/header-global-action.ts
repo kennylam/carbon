@@ -6,8 +6,7 @@
  */
 
 import { LitElement } from 'lit';
-import { property, query } from 'lit/decorators.js';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement, property, query } from 'lit/decorators.js';
 import {
   BUTTON_TOOLTIP_POSITION,
   BUTTON_KIND,

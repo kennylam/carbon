@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import Close20 from '@carbon/icons/lib/close/20.js';
 import Menu20 from '@carbon/icons/lib/menu/20.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -15,7 +15,6 @@ import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import { SIDE_NAV_COLLAPSE_MODE } from './side-nav';
 import styles from './header.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * The trigger button for side nav in header nav.

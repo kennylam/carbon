@@ -6,9 +6,9 @@
  */
 
 import { prefix } from '../../globals/settings';
+import { customElement } from 'lit/decorators.js';
 import CDSDropdownItem from '../dropdown/dropdown-item';
 import styles from './combo-box.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Combo box item.

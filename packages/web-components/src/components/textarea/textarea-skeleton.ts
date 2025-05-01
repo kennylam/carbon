@@ -6,9 +6,9 @@
  */
 
 import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from './textarea.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * @element cds-textarea-skeleton

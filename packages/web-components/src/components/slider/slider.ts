@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import throttle from 'lodash-es/throttle';
 import { prefix } from '../../globals/settings';
@@ -16,7 +16,6 @@ import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
 import CDSSliderInput from './slider-input';
 import styles from './slider.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 interface Cancelable {
   cancel(): void;

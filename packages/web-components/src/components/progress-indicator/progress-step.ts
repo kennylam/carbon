@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html, svg } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import CheckmarkOutline16 from '@carbon/icons/lib/checkmark--outline/16.js';
 import CircleDash16 from '@carbon/icons/lib/circle-dash/16.js';
 import Incomplete16 from '@carbon/icons/lib/incomplete/16.js';
@@ -15,7 +15,6 @@ import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import { PROGRESS_STEP_STAT } from './defs';
 import styles from './progress-indicator.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { PROGRESS_STEP_STAT };
 

@@ -6,9 +6,9 @@
  */
 
 import { prefix } from '../../globals/settings';
+import { customElement } from 'lit/decorators.js';
 import CDSPopoverContent from '../popover/popover-content';
 import styles from './tooltip.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Tooltip content.

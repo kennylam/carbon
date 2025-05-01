@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { customElement } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSButton from '../button/button';
 import styles from './actionable-notification.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Actionable notification action button.

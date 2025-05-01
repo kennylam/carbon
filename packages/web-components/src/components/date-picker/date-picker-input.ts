@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property, query, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 import Calendar16 from '@carbon/icons/lib/calendar/16.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { prefix } from '../../globals/settings';
@@ -17,7 +17,6 @@ import { DATE_PICKER_INPUT_COLOR_SCHEME, DATE_PICKER_INPUT_KIND } from './defs';
 import WarningFilled16 from '@carbon/icons/lib/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/lib/warning--alt--filled/16.js';
 import styles from './date-picker.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { DATE_PICKER_INPUT_COLOR_SCHEME, DATE_PICKER_INPUT_KIND };
 

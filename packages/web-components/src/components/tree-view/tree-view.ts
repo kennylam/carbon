@@ -9,13 +9,12 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { TREE_SIZE } from './defs';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import styles from './tree-view.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSTreeNode from './tree-node';
 
 export { TREE_SIZE };

@@ -11,9 +11,8 @@ import InformationSquareFilled20 from '@carbon/icons/lib/information--square--fi
 import WarningFilled20 from '@carbon/icons/lib/warning--filled/20.js';
 import WarningAltFilled20 from '@carbon/icons/lib/warning--alt--filled/20.js';
 import { html, svg } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { NOTIFICATION_TYPE, NOTIFICATION_KIND } from './defs';
 import CDSInlineNotification from './inline-notification';
 import styles from './actionable-notification.scss?lit';

@@ -6,11 +6,10 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { DATE_PICKER_INPUT_KIND } from './date-picker-input';
 import styles from './date-picker.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Skeleton version of the input box for date picker.

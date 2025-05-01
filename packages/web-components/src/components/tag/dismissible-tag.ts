@@ -8,7 +8,7 @@
  */
 
 import { html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import Close16 from '@carbon/icons/lib/close/16.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
@@ -18,7 +18,6 @@ import { TAG_SIZE, TAG_TYPE } from './defs';
 import CDSTag from '../tag/tag';
 import '../tooltip/index';
 import styles from './tag.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { TAG_SIZE, TAG_TYPE };
 

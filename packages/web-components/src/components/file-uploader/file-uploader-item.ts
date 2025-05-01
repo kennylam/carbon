@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import CheckmarkFilled16 from '@carbon/icons/lib/checkmark--filled/16.js';
 import Close16 from '@carbon/icons/lib/close/16.js';
 import WarningFilled16 from '@carbon/icons/lib/warning--filled/16.js';
@@ -14,7 +14,6 @@ import { prefix } from '../../globals/settings';
 import { LOADING_TYPE } from '../loading/loading';
 import { FILE_UPLOADER_ITEM_SIZE, FILE_UPLOADER_ITEM_STATE } from './defs';
 import styles from './file-uploader.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { FILE_UPLOADER_ITEM_SIZE, FILE_UPLOADER_ITEM_STATE };
 

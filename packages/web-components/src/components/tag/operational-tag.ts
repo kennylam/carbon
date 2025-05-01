@@ -8,7 +8,7 @@
  */
 
 import { html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import HostListener from '../../globals/decorators/host-listener';
@@ -17,7 +17,6 @@ import { TAG_SIZE, TAG_TYPE } from './defs';
 import './tag';
 import '../tooltip/index';
 import styles from './tag.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { TAG_SIZE, TAG_TYPE };
 

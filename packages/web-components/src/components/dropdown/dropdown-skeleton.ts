@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { customElement } from 'lit/decorators.js';
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
 import styles from './dropdown.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Skeleton version of dropdown.

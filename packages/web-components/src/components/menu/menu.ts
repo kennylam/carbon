@@ -7,9 +7,8 @@
 
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
-import { property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import styles from './menu.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { classMap } from 'lit/directives/class-map.js';
 import { MenuContext, menuDefaultState } from './menu-context';

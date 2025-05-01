@@ -7,12 +7,11 @@
 
 import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSLink from '../link/link';
 import { TILE_COLOR_SCHEME } from './defs';
 import styles from './tile.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import AILabel24 from '@carbon/icons/lib/ai-label/24.js';
 /**
  * Clickable tile.

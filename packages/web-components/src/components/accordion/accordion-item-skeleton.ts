@@ -6,11 +6,11 @@
  */
 
 import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import ChevronRight16 from '@carbon/icons/lib/chevron--right/16.js';
 import { prefix } from '../../globals/settings';
 import '../skeleton-text/index';
 import styles from './accordion.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Skeleton of accordion item.

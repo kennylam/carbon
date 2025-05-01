@@ -6,7 +6,7 @@
  */
 
 import { html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSFloatingMenu, {
   FLOATING_MENU_DIRECTION,
@@ -15,7 +15,6 @@ import { NAVIGATION_DIRECTION, OVERFLOW_MENU_SIZE } from './defs';
 import CDSOverflowMenuItem from './overflow-menu-item';
 import HostListener from '../../globals/decorators/host-listener';
 import { indexOf } from '../../globals/internal/collection-helpers';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import styles from './overflow-menu.scss?lit';
 
 /**

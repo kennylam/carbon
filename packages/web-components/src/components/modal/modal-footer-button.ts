@@ -6,10 +6,10 @@
  */
 
 import { prefix } from '../../globals/settings';
+import { customElement } from 'lit/decorators.js';
 import CDSButton from '../button/button';
 import buttonStyles from '../button/button.scss?lit';
 import styles from './modal.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Modal footer button.

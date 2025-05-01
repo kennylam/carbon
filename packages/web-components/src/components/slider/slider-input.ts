@@ -7,14 +7,13 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { prefix } from '../../globals/settings';
 import WarningFilled16 from '@carbon/icons/lib/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/lib/warning--alt--filled/16.js';
 import FocusMixin from '../../globals/mixins/focus';
 import styles from './slider.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * The `<input>` box for slider.

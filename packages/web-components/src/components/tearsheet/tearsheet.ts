@@ -7,6 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import {
+  customElement,
   property,
   query,
   queryAssignedElements,
@@ -16,7 +17,6 @@ import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { selectorTabbable } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import '../button/index';
 import '../layer/index';
 import '../button/button-set-base';

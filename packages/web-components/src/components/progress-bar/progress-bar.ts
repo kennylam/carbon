@@ -6,8 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import ErrorFilled16 from '@carbon/icons/lib/error--filled/16.js';
 import CheckmarkFilled16 from '@carbon/icons/lib/checkmark--filled/16.js';

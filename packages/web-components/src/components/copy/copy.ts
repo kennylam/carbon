@@ -6,11 +6,10 @@
  */
 
 import { html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from '../copy-button/copy-button.scss?lit';
 import CDSIconButton from '../icon-button/icon-button';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Copy.

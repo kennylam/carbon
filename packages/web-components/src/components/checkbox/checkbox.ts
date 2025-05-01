@@ -8,14 +8,13 @@
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { LitElement, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import FormMixin from '../../globals/mixins/form';
 import WarningFilled16 from '@carbon/icons/lib/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/lib/warning--alt--filled/16.js';
 import styles from './checkbox.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Check box.

@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import ArrowsVertical32 from '@carbon/icons/lib/arrows--vertical/32.js';
 import ArrowDown32 from '@carbon/icons/lib/arrow--down/32.js';
@@ -18,7 +18,6 @@ import {
   TABLE_SORT_DIRECTION,
 } from './defs';
 import styles from './data-table.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { TABLE_SORT_CYCLE, TABLE_SORT_CYCLES, TABLE_SORT_DIRECTION };
 

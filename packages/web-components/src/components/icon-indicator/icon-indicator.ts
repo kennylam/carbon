@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { ICON_INDICATOR_KIND } from './defs';
 import ErrorFilled16 from '@carbon/icons/lib/error--filled/16.js';
@@ -36,7 +36,6 @@ import WarningSquareFilled20 from '@carbon/icons/lib/warning-square--filled/20.j
 export { ICON_INDICATOR_KIND };
 
 import styles from './icon-indicator.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 const iconMap = {
   [ICON_INDICATOR_KIND.FAILED]: {

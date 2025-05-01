@@ -6,11 +6,11 @@
  */
 
 import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import '../skeleton-text/skeleton-text';
 import { SKELETON_TEXT_TYPE } from '../skeleton-text/skeleton-text';
 import '../button/button-skeleton';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * The File uploader skeleton.

@@ -7,13 +7,12 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSToggleTip from '../toggle-tip/toggletip';
 import styles from './slug.scss?lit';
 import Undo16 from '@carbon/icons/lib/undo/16.js';
 import { SLUG_SIZE, SLUG_KIND } from './defs';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Basic slug.
