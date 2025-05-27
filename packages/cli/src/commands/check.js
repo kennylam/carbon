@@ -5,73 +5,53 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import { reporter } from '@carbon/cli-reporter';
+import glob from 'fast-glob';
+import { compile } from '../compile.js';
 
-const glob = require('fast-glob');
-const path = require('path');
-const { createLogger } = require('../logger');
-const compile = require('../compile');
+export async function handler({ ignore, pattern }) {
+  reporter.info('Running Sass build check...');
 
-const logger = createLogger('check');
-
-async function check({ glob: pattern, ignore = [], list = false }) {
-  const cwd = process.cwd();
-
-  logger.start('check');
-  logger.info(`Running in: ${cwd}`);
-  logger.info(`Checking pattern: '${pattern}', ignoring: '${ignore}'`);
-
-  // fast-glob's ignore option only accepts an array of strings, not a string
-  // See: https://github.com/mrmlnc/fast-glob/issues/404#issuecomment-1624832288
-  if (typeof ignore === 'string') {
-    ignore = [ignore];
-  }
-
-  const files = await glob(pattern, {
-    cwd,
-    ignore,
+  const files = glob.sync(pattern, {
+    ignore: Array.isArray(ignore) ? ignore : [ignore],
   });
 
-  logger.info(`Compiling ${files.length} files...`);
+  if (files.length === 0) {
+    reporter.info('No Sass files found...');
+    return;
+  }
+
+  reporter.info(`Compiling ${files.length} files...`);
 
   try {
-    compile(files.map((file) => path.join(cwd, file)));
-
-    if (list) {
-      logger.info('Compiled the following files:');
-      console.log(files);
-    }
-
-    logger.info(`Successfully compiled ${files.length} files! 🎉`);
+    compile(files);
   } catch (error) {
-    console.log(error);
+    if (error.formatted) {
+      console.error(error.formatted);
+      process.exit(1);
+    }
+    console.error(error);
     process.exit(1);
-  } finally {
-    logger.stop();
   }
+
+  reporter.success('Done! ✨');
 }
 
-module.exports = {
-  command: 'check <glob>',
-  desc: 'check that each file can be compiled',
-  builder(yargs) {
-    yargs.positional('glob', {
-      type: 'string',
-      describe: 'glob pattern for files to check',
-    });
+export const command = 'check [pattern]';
+export const desc = 'check that each file can be compiled';
 
-    yargs.options({
-      i: {
-        alias: 'ignore',
-        describe: 'provide a glob pattern of files to ignore',
-        type: 'string',
-      },
-      l: {
-        alias: 'list',
-        describe: 'list all the files that were compiled',
-        type: 'boolean',
-      },
-    });
-  },
-  handler: check,
-};
+export function builder(yargs) {
+  yargs.positional('pattern', {
+    describe: 'Pattern to match files to check',
+    type: 'string',
+    default: '**/*.scss',
+  });
+
+  yargs.options({
+    ignore: {
+      describe: 'Provide a pattern of files to ignore',
+      type: 'string',
+      default: '**/node_modules/**',
+    },
+  });
+}

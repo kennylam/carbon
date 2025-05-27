@@ -5,13 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import { reporter } from '@carbon/cli-reporter';
+import { exec } from 'child-process-promise';
+import { workspace } from '../workspace.js';
 
-const { reporter } = require('@carbon/cli-reporter');
-const { exec } = require('child-process-promise');
-const { workspace } = require('../workspace');
-
-async function check(args, env) {
+export async function handler(args, env) {
   reporter.info('Running checks in CI...');
 
   const options = {
@@ -41,9 +39,5 @@ async function check(args, env) {
   }
 }
 
-module.exports = {
-  command: 'ci-check',
-  desc: 'run CI checks',
-  builder: {},
-  handler: workspace(check),
-};
+export const command = 'ci-check';
+export const desc = 'run CI checks';

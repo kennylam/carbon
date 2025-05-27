@@ -5,9 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 /**
  * Create a logger to be used in a handler. This is typically just for
@@ -15,7 +13,7 @@ const chalk = require('chalk');
  * box-drawing ASCII characters.
  * @returns {object}
  */
-function createLogger(command) {
+export function createLogger(name) {
   const timers = [];
   let indentLevel = 0;
 
@@ -27,7 +25,7 @@ function createLogger(command) {
    * @returns {void}
    */
   function log(boxCharacter, message = '') {
-    console.log(chalk`{yellow ${command} ▐} {gray ${boxCharacter}} ${message}`);
+    console.log(chalk`{yellow ${name} ▐} {gray ${boxCharacter}} ${message}`);
   }
 
   function getLinePrefix() {
@@ -89,7 +87,4 @@ function displayBanner() {
 `);
 }
 
-module.exports = {
-  createLogger,
-  displayBanner,
-};
+export { displayBanner };

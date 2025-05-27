@@ -5,20 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const fs = require('fs-extra');
-const klaw = require('klaw-sync');
-const os = require('os');
-const path = require('path');
-const replace = require('replace-in-file');
-const { createLogger } = require('../logger');
+import fs from 'fs-extra';
+import klaw from 'klaw-sync';
+import os from 'os';
+import path from 'path';
+import replace from 'replace-in-file';
+import { createLogger } from '../logger.js';
 
 const logger = createLogger('inline');
 const isWin = process.platform === 'win32';
 const tmpDir = os.tmpdir();
 
-async function inline({ output }) {
+export async function handler({ output }) {
   logger.start('inline');
 
   const cwd = process.cwd();
@@ -114,58 +112,53 @@ async function inlineSassDependencies(
     `^@import '(${inlinedDependencies.map(([name]) => name).join('|')})/scss`,
     'gm'
   );
-  await Promise.all(
-    paths.map(async (file) => {
-      const relativeImportPath = path.relative(
-        path.dirname(file.path),
-        vendorFolder
-      );
 
-      await replace({
-        files: file.path,
+  await Promise.all(
+    paths.map(async ({ path: filepath }) => {
+      const options = {
+        files: filepath,
         from: REPLACE_REGEX,
-        glob: { windowsPathsNoEscape: true },
-        to(_, match) {
-          return `@import '${
-            isWin ? relativeImportPath.replace('\\', '/') : relativeImportPath
-          }/${match}`;
+        to: (match) => {
+          const [, pkg] = match.split("'");
+          const relativePath = path.relative(
+            path.dirname(filepath),
+            path.join(vendorFolder, pkg, 'scss')
+          );
+          return `@import '${isWin ? relativePath.replace(/\\/g, '/') : relativePath}`;
         },
-      });
+      };
+
+      try {
+        await replace(options);
+      } catch (error) {
+        console.log(error);
+      }
     })
   );
 }
 
-function findSassModule(packageName, cwd) {
-  let currentDirectory = cwd;
+function findSassModule(dependency, cwd) {
+  const paths = [
+    path.join(cwd, 'node_modules', dependency, 'scss'),
+    path.join(cwd, '..', '..', 'node_modules', dependency, 'scss'),
+  ];
 
-  while (currentDirectory !== path.dirname(currentDirectory)) {
-    const nodeModulesFolder = path.join(currentDirectory, 'node_modules');
-    const packageFolder = path.join(nodeModulesFolder, packageName);
-    const scssFolder = path.join(packageFolder, 'scss');
-    const packageJsonPath = path.join(packageFolder, 'package.json');
-
-    if (fs.existsSync(scssFolder)) {
-      return [scssFolder, packageFolder, packageJsonPath];
-    }
-
-    currentDirectory = path.dirname(currentDirectory);
-  }
-
-  return false;
+  return paths.filter((scssFolder) => {
+    return fs.existsSync(scssFolder);
+  });
 }
 
-module.exports = {
-  command: 'inline',
-  desc: 'inline sass dependencies from package.json in a target folder',
-  builder(yargs) {
-    yargs.options({
-      o: {
-        alias: 'output',
-        describe: 'the directory to output inlined sass dependencies',
-        type: 'string',
-        default: 'scss',
-      },
-    });
-  },
-  handler: inline,
-};
+export const command = 'inline';
+export const desc =
+  'inline sass dependencies from package.json in a target folder';
+
+export function builder(yargs) {
+  yargs.options({
+    o: {
+      alias: 'output',
+      describe: 'the directory to output inlined sass dependencies',
+      type: 'string',
+      default: 'scss',
+    },
+  });
+}

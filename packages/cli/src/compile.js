@@ -5,15 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const sass = require('sass');
+import sass from 'sass';
 
 const defaultOptions = {
   includePaths: ['node_modules', '../../node_modules'],
 };
 
-function compile(filepaths, options) {
+export function compile(filepaths, options) {
   return filepaths.map((file) => {
     return sass.renderSync({
       file,
@@ -22,5 +20,3 @@ function compile(filepaths, options) {
     });
   });
 }
-
-module.exports = compile;

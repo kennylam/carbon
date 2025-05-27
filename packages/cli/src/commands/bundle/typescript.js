@@ -5,23 +5,21 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const { babel } = require('@rollup/plugin-babel');
-const commonjs = require('@rollup/plugin-commonjs');
-const { nodeResolve } = require('@rollup/plugin-node-resolve');
-const typescript = require('@rollup/plugin-typescript');
-const fs = require('fs-extra');
-const path = require('path');
-const { rollup } = require('rollup');
-const { loadBaseTsCompilerOpts } = require('typescript-config-carbon');
-const {
+import { babel } from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import typescriptPlugin from '@rollup/plugin-typescript';
+import fs from 'fs-extra';
+import path from 'path';
+import { rollup } from 'rollup';
+import { loadBaseTsCompilerOpts } from 'typescript-config-carbon';
+import {
   formatGlobals,
   findPackageFolder,
   formatDependenciesIntoGlobals,
-} = require('./utils');
+} from './utils.js';
 
-async function bundle(entrypoint, options) {
+export async function typescript(entrypoint, options) {
   const globals = options.globals ? formatGlobals(options.globals) : {};
   const { name } = options;
   const packageFolder = await findPackageFolder(entrypoint);
@@ -55,51 +53,41 @@ async function bundle(entrypoint, options) {
 
   const baseTsCompilerOpts = loadBaseTsCompilerOpts();
 
-  await Promise.all(
-    jsEntryPoints.map(async ({ outputDir, file, format }) => {
-      const bundle = await rollup({
-        input: entrypoint,
-        external: Object.keys(dependencies),
-        plugins: [
-          typescript({
-            noEmitOnError: true,
-            noForceEmit: true,
-            outputToFilesystem: false,
-            compilerOptions: {
-              ...baseTsCompilerOpts,
-              rootDir: 'src',
-              outDir: outputDir,
+  const bundle = await rollup({
+    input: entrypoint,
+    external: Object.keys(dependencies),
+    plugins: [
+      nodeResolve(),
+      commonjs({
+        include: /node_modules/,
+      }),
+      typescriptPlugin({
+        ...baseTsCompilerOpts,
+        declaration: true,
+        declarationDir: path.join(packageFolder, 'es'),
+      }),
+      babel({
+        babelrc: false,
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              modules: false,
+              targets: {
+                browsers: ['last 1 version', 'ie >= 11'],
+              },
             },
-          }),
-          babel({
-            exclude: 'node_modules/**',
-            babelrc: false,
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  modules: false,
-                  targets: {
-                    browsers: ['last 1 version', 'ie >= 11', 'Firefox ESR'],
-                  },
-                },
-              ],
-              '@babel/preset-typescript',
-            ],
-            babelHelpers: 'bundled',
-            extensions: ['.ts', '.tsx', '.js', '.jsx'],
-          }),
-          nodeResolve(),
-          commonjs({
-            include: [/node_modules/],
-            extensions: ['.js'],
-          }),
+          ],
         ],
-      });
+      }),
+    ],
+  });
+
+  await Promise.all(
+    jsEntryPoints.map(async ({ format, file }) => {
       const outputOptions = {
-        exports: 'auto',
-        file,
         format,
+        file,
       };
 
       if (format === 'umd') {
@@ -110,9 +98,7 @@ async function bundle(entrypoint, options) {
         };
       }
 
-      return bundle.write(outputOptions);
+      await bundle.write(outputOptions);
     })
   );
 }
-
-module.exports = bundle;

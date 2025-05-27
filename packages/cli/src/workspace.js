@@ -5,16 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import { fileURLToPath } from 'url';
+import { dirname, parse, join, relative } from 'path';
+import fse from 'fs-extra';
+import glob from 'fast-glob';
+import execa from 'execa';
 
-const execa = require('execa');
-const fs = require('fs-extra');
-const glob = require('fast-glob');
-const path = require('path');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const { root: ROOT_DIR } = path.parse(__dirname);
+const { root: ROOT_DIR } = parse(__dirname);
 const WORKSPACE_ROOT = getProjectRoot(__dirname);
-const packageJson = fs.readJsonSync(path.join(WORKSPACE_ROOT, 'package.json'));
+const packageJson = fse.readJsonSync(join(WORKSPACE_ROOT, 'package.json'));
 const packagePaths = Array.isArray(packageJson.workspaces)
   ? glob
       .sync(
@@ -24,15 +26,12 @@ const packagePaths = Array.isArray(packageJson.workspaces)
         }
       )
       .map((match) => {
-        const packageJsonPath = path.join(WORKSPACE_ROOT, match);
+        const packageJsonPath = join(WORKSPACE_ROOT, match);
         return {
           packageJsonPath,
-          packageJson: fs.readJsonSync(packageJsonPath),
-          packagePath: path.dirname(packageJsonPath),
-          packageFolder: path.relative(
-            WORKSPACE_ROOT,
-            path.dirname(packageJsonPath)
-          ),
+          packageJson: fse.readJsonSync(packageJsonPath),
+          packagePath: dirname(packageJsonPath),
+          packageFolder: relative(WORKSPACE_ROOT, dirname(packageJsonPath)),
         };
       })
   : [];
@@ -45,7 +44,7 @@ const env = {
   packagePaths,
 };
 
-function workspace(fn) {
+export function workspace(fn) {
   return (...args) => fn(...args, env);
 }
 
@@ -53,7 +52,7 @@ function workspace(fn) {
  * Lists the packages for the current project using the `lerna list` command
  * @returns {Array<PackageInfo>}
  */
-async function getPackages() {
+export async function getPackages() {
   const { stdout: lernaListOutput } = await execa('yarn', [
     'lerna',
     'list',
@@ -70,7 +69,7 @@ async function getPackages() {
  */
 function getProjectRoot(directory) {
   const packageJsonPaths = ancestors(directory).filter((directory) => {
-    return fs.existsSync(path.join(directory, 'package.json'));
+    return fse.existsSync(join(directory, 'package.json'));
   });
 
   const rootDirectory =
@@ -100,7 +99,7 @@ function ancestors(directory) {
     result.push(current);
 
     if (current !== ROOT_DIR) {
-      current = path.dirname(current);
+      current = dirname(current);
     } else {
       current = '';
     }
@@ -108,8 +107,3 @@ function ancestors(directory) {
 
   return result;
 }
-
-module.exports = {
-  workspace,
-  getPackages,
-};

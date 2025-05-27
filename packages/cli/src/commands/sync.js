@@ -5,17 +5,18 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const { workspace } = require('../workspace');
+import { workspace } from '../workspace.js';
+import * as npmTask from './sync/npm.js';
+import * as packageTask from './sync/package.js';
+import * as readmeTask from './sync/readme.js';
 
 const tasks = {
-  npm: require('./sync/npm'),
-  package: require('./sync/package'),
-  readme: require('./sync/readme'),
+  npm: npmTask,
+  package: packageTask,
+  readme: readmeTask,
 };
 
-async function sync(args, env) {
+export async function handler(args, env) {
   const { target } = args;
   const tasksToRun = target === 'all' ? Object.keys(tasks) : [target];
 
@@ -25,15 +26,5 @@ async function sync(args, env) {
   }
 }
 
-module.exports = {
-  command: 'sync [target]',
-  desc: 'sync files across workspaces',
-  builder(yargs) {
-    yargs.positional('target', {
-      describe: 'choose a target to sync',
-      choices: ['all', 'npm', 'package', 'readme'],
-      default: 'all',
-    });
-  },
-  handler: workspace(sync),
-};
+export const command = 'sync [target]';
+export const desc = 'sync files across workspaces';

@@ -5,64 +5,31 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import { reporter } from '@carbon/cli-reporter';
+import { exec } from 'child-process-promise';
+import { workspace } from '../workspace.js';
 
-const clipboard = require('clipboardy');
-const { prompt } = require('inquirer');
-const { generate } = require('../changelog');
-const { fetchLatestFromUpstream } = require('../git');
-const { createLogger, displayBanner } = require('../logger');
-const { getPackages } = require('../workspace');
+export async function handler(args, env) {
+  reporter.info('Building changelog...');
 
-const logger = createLogger('changelog');
+  const options = {
+    cwd: env.root.directory,
+    stdio: 'inherit',
+  };
 
-/**
- * Outputs a changelog for the list of packages in a lerna/yarn workspace for
- * the given tag range. You can specify the range of commits to get the
- * changelog for by using git tags, or the name of a branch. For example:
- * v10.5.1..master or v10.5.0..v10.5.1
- * @returns {void}
- */
-async function changelog({ range }) {
-  displayBanner();
-
-  logger.start('Fetching latest git information from upstream');
-  await fetchLatestFromUpstream();
-  logger.stop();
-
-  logger.start('Getting a list of all packages in the project');
-  const packages = await getPackages();
-  logger.stop();
-
-  const [lastTag, tag] = range.split('..');
-  logger.start(`Generating a changelog for range: ${range}`);
-  const changelog = await generate(packages, lastTag, tag);
-  logger.stop();
-
-  const { copy } = await prompt([
-    {
-      type: 'confirm',
-      name: 'copy',
-      message: 'Would you like to copy the changelog to your clipboard?',
-    },
-  ]);
-
-  if (copy) {
-    clipboard.writeSync(changelog);
-    console.log('Done!');
-  } else {
-    console.log(changelog);
+  try {
+    await exec('yarn lerna-changelog', options);
+  } catch (error) {
+    if (error.stdout) {
+      console.error(error.stdout);
+    }
+    if (error.stderr) {
+      console.error(error.stderr);
+    }
+    console.error(error);
+    process.exit(1);
   }
 }
 
-module.exports = {
-  command: 'changelog <range>',
-  desc: 'generate the changelog for the given git tag range',
-  builder(yargs) {
-    yargs.positional('range', {
-      describe: 'the git tag range to generate a changelog for',
-      type: 'string',
-    });
-  },
-  handler: changelog,
-};
+export const command = 'changelog';
+export const desc = 'build the changelog using lerna-changelog';

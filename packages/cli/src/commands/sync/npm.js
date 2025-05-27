@@ -5,10 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
-
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 const defaultIgnorePatterns = [
   '**/__mocks__/**',
@@ -37,7 +35,5 @@ function run({ packagePaths }) {
   );
 }
 
-module.exports = {
-  name: 'npm',
-  run,
-};
+export const name = 'npm';
+export { run };

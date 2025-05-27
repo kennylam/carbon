@@ -1,62 +1,69 @@
 /**
- * Copyright IBM Corp. 2023
+ * Copyright IBM Corp. 2019, 2023
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
-'use strict';
+import fs from 'fs-extra';
+import path from 'path';
 
-const path = require('path');
-const fs = require('fs-extra');
-const { pascalCase } = require('change-case');
+export function formatGlobals(globals) {
+  if (typeof globals !== 'string') {
+    return {};
+  }
 
-function formatGlobals(string) {
-  const mappings = string.split(',').map((mapping) => {
-    return mapping.split('=');
-  });
-  return mappings.reduce(
-    (acc, [pkg, global]) => ({
-      ...acc,
-      [pkg]: global,
-    }),
-    {}
-  );
-}
-
-function formatDependenciesIntoGlobals(dependencies) {
-  return Object.keys(dependencies).reduce((acc, key) => {
-    const parts = key.split('/').map((identifier, i) => {
-      if (i === 0) {
-        return identifier.replace(/@/, '');
-      }
-      return identifier;
-    });
-
+  return globals.split(',').reduce((acc, entry) => {
+    const [key, value] = entry.split('=');
     return {
       ...acc,
-      [key]: pascalCase(parts.join(' ')),
+      [key]: value,
     };
   }, {});
 }
 
-async function findPackageFolder(entrypoint) {
-  let packageFolder = entrypoint;
+export function formatDependenciesIntoGlobals(dependencies) {
+  return Object.keys(dependencies).reduce((acc, key) => {
+    return {
+      ...acc,
+      [key]: key,
+    };
+  }, {});
+}
 
-  while (packageFolder !== '/' && path.dirname(packageFolder) !== '/') {
-    packageFolder = path.dirname(packageFolder);
-    const packageJsonPath = path.join(packageFolder, 'package.json');
+export async function findPackageFolder(entrypoint) {
+  const directory = path.dirname(entrypoint);
+  const packageJsonPaths = ancestors(directory).filter((directory) => {
+    return fs.existsSync(path.join(directory, 'package.json'));
+  });
 
-    if (await fs.pathExists(packageJsonPath)) {
-      break;
+  const rootDirectory =
+    packageJsonPaths.length > 0
+      ? packageJsonPaths[packageJsonPaths.length - 1]
+      : null;
+
+  if (!rootDirectory) {
+    throw new Error(
+      `Unable to find a \`package.json\` file from directory: ${directory}`
+    );
+  }
+
+  return rootDirectory;
+}
+
+function ancestors(directory) {
+  const result = [directory];
+  let current = directory;
+
+  while (current !== '') {
+    result.push(current);
+
+    if (current !== '/') {
+      current = path.dirname(current);
+    } else {
+      current = '';
     }
   }
 
-  return packageFolder;
+  return result;
 }
-
-module.exports = {
-  formatGlobals,
-  formatDependenciesIntoGlobals,
-  findPackageFolder,
-};
