@@ -18,7 +18,6 @@
 @use '../../utilities/convert';
 @use '../../utilities/component-reset';
 @use '../../utilities/focus-outline' as *;
-@use '../../utilities/high-contrast-mode' as *;
 @use '../../utilities/visually-hidden' as *;
 @use '../../utilities/layout';
 
@@ -214,13 +213,6 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
       @media screen and (prefers-reduced-motion: reduce) {
         transition: none;
       }
-
-      // Windows, Firefox HCM Fix
-      @media screen and (-ms-high-contrast: active),
-        screen and (prefers-contrast) {
-        // `ButtonText` is a CSS2 system color to help improve colors in HCM
-        fill: ButtonText;
-      }
     }
   }
 
@@ -301,7 +293,8 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
   .#{$prefix}--tile-content__below-the-fold {
     display: block;
     opacity: 0;
-    transition: opacity $duration-fast-02 motion(standard, productive),
+    transition:
+      opacity $duration-fast-02 motion(standard, productive),
       visibility $duration-fast-02 motion(standard, productive);
     visibility: hidden;
   }
@@ -316,7 +309,8 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
 
     .#{$prefix}--tile-content__below-the-fold {
       opacity: 1;
-      transition: opacity $duration-fast-02 motion(standard, productive),
+      transition:
+        opacity $duration-fast-02 motion(standard, productive),
         visibility $duration-fast-02 motion(standard, productive);
       visibility: inherit;
 
@@ -341,13 +335,6 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
 
   .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark svg {
     fill: $icon-primary;
-
-    // Windows, Firefox HCM Fix
-    @media screen and (-ms-high-contrast: active),
-      screen and (prefers-contrast) {
-      // `ButtonText` is a CSS2 system color to help improve colors in HCM
-      fill: ButtonText;
-    }
   }
 
   .#{$prefix}--tile-content {
@@ -452,7 +439,8 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
   .#{$prefix}--tile--decorator:has(.#{$prefix}--ai-label).#{$prefix}--tile,
   .#{$prefix}--tile--slug.#{$prefix}--tile {
     border: 1px solid transparent;
-    box-shadow: inset 0 -80px 70px -65px $ai-inner-shadow,
+    box-shadow:
+      inset 0 -80px 70px -65px $ai-inner-shadow,
       0 4px 8px 0 $ai-drop-shadow;
 
     @include ai-popover-gradient('default', 0, 'layer');
@@ -490,7 +478,8 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
     ).#{$prefix}--tile--clickable::before,
   .#{$prefix}--tile--slug.#{$prefix}--tile--selectable::before,
   .#{$prefix}--tile--slug.#{$prefix}--tile--clickable::before {
-    box-shadow: inset 0 -80px 70px -65px $ai-inner-shadow,
+    box-shadow:
+      inset 0 -80px 70px -65px $ai-inner-shadow,
       0 4px 10px 2px $ai-drop-shadow;
 
     @include ai-popover-gradient('hover', 0, 'layer');
@@ -516,7 +505,8 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
       .#{$prefix}--tile--inner-decorator .#{$prefix}--ai-label
     ).#{$prefix}--tile--selectable::after,
   .#{$prefix}--tile--slug.#{$prefix}--tile--selectable::after {
-    box-shadow: inset 0 -80px 70px -65px $ai-inner-shadow,
+    box-shadow:
+      inset 0 -80px 70px -65px $ai-inner-shadow,
       0 4px 8px 0 $ai-drop-shadow;
 
     @include ai-popover-gradient('selected', 0, 'layer');
@@ -627,12 +617,5 @@ $-icon-container-size: calc(#{layout.density('padding-inline')} * 2 + 1rem);
   .#{$prefix}--tile--decorator-rounded .#{$prefix}--tile__chevron,
   .#{$prefix}--tile--slug-rounded .#{$prefix}--tile__chevron {
     border-end-end-radius: $spacing-03;
-  }
-
-  // Windows HCM fix
-  .#{$prefix}--tile__chevron svg,
-  .#{$prefix}--tile__checkmark svg,
-  .#{$prefix}--tile--is-selected .#{$prefix}--tile__checkmark svg {
-    @include high-contrast-mode('icon-fill');
   }
 }

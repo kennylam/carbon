@@ -350,6 +350,66 @@ describe('DatePicker', () => {
     expect(screen.getByLabelText('Date Picker label')).toHaveValue('');
     warn.mockRestore();
   });
+
+  it('end date in range mode should not retain old value after setting to null', async () => {
+    const DatePickerExample = () => {
+      const resetValues = { fromDate: null, toDate: null };
+      const [dateRange, setDateRange] = useState(resetValues);
+      const onChange = ({ fromDate, toDate }) => {
+        setDateRange({ fromDate, toDate });
+      };
+      return (
+        <>
+          <DatePicker
+            datePickerType="range"
+            onChange={(dates) => {
+              const [start, end] = dates;
+              onChange({ fromDate: start, toDate: end });
+            }}
+            value={
+              dateRange ? [dateRange.fromDate, dateRange.toDate] : [null, null]
+            }>
+            <DatePickerInput
+              id="fromDate"
+              placeholder="mm/dd/yyyy"
+              labelText="FromDate"
+            />
+            <DatePickerInput
+              id="toDate"
+              placeholder="mm/dd/yyyy"
+              labelText="ToDate"
+            />
+          </DatePicker>
+          <button type="button" onClick={() => setDateRange(resetValues)}>
+            reset
+          </button>
+        </>
+      );
+    };
+    render(<DatePickerExample />);
+
+    // populate fromDate and toDate values
+    await userEvent.type(
+      screen.getByLabelText('FromDate'),
+      '01/14/2025{enter}'
+    );
+    await userEvent.type(screen.getByLabelText('ToDate'), '02/10/2025{enter}');
+
+    // reset both values
+    await userEvent.click(screen.getByText('reset'));
+
+    // assert that toDate is empty
+    expect(screen.getByLabelText('ToDate')).toHaveValue('');
+
+    // populate fromDate
+    await userEvent.type(
+      screen.getByLabelText('FromDate'),
+      '01/14/2025{enter}'
+    );
+
+    // assert that toDate is still empty
+    expect(screen.getByLabelText('ToDate')).toHaveValue('');
+  });
 });
 
 describe('Simple date picker', () => {
@@ -834,5 +894,74 @@ describe('Date picker with minDate and maxDate', () => {
       </DatePicker>
     );
     expect(screen.getByRole('application')).toBeInTheDocument();
+  });
+  it('should close calendar when moving focus outside of the DatePicker by pressing TAB', async () => {
+    const onClose = jest.fn();
+    render(
+      <div className="wrapper">
+        <DatePicker datePickerType="range" onClose={onClose}>
+          <DatePickerInput id="input-id-start" labelText="Start date" />
+          <DatePickerInput id="input-id-end" labelText="End date" />
+        </DatePicker>
+        <DatePicker datePickerType="range">
+          <DatePickerInput
+            id="next-input-id-start"
+            labelText="Next start date"
+          />
+          <DatePickerInput id="next-input-id-end" labelText="Next end date" />
+        </DatePicker>
+      </div>
+    );
+
+    const startInput = screen.getByLabelText('Start date');
+    const endInput = screen.getByLabelText('End date');
+    const nextInput = screen.getByLabelText('Next start date');
+
+    expect(document.body).toHaveFocus();
+    await userEvent.tab();
+    expect(startInput).toHaveFocus();
+    await userEvent.tab();
+    expect(endInput).toHaveFocus();
+    expect(onClose).not.toHaveBeenCalled();
+    await userEvent.tab();
+    expect(nextInput).toHaveFocus();
+    expect(onClose).toHaveBeenCalled();
+  });
+  it('should close calendar when moving focus outside of the DatePicker by pressing SHIFT+TAB', async () => {
+    const onClose = jest.fn();
+    render(
+      <div className="wrapper">
+        <DatePicker datePickerType="range">
+          <DatePickerInput
+            id="prev-input-id-start"
+            labelText="Previous start date"
+          />
+          <DatePickerInput
+            id="prev-input-id-end"
+            labelText="Previous end date"
+          />
+        </DatePicker>
+        <DatePicker datePickerType="range" onClose={onClose}>
+          <DatePickerInput id="input-id-start" labelText="Start date" />
+          <DatePickerInput id="input-id-end" labelText="End date" />
+        </DatePicker>
+      </div>
+    );
+
+    const prevStartInput = screen.getByLabelText('Previous start date');
+    const prevEndInput = screen.getByLabelText('Previous end date');
+    const startInput = screen.getByLabelText('Start date');
+
+    expect(document.body).toHaveFocus();
+    await userEvent.tab();
+    expect(prevStartInput).toHaveFocus();
+    await userEvent.tab();
+    expect(prevEndInput).toHaveFocus();
+    await userEvent.tab();
+    await expect(startInput).toHaveFocus();
+    expect(onClose).not.toHaveBeenCalled();
+    await userEvent.tab({ shift: true });
+    expect(prevEndInput).toHaveFocus();
+    expect(onClose).toHaveBeenCalled();
   });
 });

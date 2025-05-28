@@ -163,7 +163,9 @@
     margin-inline-start: auto;
     min-block-size: convert.to-rem(48px);
     min-inline-size: convert.to-rem(48px);
-    transition: outline $transition-base, background-color $transition-base;
+    transition:
+      outline $transition-base,
+      background-color $transition-base;
 
     .#{$prefix}--toast-notification__close-icon {
       fill: $icon-inverse;
@@ -228,11 +230,5 @@
   }
   .#{$prefix}--toast-notification__close-button:focus {
     @include high-contrast-mode('focus');
-  }
-  .#{$prefix}--toast-notification .#{$prefix}--toast-notification__close-icon {
-    @include high-contrast-mode('icon-fill');
-  }
-  .#{$prefix}--toast-notification .#{$prefix}--toast-notification__icon {
-    @include high-contrast-mode('icon-fill');
   }
 }

@@ -223,7 +223,8 @@
   .#{$prefix}--dropdown-item {
     position: relative;
     opacity: 0;
-    transition: visibility $duration-fast-01 motion(standard, productive),
+    transition:
+      visibility $duration-fast-01 motion(standard, productive),
       opacity $duration-fast-01 motion(standard, productive),
       background-color $duration-fast-01 motion(standard, productive);
     visibility: inherit;
@@ -478,10 +479,6 @@
     @include high-contrast-mode {
       outline: none;
     }
-  }
-
-  .#{$prefix}--list-box__menu-item__selected-icon {
-    @include high-contrast-mode('icon-fill');
   }
 
   // readonly
