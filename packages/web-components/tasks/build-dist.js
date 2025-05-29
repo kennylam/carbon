@@ -23,7 +23,7 @@ import { promisify } from 'util';
 import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import carbonIcons from '../tools/rollup-plugin-dist-icons.js';
-import fixHostPseudo from '../tools/postcss-fix-host-pseudo.js';
+// import fixHostPseudo from '../tools/postcss-fix-host-pseudo.js';
 import license from '../tools/rollup-plugin-license.js';
 import litSCSS from '../tools/rollup-plugin-lit-scss.js';
 
@@ -100,7 +100,7 @@ function _generateInputs(folders) {
  * @returns {object} The Rollup config.
  */
 function getRollupConfig({ folders = [] } = {}) {
-  const postCSSPlugins = [fixHostPseudo(), autoprefixer(), cssnano()];
+  // const postCSSPlugins = [fixHostPseudo(), autoprefixer(), cssnano()];
 
   const licenseOptions = {
     whitelist: /^(carbon-components|@carbon*)$/i,
@@ -140,10 +140,10 @@ function getRollupConfig({ folders = [] } = {}) {
           path.resolve(__dirname, '../node_modules'),
           path.resolve(__dirname, '../../../node_modules'),
         ],
-        async preprocessor(contents, id) {
-          return (await postcss(postCSSPlugins).process(contents, { from: id }))
-            .css;
-        },
+        // async preprocessor(contents, id) {
+        //   return (await postcss(postCSSPlugins).process(contents, { from: id }))
+        //     .css;
+        // },
       }),
       replace({
         'process.env.NODE_ENV': 'production',

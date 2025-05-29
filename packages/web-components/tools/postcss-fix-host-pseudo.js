@@ -53,61 +53,63 @@ const rePseudoElements = new RegExp(`::?(${pseudoElementNames.join('|')})`);
  * ```
  */
 
-export default postcss.plugin(
-  'fix-host-pseudo',
-  // eslint-disable-next-line prefer-arrow-callback
-  function postCssPluginFixHostPseudo() {
-    return function fixHostPseudo(css) {
-      css.walkRules(async (rule) => {
-        await parser((selectors) => {
-          selectors.walkPseudos((pseudo) => {
-            if (pseudo.value === ':host') {
+const plugin = {
+  postcssPlugin: 'fix-host-pseudo',
+  Rule: async (rule) => {
+    await parser((selectors) => {
+      selectors.walkPseudos((pseudo) => {
+        if (pseudo.value === ':host') {
+          if (pseudo.nodes.length !== 1 || pseudo.first.type !== 'selector') {
+            // eslint-disable-next-line no-console
+            console.warn(
+              'Found :host() with more than one child or with a non-selector child. Skipping...'
+            );
+          } else {
+            const pseudosToMove = [];
+            for (
+              let precedingNode = pseudo.prev();
+              precedingNode && precedingNode.type !== 'combinator';
+              precedingNode = precedingNode.prev()
+            ) {
               if (
-                pseudo.nodes.length !== 1 ||
-                pseudo.first.type !== 'selector'
+                precedingNode.type !== 'pseudo' ||
+                !rePseudoElements.test(precedingNode.value)
               ) {
-                // eslint-disable-next-line no-console
-                console.warn(
-                  'Found :host() with more than one child or with a non-selector child. Skipping...'
-                );
-              } else {
-                const pseudosToMove = [];
-                for (
-                  let precedingNode = pseudo.prev();
-                  precedingNode && precedingNode.type !== 'combinator';
-                  precedingNode = precedingNode.prev()
-                ) {
-                  if (
-                    precedingNode.type !== 'pseudo' ||
-                    !rePseudoElements.test(precedingNode.value)
-                  ) {
-                    pseudosToMove.unshift(precedingNode);
-                  }
-                }
-                for (
-                  let followingNode = pseudo.next();
-                  followingNode && followingNode.type !== 'combinator';
-                  followingNode = followingNode.next()
-                ) {
-                  if (
-                    followingNode.type !== 'pseudo' ||
-                    !rePseudoElements.test(followingNode.value)
-                  ) {
-                    pseudosToMove.push(followingNode);
-                  }
-                }
-                pseudosToMove.forEach((item) => {
-                  const newNode = item.clone();
-                  newNode.spaces.before = '';
-                  newNode.spaces.after = '';
-                  pseudo.first.append(newNode);
-                  item.remove();
-                });
+                pseudosToMove.unshift(precedingNode);
               }
             }
-          });
-        }).process(rule);
+            for (
+              let followingNode = pseudo.next();
+              followingNode && followingNode.type !== 'combinator';
+              followingNode = followingNode.next()
+            ) {
+              if (
+                followingNode.type !== 'pseudo' ||
+                !rePseudoElements.test(followingNode.value)
+              ) {
+                pseudosToMove.push(followingNode);
+              }
+            }
+            pseudosToMove.forEach((item) => {
+              const newNode = item.clone();
+              newNode.spaces.before = '';
+              newNode.spaces.after = '';
+              pseudo.first.append(newNode);
+              item.remove();
+            });
+          }
+        }
       });
-    };
-  }
-);
+    }).process(rule);
+  },
+};
+
+// Create a function that returns the plugin for backward compatibility
+function fixHostPseudo() {
+  return plugin;
+}
+
+// Add the postcssPlugin property to the function for modern usage
+fixHostPseudo.postcssPlugin = 'fix-host-pseudo';
+
+export default fixHostPseudo;
