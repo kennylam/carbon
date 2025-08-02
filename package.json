@@ -61,6 +61,7 @@
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^30.0.0",
     "@types/prop-types": "^15.7.13",
     "@types/react-is": "^19.0.0",
     "accessibility-checker": "^4.0.6",
