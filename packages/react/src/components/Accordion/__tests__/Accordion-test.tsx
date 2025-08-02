@@ -7,7 +7,7 @@
 
 import Button from '../../Button';
 import React from 'react';
-import { default as Accordion, AccordionItem } from '../';
+import { default as Accordion, AccordionItem } from '..';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -205,12 +205,7 @@ describe('Accordion', () => {
           <Button onClick={() => setExpandAll(true)}>
             Click to expand all
           </Button>
-          <Button
-            onClick={() => {
-              expandAll || expandAll === null
-                ? setExpandAll(false)
-                : setExpandAll(null);
-            }}>
+          <Button onClick={() => setExpandAll(false)}>
             Click to collapse all
           </Button>
 
