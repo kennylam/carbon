@@ -21,9 +21,9 @@ module.exports = {
   setupFiles: [require.resolve('./setup/setup.js')],
   setupFilesAfterEnv: [require.resolve('./setup/setupAfterEnv.js')],
   testMatch: [
-    '<rootDir>/**/__tests__/**/*.js?(x)',
-    '<rootDir>/**/*.(spec|test).js?(x)',
-    '<rootDir>/**/*-(spec|test).js?(x)',
+    '<rootDir>/**/__tests__/**/*.(js|jsx|ts|tsx)',
+    '<rootDir>/**/*.(spec|test).(js|jsx|ts|tsx)',
+    '<rootDir>/**/*-(spec|test).(js|jsx|ts|tsx)',
   ],
   transform: {
     '^.+\\.(mjs|cjs|js|jsx|ts|tsx)$': require.resolve(
