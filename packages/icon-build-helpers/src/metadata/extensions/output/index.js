@@ -7,7 +7,6 @@
 
 'use strict';
 
-const svg2js = require('svgo/lib/svgo/svg2js');
 const { svgo } = require('./optimizer');
 const { getModuleName } = require('./getModuleName');
 
@@ -180,64 +179,36 @@ async function createDescriptor(name, data, size, original) {
 }
 
 /**
- * Attempt to parse the given svg string to an object-based representation
- * using SVGO's svg2js
+ * Attempt to parse the given svg string to extract basic information
  * @param {string} svg - the source svg for the icon
  * @param {string} name - the name of the icon
  * @returns {object}
  */
 async function parse(svg, name) {
-  const root = await svg2jsAsync(svg);
   try {
-    return convert(root.content[0]);
+    // Extract viewBox
+    const viewBoxMatch = svg.match(/viewBox=["']([^"']+)["']/);
+    const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 32 32';
+
+    return {
+      elem: 'svg',
+      attrs: {
+        viewBox,
+      },
+    };
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(error);
     // eslint-disable-next-line no-console
     console.log(`Error parsing icon with name: ${name}`);
+    // Return default values if parsing fails
+    return {
+      elem: 'svg',
+      attrs: {
+        viewBox: '0 0 32 32',
+      },
+    };
   }
-}
-
-/**
- * Convert svg2js from a callback style to a Promise
- * @param {any} args
- * @returns {Promise}
- */
-function svg2jsAsync(...args) {
-  return new Promise((resolve, reject) => {
-    svg2js(...args, ({ error, ...rest }) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      resolve(rest);
-    });
-  });
-}
-
-/**
- * Converts the data structure from svg2js to one that we can use for a
- * descriptor
- * @param {object} root
- * @returns {object}
- */
-function convert(root) {
-  const { elem, attrs = {}, content } = root;
-  const safeFormat = {
-    elem,
-    attrs: Object.keys(attrs).reduce((acc, attr) => {
-      return {
-        ...acc,
-        [attr]: attrs[attr].value,
-      };
-    }, {}),
-  };
-
-  if (content) {
-    safeFormat.content = content.map(convert);
-  }
-
-  return safeFormat;
 }
 
 module.exports = output;
