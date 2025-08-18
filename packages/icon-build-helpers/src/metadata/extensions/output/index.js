@@ -9,6 +9,7 @@
 
 const { svgo } = require('./optimizer');
 const { getModuleName } = require('./getModuleName');
+const parser = require('svgson');
 
 // Icon size targets and default size. Not used with pictograms
 const sizes = [32, 24, 20, 16];
@@ -186,15 +187,34 @@ async function createDescriptor(name, data, size, original) {
  */
 async function parse(svg, name) {
   try {
-    // Extract viewBox
-    const viewBoxMatch = svg.match(/viewBox=["']([^"']+)["']/);
-    const viewBox = viewBoxMatch ? viewBoxMatch[1] : '0 0 32 32';
+    const root = parser.parseSync(svg);
+
+    // Extract viewBox from the root svg element
+    const viewBox = root.attributes.viewBox || '0 0 32 32';
+
+    // Transform the SVG content to the format expected by the React builder
+    function transformNode(node) {
+      if (node.type === 'element') {
+        return {
+          elem: node.name,
+          attrs: node.attributes || {},
+          content: node.children ? node.children.map(transformNode) : [],
+        };
+      }
+      return null;
+    }
+
+    const content = root.children
+      .filter((child) => child.type === 'element')
+      .map(transformNode)
+      .filter(Boolean);
 
     return {
       elem: 'svg',
       attrs: {
         viewBox,
       },
+      content,
     };
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -207,6 +227,7 @@ async function parse(svg, name) {
       attrs: {
         viewBox: '0 0 32 32',
       },
+      content: [],
     };
   }
 }

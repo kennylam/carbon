@@ -276,13 +276,18 @@ function createIconSource(moduleName, sizes, preamble = []) {
   // render the asset
   const sizeVariants = sizes.map(({ size, ast }) => {
     const { svgProps, children } = svgToJSX(ast);
+    // Check if a string is a valid JavaScript identifier signs
+    const isValidIdentifier = (name) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(name);
     const source = templates.jsx({
       props: t.objectExpression([
         t.objectProperty(t.identifier('width'), t.identifier('size')),
         t.objectProperty(t.identifier('height'), t.identifier('size')),
         t.objectProperty(t.identifier('ref'), t.identifier('ref')),
         ...Object.entries(svgProps).map(([key, value]) => {
-          return t.objectProperty(t.identifier(key), jsToAST(value));
+          const keyNode = isValidIdentifier(key)
+            ? t.identifier(key)
+            : t.stringLiteral(key);
+          return t.objectProperty(keyNode, jsToAST(value));
         }),
         t.spreadElement(t.identifier('rest')),
       ]),
