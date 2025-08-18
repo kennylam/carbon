@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ActionableNotification should render 1`] = `
 <DocumentFragment>
@@ -29,11 +29,15 @@ exports[`ActionableNotification should render 1`] = `
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+          d="M0 0h20v20H0z"
+          fill="none"
         />
         <path
-          d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-          data-icon-path="inner-path"
+          d="M10 1c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9m3.5 13.5-8-8 1-1 8 8z"
+        />
+        <path
+          d="m13.5 14.5-8-8 1-1 8 8z"
+          id="inner-path"
           opacity="0"
         />
         <title>
@@ -75,7 +79,11 @@ exports[`ActionableNotification should render 1`] = `
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+            d="M17.414 16 24 9.414 22.586 8 16 14.586 9.414 8 8 9.414 14.586 16 8 22.586 9.414 24 16 17.414 22.586 24 24 22.586z"
+          />
+          <path
+            d="M0 0h32v32H0z"
+            fill="none"
           />
         </svg>
       </button>
@@ -112,11 +120,15 @@ exports[`InlineNotification should render 1`] = `
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+          d="M0 0h20v20H0z"
+          fill="none"
         />
         <path
-          d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-          data-icon-path="inner-path"
+          d="M10 1c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9m3.5 13.5-8-8 1-1 8 8z"
+        />
+        <path
+          d="m13.5 14.5-8-8 1-1 8 8z"
+          id="inner-path"
           opacity="0"
         />
         <title>
@@ -152,7 +164,11 @@ exports[`InlineNotification should render 1`] = `
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+          d="M17.414 16 24 9.414 22.586 8 16 14.586 9.414 8 8 9.414 14.586 16 8 22.586 9.414 24 16 17.414 22.586 24 24 22.586z"
+        />
+        <path
+          d="M0 0h32v32H0z"
+          fill="none"
         />
       </svg>
     </button>
@@ -178,11 +194,15 @@ exports[`ToastNotification should render 1`] = `
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        d="M10,1c-5,0-9,4-9,9s4,9,9,9s9-4,9-9S15,1,10,1z M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
+        d="M0 0h20v20H0z"
+        fill="none"
       />
       <path
-        d="M13.5,14.5l-8-8l1-1l8,8L13.5,14.5z"
-        data-icon-path="inner-path"
+        d="M10 1c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9m3.5 13.5-8-8 1-1 8 8z"
+      />
+      <path
+        d="m13.5 14.5-8-8 1-1 8 8z"
+        id="inner-path"
         opacity="0"
       />
       <title>
@@ -217,7 +237,11 @@ exports[`ToastNotification should render 1`] = `
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+          d="M17.414 16 24 9.414 22.586 8 16 14.586 9.414 8 8 9.414 14.586 16 8 22.586 9.414 24 16 17.414 22.586 24 24 22.586z"
+        />
+        <path
+          d="M0 0h32v32H0z"
+          fill="none"
         />
       </svg>
     </button>

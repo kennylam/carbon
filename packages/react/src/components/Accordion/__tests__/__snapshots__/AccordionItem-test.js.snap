@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`AccordionItem renders as expected - Component API should render and match snapshot 1`] = `
 <div>
@@ -23,7 +23,11 @@ exports[`AccordionItem renders as expected - Component API should render and mat
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M11 8L6 13 5.3 12.3 9.6 8 5.3 3.7 6 3z"
+          d="m11 8-5 5-.7-.7L9.6 8 5.3 3.7 6 3z"
+        />
+        <path
+          d="M0 0h16v16H0z"
+          fill="none"
         />
       </svg>
       <div

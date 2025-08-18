@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`TableToolbarSearch renders as expected - Component API should render 1`] = `
 <div>
@@ -23,7 +23,11 @@ exports[`TableToolbarSearch renders as expected - Component API should render 1`
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M15,14.3L10.7,10c1.9-2.3,1.6-5.8-0.7-7.7S4.2,0.7,2.3,3S0.7,8.8,3,10.7c2,1.7,5,1.7,7,0l4.3,4.3L15,14.3z M2,6.5 C2,4,4,2,6.5,2S11,4,11,6.5S9,11,6.5,11S2,9,2,6.5z"
+          d="M15 14.3 10.7 10c1.9-2.3 1.6-5.8-.7-7.7S4.2.7 2.3 3 .7 8.8 3 10.7c2 1.7 5 1.7 7 0l4.3 4.3zM2 6.5C2 4 4 2 6.5 2S11 4 11 6.5 9 11 6.5 11 2 9 2 6.5"
+        />
+        <path
+          d="M0 0h16v16H0z"
+          fill="none"
         />
       </svg>
     </div>
@@ -61,7 +65,11 @@ exports[`TableToolbarSearch renders as expected - Component API should render 1`
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M17.4141 16L24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"
+          d="M17.414 16 24 9.414 22.586 8 16 14.586 9.414 8 8 9.414 14.586 16 8 22.586 9.414 24 16 17.414 22.586 24 24 22.586z"
+        />
+        <path
+          d="M0 0h32v32H0z"
+          fill="none"
         />
       </svg>
     </button>

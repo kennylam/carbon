@@ -213,6 +213,7 @@ async function parse(svg, name) {
       elem: 'svg',
       attrs: {
         viewBox,
+        ...root.attributes, // Preserve all attributes from the root SVG element
       },
       content,
     };

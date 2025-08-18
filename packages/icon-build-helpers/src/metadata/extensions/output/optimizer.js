@@ -225,6 +225,8 @@ const plugins = [
         // https://github.com/svg/svgo/pull/977
         '*:(fill|stroke):((?!^none$).)*',
       ],
+      // Preserve data-test-id attributes for testing
+      preserve: ['data-test-id'],
     },
   },
 ];
