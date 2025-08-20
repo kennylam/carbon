@@ -6,11 +6,9 @@
  */
 
 import path from 'path';
-import { promisify } from 'util';
-import * as sass from 'sass';
+import * as sass from 'sass-embedded';
 import { createFilter } from '@rollup/pluginutils';
 
-const renderSass = promisify(sass.render);
 const noop = (s) => s;
 
 /**
@@ -70,10 +68,10 @@ export default function LitSCSS({
         );
        ${contents}`;
 
-      const { css } = await renderSass({
+      const { css } = await sass.compileStringAsync(finalContent, {
         ...options,
-        file: id,
-        data: finalContent,
+        url: new URL(`file://${id}`),
+        loadPaths: options.includePaths || [],
         // suppress mixed-declarations warnings until resolved in
         // https://github.com/carbon-design-system/carbon/issues/16962
         logger: {
@@ -85,7 +83,7 @@ export default function LitSCSS({
       });
 
       return {
-        code: transformToTemplate(await preprocessor(css.toString(), id)),
+        code: transformToTemplate(await preprocessor(css, id)),
         map: {
           mappings: '',
         },
