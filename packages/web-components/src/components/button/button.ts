@@ -11,6 +11,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
+import { adoptedStyles } from '../../globals/decorators/adopted-styles';
 import {
   BUTTON_KIND,
   BUTTON_TYPE,
@@ -37,6 +38,7 @@ export {
  * @element cds-button
  * @csspart button The button.
  */
+@adoptedStyles()
 @customElement(`${prefix}-button`)
 class CDSButton extends HostListenerMixin(FocusMixin(LitElement)) {
   /**

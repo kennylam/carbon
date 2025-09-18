@@ -34,6 +34,7 @@ export default tseslint.config([
   {
     files: [
       '**/tasks/**',
+      '**/tools/**',
       'actions/**',
       'packages/cli/**',
       'packages/upgrade/**',
