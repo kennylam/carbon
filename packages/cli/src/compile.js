@@ -5,16 +5,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import sass from 'sass';
+import * as sass from 'sass';
 
 const defaultOptions = {
-  includePaths: ['node_modules', '../../node_modules'],
+  loadPaths: ['node_modules', '../../node_modules'],
 };
 
 export default function compile(filepaths, options) {
   return filepaths.map((file) => {
-    return sass.renderSync({
-      file,
+    return sass.compile(file, {
       ...defaultOptions,
       ...options,
     });

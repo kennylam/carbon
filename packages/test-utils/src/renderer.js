@@ -18,27 +18,30 @@ const SassRenderer = {
     async function render(data) {
       const values = [];
       const valuesByKey = new Map();
-      const result = sass.renderSync({
-        data: `${initialData}\n${data}`,
+      const result = sass.compileString(`${initialData}\n${data}`, {
         functions: {
-          'get-value($arg)': (arg) => {
-            values.push(arg);
-            return sass.types.Null.NULL;
+          'get-value($arg)': (args) => {
+            values.push(args[0]);
+            return sass.sassNull;
           },
-          'get($key, $value)': (key, value) => {
+          'get($key, $value)': (args) => {
+            const key = args[0];
+            const value = args[1];
             valuesByKey.set(convert(key), {
               value: convert(value),
               nativeValue: value,
             });
-            return sass.types.Null.NULL;
+            return sass.sassNull;
           },
         },
-        includePaths: [cwd, ...nodeModules],
+        loadPaths: [cwd, ...nodeModules],
         quietDeps: true,
       });
 
       return {
-        result,
+        result: {
+          css: Buffer.from(result.css),
+        },
         values,
         getValue(index) {
           return convert(values[index]);

@@ -7,7 +7,7 @@
 
 import { createHash } from 'crypto';
 import fs from 'fs';
-import sass from 'sass';
+import * as sass from 'sass';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -50,14 +50,13 @@ export default {
         return fs.existsSync(directory);
       });
 
-    const result = sass.renderSync({
-      file: filepath,
-      outputStyle: 'compressed',
-      includePaths: [...nodeModules],
+    const result = sass.compile(filepath, {
+      style: 'compressed',
+      loadPaths: [...nodeModules],
     });
     return {
       code: `
-        const css = \`${result.css.toString()}\`;
+        const css = \`${result.css}\`;
         let style;
         beforeAll(() => {
           style = document.createElement('style');
