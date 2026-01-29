@@ -6,17 +6,25 @@
  */
 
 import { LitElement, html } from 'lit';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 import { customElement } from 'lit/decorators.js';
 import ChevronRight16 from '@carbon/icons/lib/chevron--right/16.js';
 import { prefix } from '../../globals/settings';
 import '../skeleton-text/index';
 import styles from './accordion.scss?lit';
+import CDSSkeletonText from '../skeleton-text/skeleton-text';
 
 /**
  * Skeleton of accordion item.
  */
 @customElement(`${prefix}-accordion-item-skeleton`)
-class CDSAccordionItemSkeleton extends LitElement {
+class CDSAccordionItemSkeleton extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-skeleton-text': CDSSkeletonText,
+    };
+  }
+
   render() {
     return html`
       <span class="${prefix}--accordion__heading">
