@@ -7,7 +7,7 @@
 
 import { prefix } from '../../globals/settings';
 import { html } from 'lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement } from 'lit/decorators.js';
 import CDSNumberInput from '../number-input/number-input';
 import styles from './fluid-number-input.scss?lit';
 import { classMap } from 'lit/directives/class-map.js';

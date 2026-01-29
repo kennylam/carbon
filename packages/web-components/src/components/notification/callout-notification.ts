@@ -6,9 +6,8 @@
  */
 
 import { html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import CDSActionableNotification, {
   iconsForKinds,

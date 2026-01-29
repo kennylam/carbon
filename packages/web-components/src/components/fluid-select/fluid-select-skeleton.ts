@@ -7,7 +7,7 @@
 
 import { prefix } from '../../globals/settings';
 import { html } from 'lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement } from 'lit/decorators.js';
 import styles from './fluid-select.scss?lit';
 import CDSSelectSkeleton from '../select/select-skeleton';
 /**

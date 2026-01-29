@@ -8,7 +8,7 @@
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
 import styles from './page-header.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement } from 'lit/decorators.js';
 
 /**
  * Page header Tabs Bar.

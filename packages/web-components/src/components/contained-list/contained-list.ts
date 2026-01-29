@@ -6,11 +6,10 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import styles from './contained-list.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export type Variants = 'on-page' | 'disclosed';
 

@@ -28,8 +28,8 @@ import {
   FeatureFlags as GlobalFeatureFlags,
   createScope,
 } from '@carbon/feature-flags';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { LitElement, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
 /**
  * Feature Flags

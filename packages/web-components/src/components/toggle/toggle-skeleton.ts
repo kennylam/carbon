@@ -7,7 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from './toggle.scss?lit';
 
