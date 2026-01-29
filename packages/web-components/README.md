@@ -43,6 +43,25 @@ same manner as native HTML tags:
 </cds-dropdown>
 ```
 
+#### Scoped elements and the registry polyfill
+
+To avoid custom-element tag name collisions with other libraries, this package
+uses scoped elements.
+
+Scoped elements require the Scoped Custom Element Registry polyfill, which must
+be loaded before any custom elements are defined.
+
+To enable scoped elements, import the shared entrypoint first:
+
+```javascript
+import '@carbon/web-components/scoped-elements';
+import '@carbon/web-components/es/components/dropdown/dropdown.js';
+import '@carbon/web-components/es/components/dropdown/dropdown-item.js';
+```
+
+This entrypoint loads the polyfill and then re-exports the standard index. It
+still needs to be your very first custom elements import in the app.
+
 #### CDN
 
 CDN artifacts are also available and can be added directly to the page (starting

@@ -7,17 +7,25 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './menu-item.scss?lit';
 import { consume } from '@lit/context';
 import { MenuContext } from './menu-context';
+import CDSMenuItem from './menu-item';
 /**
  * Menu Item.
  *
  * @element cds-menu-item
  */
 @customElement(`${prefix}-menu-item-selectable`)
-class CDSmenuItemSelectable extends LitElement {
+class CDSmenuItemSelectable extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-menu-item': CDSMenuItem,
+    };
+  }
+
   @consume({ context: MenuContext })
   context;
   /**

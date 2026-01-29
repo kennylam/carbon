@@ -7,11 +7,13 @@
 
 import { LitElement, PropertyValues, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './menu-item.scss?lit';
 
 import { consume } from '@lit/context';
 import { MenuContext } from './menu-context';
+import CDSMenu from './menu';
 import Checkmark16 from '@carbon/icons/es/checkmark/16.js';
 import CaretLeft16 from '@carbon/icons/es/caret--left/16.js';
 import CaretRight16 from '@carbon/icons/es/caret--right/16.js';
@@ -29,7 +31,15 @@ export const MENU_CLOSE_ROOT_EVENT = `${prefix}-menu-close-root-request`;
  * @element cds-menu-item
  */
 @customElement(`${prefix}-menu-item`)
-class CDSmenuItem extends HostListenerMixin(HostListenerMixin(LitElement)) {
+class CDSmenuItem extends ScopedElementsMixin(
+  HostListenerMixin(HostListenerMixin(LitElement))
+) {
+  static get scopedElements() {
+    return {
+      'cds-menu': CDSMenu,
+    };
+  }
+
   @consume({ context: MenuContext })
   context;
 

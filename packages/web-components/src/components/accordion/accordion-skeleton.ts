@@ -8,20 +8,28 @@
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import { ACCORDION_ALIGNMENT } from './accordion';
 import { forEach } from '../../globals/internal/collection-helpers';
 import ChevronRight16 from '@carbon/icons/es/chevron--right/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import './accordion-item-skeleton';
-import '../skeleton-text/index';
+import CDSAccordionItemSkeleton from './accordion-item-skeleton';
+import CDSSkeletonText from '../skeleton-text/skeleton-text';
 import styles from './accordion.scss?lit';
 
 /**
  * Skeleton of code snippet.
  */
 @customElement(`${prefix}-accordion-skeleton`)
-class CDSAccordionSkeleton extends LitElement {
+class CDSAccordionSkeleton extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-accordion-item-skeleton': CDSAccordionItemSkeleton,
+      'cds-skeleton-text': CDSSkeletonText,
+    };
+  }
+
   /**
    * Specify the alignment of the accordion heading title and chevron
    */

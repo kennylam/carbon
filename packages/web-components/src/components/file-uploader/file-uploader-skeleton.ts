@@ -7,10 +7,12 @@
 
 import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
-import '../skeleton-text/skeleton-text';
-import { SKELETON_TEXT_TYPE } from '../skeleton-text/skeleton-text';
-import '../button/button-skeleton';
+import CDSSkeletonText, {
+  SKELETON_TEXT_TYPE,
+} from '../skeleton-text/skeleton-text';
+import CDSButtonSkeleton from '../button/button-skeleton';
 
 /**
  * The File uploader skeleton.
@@ -18,7 +20,14 @@ import '../button/button-skeleton';
  * @element cds-file-uploader-skeleton
  */
 @customElement(`${prefix}-file-uploader-skeleton`)
-class CDSFileUploaderSkeleton extends LitElement {
+class CDSFileUploaderSkeleton extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-button-skeleton': CDSButtonSkeleton,
+      'cds-skeleton-text': CDSSkeletonText,
+    };
+  }
+
   render() {
     return html`
       <cds-skeleton-text

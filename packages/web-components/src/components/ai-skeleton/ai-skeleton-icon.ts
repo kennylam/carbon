@@ -8,8 +8,9 @@
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import styles from './ai-skeleton.scss?lit';
-import '../skeleton-icon/skeleton-icon';
+import CDSSkeletonIcon from '../skeleton-icon/skeleton-icon';
 
 /**
  * AI skeleton icon.
@@ -17,7 +18,13 @@ import '../skeleton-icon/skeleton-icon';
  * @element cds-ai-skeleton-icon
  */
 @customElement(`${prefix}-ai-skeleton-icon`)
-class CDSAISkeletonIcon extends LitElement {
+class CDSAISkeletonIcon extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-skeleton-icon': CDSSkeletonIcon,
+    };
+  }
+
   /**
    * Custom styles to apply to skeleton icon
    */

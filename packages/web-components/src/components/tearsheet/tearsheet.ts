@@ -13,6 +13,7 @@ import {
   queryAssignedElements,
   state,
 } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
@@ -20,7 +21,11 @@ import { selectorTabbable } from '../../globals/settings';
 import '../button/index';
 import '../layer/index';
 import '../button/button-set-base';
-import '../modal/index';
+import CDSButtonSetBase from '../button/button-set-base';
+import CDSLayer from '../layer/layer';
+import CDSModalBody from '../modal/modal-body';
+import CDSModalCloseButton from '../modal/modal-close-button';
+import CDSModalHeader from '../modal/modal-header';
 import {
   TEARSHEET_INFLUENCER_PLACEMENT,
   TEARSHEET_INFLUENCER_WIDTH,
@@ -95,7 +100,17 @@ function tryFocusElems(elems: NodeListOf<HTMLElement>, reverse: boolean) {
  * @fires cds-tearsheet-closed - The custom event fired after this tearsheet is closed upon a user gesture.
  */
 @customElement(`${prefix}-tearsheet`)
-class CDSTearsheet extends HostListenerMixin(LitElement) {
+class CDSTearsheet extends ScopedElementsMixin(HostListenerMixin(LitElement)) {
+  static get scopedElements() {
+    return {
+      'cds-button-set-base': CDSButtonSetBase,
+      'cds-layer': CDSLayer,
+      'cds-modal-body': CDSModalBody,
+      'cds-modal-close-button': CDSModalCloseButton,
+      'cds-modal-header': CDSModalHeader,
+    };
+  }
+
   /**
    * The element that had focus before this tearsheet gets open.
    */

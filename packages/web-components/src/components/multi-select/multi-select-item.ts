@@ -8,17 +8,24 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import CDSDropdownItem from '../dropdown/dropdown-item';
 import styles from './multi-select.scss?lit';
-import '../checkbox';
+import CDSCheckbox from '../checkbox/checkbox';
 /**
  * Multi select item.
  *
  * @element cds-multi-select-item
  */
 @customElement(`${prefix}-multi-select-item`)
-class CDSMultiSelectItem extends CDSDropdownItem {
+class CDSMultiSelectItem extends ScopedElementsMixin(CDSDropdownItem) {
+  static get scopedElements() {
+    return {
+      'cds-checkbox': CDSCheckbox,
+    };
+  }
+
   /**
    * The property to hide when item is filtered from input
    */

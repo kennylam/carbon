@@ -7,6 +7,7 @@
 
 import { html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import Close16 from '@carbon/icons/es/close/16.js';
@@ -15,7 +16,8 @@ import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { TAG_SIZE, TAG_TYPE } from './defs';
 import CDSTag from '../tag/tag';
-import '../tooltip/index';
+import CDSTooltip from '../tooltip/tooltip';
+import CDSTooltipContent from '../tooltip/tooltip-content';
 import styles from './tag.scss?lit';
 
 export { TAG_SIZE, TAG_TYPE };
@@ -29,7 +31,16 @@ export { TAG_SIZE, TAG_TYPE };
  * @fires cds-dismissible-tag-closed - The custom event fired after the element has been closed
  */
 @customElement(`${prefix}-dismissible-tag`)
-class CDSDismissibleTag extends HostListenerMixin(FocusMixin(CDSTag)) {
+class CDSDismissibleTag extends ScopedElementsMixin(
+  HostListenerMixin(FocusMixin(CDSTag))
+) {
+  static get scopedElements() {
+    return {
+      'cds-tooltip': CDSTooltip,
+      'cds-tooltip-content': CDSTooltipContent,
+    };
+  }
+
   @query('button')
   protected _buttonNode!: HTMLButtonElement;
 

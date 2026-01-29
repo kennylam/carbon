@@ -7,12 +7,13 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import Close16 from '@carbon/icons/es/close/16.js';
 import CheckmarkFilled16 from '@carbon/icons/es/checkmark--filled/16.js';
-import { LOADING_TYPE } from '../loading/loading';
+import CDSLoading, { LOADING_TYPE } from '../loading/loading';
 import { FILE_UPLOADER_ITEM_SIZE, FILE_UPLOADER_ITEM_STATE } from './defs';
 import styles from './file-uploader.scss?lit';
 
@@ -30,7 +31,13 @@ export { FILE_UPLOADER_ITEM_SIZE, FILE_UPLOADER_ITEM_STATE };
  * @fires cds-file-uploader-item-deleted - The custom event fired after this file uploader item is deleted upon a user gesture.
  */
 @customElement(`${prefix}-file-uploader-item`)
-class CDSFileUploaderItem extends LitElement {
+class CDSFileUploaderItem extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-loading': CDSLoading,
+    };
+  }
+
   /**
    * Handles `click` event on the delete button.
    */

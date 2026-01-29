@@ -7,13 +7,15 @@
 
 import { html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { TAG_SIZE, TAG_TYPE } from './defs';
-import './tag';
-import '../tooltip/index';
+import CDSTag from './tag';
+import CDSTooltip from '../tooltip/tooltip';
+import CDSTooltipContent from '../tooltip/tooltip-content';
 import styles from './tag.scss?lit';
 
 export { TAG_SIZE, TAG_TYPE };
@@ -27,7 +29,17 @@ export { TAG_SIZE, TAG_TYPE };
  * @fires cds-operational-tag-selected - The custom event fired after the element has been selected
  */
 @customElement(`${prefix}-operational-tag`)
-class CDSOperationalTag extends HostListenerMixin(FocusMixin(LitElement)) {
+class CDSOperationalTag extends ScopedElementsMixin(
+  HostListenerMixin(FocusMixin(LitElement))
+) {
+  static get scopedElements() {
+    return {
+      'cds-tag': CDSTag,
+      'cds-tooltip': CDSTooltip,
+      'cds-tooltip-content': CDSTooltipContent,
+    };
+  }
+
   /**
    * Custom events to be triggered
    *

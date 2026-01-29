@@ -8,15 +8,23 @@
 import { LitElement, html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { customElement, property, state } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './page-header.scss?lit';
+import CDSDefinitionTooltip from '../tooltip/definition-tooltip';
 
 /**
  * Page header content.
  * @element cds-page-header-content
  */
 @customElement(`${prefix}-page-header-content`)
-class CDSPageHeaderContent extends LitElement {
+class CDSPageHeaderContent extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-definition-tooltip': CDSDefinitionTooltip,
+    };
+  }
+
   /**
    * Set to `true` if there are contextual actions
    */

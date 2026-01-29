@@ -7,8 +7,9 @@
 
 import { adoptStyles, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
-import '../button/button';
+import CDSButton from '../button/button';
 import { CHAT_BUTTON_SIZE, CHAT_BUTTON_KIND } from './defs';
 import buttonStyles from '../button/button.scss?lit';
 import styles from './chat-button.scss?lit';
@@ -22,7 +23,13 @@ export { CHAT_BUTTON_SIZE, CHAT_BUTTON_KIND };
  *
  */
 @customElement(`${prefix}-chat-button`)
-class CDSChatButton extends LitElement {
+class CDSChatButton extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-button': CDSButton,
+    };
+  }
+
   /**
    * `true` if there is an icon.
    */

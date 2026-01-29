@@ -8,15 +8,16 @@
 import { styleMap } from 'lit/directives/style-map.js';
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import FocusMixin from '../../globals/mixins/focus';
 import { CODE_SNIPPET_COLOR_SCHEME, CODE_SNIPPET_TYPE } from './defs';
 import styles from './code-snippet.scss?lit';
 import Handle from '../../globals/internal/handle';
-import '../copy-button/index';
-import '../copy/copy';
-import '../button/button';
+import CDSCopyButton from '../copy-button/copy-button';
+import CDSCopy from '../copy/copy';
+import CDSButton from '../button/button';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 export { CODE_SNIPPET_COLOR_SCHEME, CODE_SNIPPET_TYPE };
@@ -46,7 +47,15 @@ const observeResize = (observer: ResizeObserver, elem: Element) => {
  * @element cds-code-snippet
  */
 @customElement(`${prefix}-code-snippet`)
-class CDSCodeSnippet extends FocusMixin(LitElement) {
+class CDSCodeSnippet extends ScopedElementsMixin(FocusMixin(LitElement)) {
+  static get scopedElements() {
+    return {
+      'cds-button': CDSButton,
+      'cds-copy': CDSCopy,
+      'cds-copy-button': CDSCopyButton,
+    };
+  }
+
   /**
    * `true` to expand multi-line variant of code snippet.
    */

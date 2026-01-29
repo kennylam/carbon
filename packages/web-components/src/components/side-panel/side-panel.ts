@@ -13,6 +13,7 @@ import {
   queryAssignedElements,
   state,
 } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import HostListener from '../../globals/decorators/host-listener';
@@ -27,6 +28,9 @@ import '../icon-button/index';
 import '../layer/index';
 import Handle from '../../globals/internal/handle';
 import '../button/button-set-base';
+import CDSButtonSetBase from '../button/button-set-base';
+import CDSIconButton from '../icon-button/icon-button';
+import CDSLayer from '../layer/layer';
 
 export { SIDE_PANEL_SIZE, SIDE_PANEL_PLACEMENT };
 
@@ -104,7 +108,15 @@ function tryFocusElems(elems: NodeListOf<HTMLElement>, reverse: boolean) {
  * @fires cds-side-panel-navigate-back - custom event fired when clicking navigate back (available when step > 0)
  */
 @customElement(`${prefix}-side-panel`)
-class CDSSidePanel extends HostListenerMixin(LitElement) {
+class CDSSidePanel extends ScopedElementsMixin(HostListenerMixin(LitElement)) {
+  static get scopedElements() {
+    return {
+      'cds-button-set-base': CDSButtonSetBase,
+      'cds-icon-button': CDSIconButton,
+      'cds-layer': CDSLayer,
+    };
+  }
+
   /**
    * The handle for observing resize of the parent element of this element.
    */

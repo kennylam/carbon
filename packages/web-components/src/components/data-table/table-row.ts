@@ -7,12 +7,13 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import ChevronRight16 from '@carbon/icons/es/chevron--right/16.js';
 import FocusMixin from '../../globals/mixins/focus';
 import styles from './data-table.scss?lit';
-import '../checkbox';
-import '../radio-button';
+import CDSCheckbox from '../checkbox/checkbox';
+import CDSRadioButton from '../radio-button/radio-button';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import CDSTableExpandedRow from './table-expanded-row';
@@ -39,7 +40,16 @@ import { iconLoader } from '../../globals/internal/icon-loader';
  *   The name of the custom event fired after the expanded state of this row is toggled upon a user gesture.
  */
 @customElement(`${prefix}-table-row`)
-class CDSTableRow extends HostListenerMixin(FocusMixin(LitElement)) {
+class CDSTableRow extends ScopedElementsMixin(
+  HostListenerMixin(FocusMixin(LitElement))
+) {
+  static get scopedElements() {
+    return {
+      'cds-checkbox': CDSCheckbox,
+      'cds-radio-button': CDSRadioButton,
+    };
+  }
+
   /**
    * `true` if there is an AI Label.
    */

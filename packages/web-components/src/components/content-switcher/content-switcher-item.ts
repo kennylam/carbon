@@ -9,9 +9,12 @@ import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import styles from './content-switcher.scss?lit';
+import CDSTooltip from '../tooltip/tooltip';
+import CDSTooltipContent from '../tooltip/tooltip-content';
 
 /**
  * Content switcher button.
@@ -19,7 +22,16 @@ import styles from './content-switcher.scss?lit';
  * @element cds-content-switcher-item
  */
 @customElement(`${prefix}-content-switcher-item`)
-class CDSContentSwitcherItem extends FocusMixin(LitElement) {
+class CDSContentSwitcherItem extends ScopedElementsMixin(
+  FocusMixin(LitElement)
+) {
+  static get scopedElements() {
+    return {
+      'cds-tooltip': CDSTooltip,
+      'cds-tooltip-content': CDSTooltipContent,
+    };
+  }
+
   /**
    * `true` if this content switcher item should be disabled.
    */

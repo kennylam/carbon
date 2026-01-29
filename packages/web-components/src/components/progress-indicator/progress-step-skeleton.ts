@@ -7,17 +7,26 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './progress-indicator.scss?lit';
 import CircleDash from '@carbon/icons/es/circle-dash/16.js';
-import '../skeleton-text';
+import CDSSkeletonText from '../skeleton-text/skeleton-text';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 /**
  * Skeleton of progress step.
  */
 @customElement(`${prefix}-progress-step-skeleton`)
-export default class CDSProgressStepSkeleton extends LitElement {
+export default class CDSProgressStepSkeleton extends ScopedElementsMixin(
+  LitElement
+) {
+  static get scopedElements() {
+    return {
+      'cds-skeleton-text': CDSSkeletonText,
+    };
+  }
+
   /**
    * `true` if the progress indicator should be vertical. Corresponds to the attribute with the same name.
    */

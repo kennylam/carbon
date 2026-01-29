@@ -7,12 +7,13 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import Copy16 from '@carbon/icons/es/copy/16.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import styles from './copy-button.scss?lit';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
-import '../copy/copy';
+import CDSCopy from '../copy/copy';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 /**
@@ -21,7 +22,13 @@ import { iconLoader } from '../../globals/internal/icon-loader';
  * @element cds-copy-button
  */
 @customElement(`${prefix}-copy-button`)
-class CDSCopyButton extends FocusMixin(LitElement) {
+class CDSCopyButton extends ScopedElementsMixin(FocusMixin(LitElement)) {
+  static get scopedElements() {
+    return {
+      'cds-copy': CDSCopy,
+    };
+  }
+
   /**
    * Specify an optional className to be added to your Button
    */

@@ -7,7 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import ChevronRight16 from '@carbon/icons/es/chevron--right/16.js';
 import { prefix } from '../../globals/settings';

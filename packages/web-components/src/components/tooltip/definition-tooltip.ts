@@ -7,9 +7,11 @@
 
 import { adoptStyles, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
-import '../popover/index';
+import CDSPopover from '../popover/popover';
+import CDSPopoverContent from '../popover/popover-content';
 import popoverStyles from '../popover/popover.scss?lit';
 import styles from './tooltip.scss?lit';
 
@@ -19,7 +21,14 @@ import styles from './tooltip.scss?lit';
  * @element cds-definition-tooltip
  */
 @customElement(`${prefix}-definition-tooltip`)
-class CDSDefinitionTooltip extends LitElement {
+class CDSDefinitionTooltip extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-popover': CDSPopover,
+      'cds-popover-content': CDSPopoverContent,
+    };
+  }
+
   /**
    * Specify how the trigger should align with the tooltip
    */

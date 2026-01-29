@@ -5,11 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import '../button/index';
-
 import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import CDSSelect from '../select/select';
+import CDSSelectItem from '../select/select-item';
+import CDSButton from '../button/button';
 import CaretLeft16 from '@carbon/icons/es/caret--left/16.js';
 import CaretRight16 from '@carbon/icons/es/caret--right/16.js';
 import FocusMixin from '../../globals/mixins/focus';
@@ -29,7 +30,17 @@ import styles from './pagination.scss?lit';
  * @fires cds-page-sizes-select-changed - The custom event fired after the number of rows per page is changed from `<cds-page-sizes-select>`.
  */
 @customElement(`${prefix}-pagination`)
-class CDSPagination extends FocusMixin(HostListenerMixin(LitElement)) {
+class CDSPagination extends ScopedElementsMixin(
+  FocusMixin(HostListenerMixin(LitElement))
+) {
+  static get scopedElements() {
+    return {
+      'cds-button': CDSButton,
+      'cds-select': CDSSelect,
+      'cds-select-item': CDSSelectItem,
+    };
+  }
+
   @query(`${prefix}-select`)
   private _pageSizeSelect!: HTMLElement;
 

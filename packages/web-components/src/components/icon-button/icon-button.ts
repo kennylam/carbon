@@ -7,10 +7,11 @@
 
 import { adoptStyles, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
-import '../tooltip/index';
-import '../button/index';
 import CDSButton from '../button/button';
+import CDSTooltip from '../tooltip/tooltip';
+import CDSTooltipContent from '../tooltip/tooltip-content';
 import { ICON_BUTTON_SIZE, ICON_BUTTON_TOOLTIP_ALIGNMENT } from './defs';
 import tooltipStyles from '../tooltip/tooltip.scss?lit';
 import buttonStyles from '../button/button.scss?lit';
@@ -24,7 +25,14 @@ export { ICON_BUTTON_SIZE, ICON_BUTTON_TOOLTIP_ALIGNMENT };
  * @element cds-icon-button
  */
 @customElement(`${prefix}-icon-button`)
-class CDSIconButton extends CDSButton {
+class CDSIconButton extends ScopedElementsMixin(CDSButton) {
+  static get scopedElements() {
+    return {
+      'cds-tooltip': CDSTooltip,
+      'cds-tooltip-content': CDSTooltipContent,
+    };
+  }
+
   /**
    * Checks if a badge indicator is being used with incorrect properties
    */

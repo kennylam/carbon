@@ -8,6 +8,7 @@
 import { classMap } from 'lit/directives/class-map.js';
 import { adoptStyles, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import CDSToggleTip from '../toggle-tip/toggletip';
 import popoverStyles from '../popover/popover.scss?lit';
@@ -16,6 +17,7 @@ import styles from './ai-label.scss?lit';
 import Undo16 from '@carbon/icons/es/undo/16.js';
 import { AI_LABEL_SIZE, AI_LABEL_KIND } from './defs';
 import { iconLoader } from '../../globals/internal/icon-loader';
+import CDSIconButton from '../icon-button/icon-button';
 
 /**
  * Basic AI Label.
@@ -23,7 +25,13 @@ import { iconLoader } from '../../globals/internal/icon-loader';
  * @element cds-ai-label
  */
 @customElement(`${prefix}-ai-label`)
-class CDSAILabel extends CDSToggleTip {
+class CDSAILabel extends ScopedElementsMixin(CDSToggleTip) {
+  static get scopedElements() {
+    return {
+      'cds-icon-button': CDSIconButton,
+    };
+  }
+
   /**
    * @deprecated the slot string will be renamed to "decorator"
    */

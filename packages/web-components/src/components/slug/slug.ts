@@ -8,6 +8,7 @@
 import { classMap } from 'lit/directives/class-map.js';
 import { adoptStyles, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import CDSToggleTip from '../toggle-tip/toggletip';
 import styles from './slug.scss?lit';
@@ -16,6 +17,7 @@ import toggletipStyles from '../toggle-tip/toggletip.scss?lit';
 import { SLUG_SIZE, SLUG_KIND } from './defs';
 import Undo16 from '@carbon/icons/es/undo/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
+import CDSIconButton from '../icon-button/icon-button';
 
 /**
  * Basic slug.
@@ -24,7 +26,13 @@ import { iconLoader } from '../../globals/internal/icon-loader';
  * @element cds-slug
  */
 @customElement(`${prefix}-slug`)
-export default class CDSSlug extends CDSToggleTip {
+export default class CDSSlug extends ScopedElementsMixin(CDSToggleTip) {
+  static get scopedElements() {
+    return {
+      'cds-icon-button': CDSIconButton,
+    };
+  }
+
   @property({ reflect: true })
   slot = 'slug';
   /**

@@ -7,8 +7,10 @@
 
 import { LitElement, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './data-table.scss?lit';
+import CDSButton from '../button/button';
 
 /**
  * Table batch actions.
@@ -19,7 +21,13 @@ import styles from './data-table.scss?lit';
  */
 
 @customElement(`${prefix}-table-batch-actions`)
-class CDSTableBatchActions extends LitElement {
+class CDSTableBatchActions extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-button': CDSButton,
+    };
+  }
+
   /**
    * Handles `click` event on the Cancel button.
    */

@@ -9,13 +9,15 @@ import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import throttle from 'lodash-es/throttle';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
 import FormMixin from '../../globals/mixins/form';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
 import CDSSliderInput from './slider-input';
-import '../tooltip/index';
+import CDSTooltip from '../tooltip/tooltip';
+import CDSTooltipContent from '../tooltip/tooltip-content';
 import styles from './slider.scss?lit';
 
 interface Cancelable {
@@ -53,7 +55,16 @@ const EVENT_THROTTLE = 16; // ms
  * @fires cds-slider-changed - The custom event fired after the value is changed by user gesture.
  */
 @customElement(`${prefix}-slider`)
-class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
+class CDSSlider extends ScopedElementsMixin(
+  HostListenerMixin(FormMixin(FocusMixin(LitElement)))
+) {
+  static get scopedElements() {
+    return {
+      'cds-tooltip': CDSTooltip,
+      'cds-tooltip-content': CDSTooltipContent,
+    };
+  }
+
   private _cachedRateUpper: number = 1;
   private _cachedRate: number = 0;
   private dragCooldownTimeout: number | null = null;

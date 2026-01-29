@@ -7,9 +7,10 @@
 
 import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './ai-skeleton.scss?lit';
-import '../skeleton-placeholder/skeleton-placeholder';
+import CDSSkeletonPlaceholder from '../skeleton-placeholder/skeleton-placeholder';
 
 /**
  * AI skeleton placeholder.
@@ -17,7 +18,13 @@ import '../skeleton-placeholder/skeleton-placeholder';
  * @element cds-ai-skeleton-placeholder
  */
 @customElement(`${prefix}-ai-skeleton-placeholder`)
-class CDSAISkeletonPlaceholder extends LitElement {
+class CDSAISkeletonPlaceholder extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-skeleton-placeholder': CDSSkeletonPlaceholder,
+    };
+  }
+
   render() {
     return html`<cds-skeleton-placeholder
       exportparts="placeholder:skeleton-placeholder"

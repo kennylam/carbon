@@ -8,6 +8,7 @@
 import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import View16 from '@carbon/icons/es/view/16.js';
 import ViewOff16 from '@carbon/icons/es/view--off/16.js';
@@ -20,6 +21,7 @@ import '../tooltip/tooltip-content';
 import styles from './password-input.scss?lit';
 import CDSTextInput from '../text-input/text-input';
 import CDSTooltip from '../tooltip/tooltip';
+import CDSTooltipContent from '../tooltip/tooltip-content';
 
 import {
   INPUT_COLOR_SCHEME,
@@ -45,7 +47,7 @@ export {
  * @slot validity-message - The validity message. If present and non-empty, this input shows the UI of its invalid state.
  */
 @customElement(`${prefix}-password-input`)
-class CDSPasswordInput extends CDSTextInput {
+class CDSPasswordInput extends ScopedElementsMixin(CDSTextInput) {
   /**
    * The Show/Hide Password tooltip
    */
@@ -347,6 +349,13 @@ class CDSPasswordInput extends CDSTextInput {
    */
   static get slugItem() {
     return `${prefix}-slug`;
+  }
+
+  static get scopedElements() {
+    return {
+      'cds-tooltip': CDSTooltip,
+      'cds-tooltip-content': CDSTooltipContent,
+    };
   }
 
   static shadowRootOptions = {

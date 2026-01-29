@@ -7,9 +7,10 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import styles from './ai-skeleton.scss?lit';
-import '../skeleton-text/skeleton-text';
+import CDSSkeletonText from '../skeleton-text/skeleton-text';
 
 /**
  * AI skeleton text.
@@ -17,7 +18,13 @@ import '../skeleton-text/skeleton-text';
  * @element cds-ai-skeleton-text
  */
 @customElement(`${prefix}-ai-skeleton-text`)
-class CDSAISkeletonText extends LitElement {
+class CDSAISkeletonText extends ScopedElementsMixin(LitElement) {
+  static get scopedElements() {
+    return {
+      'cds-skeleton-text': CDSSkeletonText,
+    };
+  }
+
   /**
    * Generates skeleton text at a larger size.
    */

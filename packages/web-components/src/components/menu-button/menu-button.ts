@@ -7,6 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
@@ -29,7 +30,13 @@ export { MENU_BUTTON_KIND, MENU_BUTTON_SIZE };
  * @element cds-menu-button
  */
 @customElement(`${prefix}-menu-button`)
-class CDSMenuButton extends HostListenerMixin(LitElement) {
+class CDSMenuButton extends ScopedElementsMixin(HostListenerMixin(LitElement)) {
+  static get scopedElements() {
+    return {
+      'cds-button': CDSButton,
+    };
+  }
+
   private _menuController = new FloatingUIController(this);
 
   @query(`${prefix}-button`)

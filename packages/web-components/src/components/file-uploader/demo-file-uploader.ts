@@ -7,11 +7,16 @@
 
 import { html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 
 import { prefix } from '../../globals/settings';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import './index';
-import { FILE_UPLOADER_ITEM_STATE } from './file-uploader-item';
+import CDSFileUploader from './file-uploader';
+import CDSFileUploaderButton from './file-uploader-button';
+import CDSFileUploaderDropContainer from './file-uploader-drop-container';
+import CDSFileUploaderItem, {
+  FILE_UPLOADER_ITEM_STATE,
+} from './file-uploader-item';
 import { BUTTON_SIZE } from '../button/button';
 import { FileData } from './stories/types';
 
@@ -23,7 +28,18 @@ import { FileData } from './stories/types';
  * vs. letting users copy code here and implement features that fit their needs.
  */
 @customElement(`${prefix}-ce-demo-file-uploader`)
-export default class CDSCEDemoFileUploader extends LitElement {
+export default class CDSCEDemoFileUploader extends ScopedElementsMixin(
+  LitElement
+) {
+  static get scopedElements() {
+    return {
+      'cds-file-uploader': CDSFileUploader,
+      'cds-file-uploader-button': CDSFileUploaderButton,
+      'cds-file-uploader-drop-container': CDSFileUploaderDropContainer,
+      'cds-file-uploader-item': CDSFileUploaderItem,
+    };
+  }
+
   /**
    * The files being uploaded.
    */

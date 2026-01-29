@@ -7,6 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import Close20 from '@carbon/icons/es/close/20.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
@@ -14,6 +15,7 @@ import FocusMixin from '../../globals/mixins/focus';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './modal.scss?lit';
 import '../icon-button';
+import CDSIconButton from '../icon-button/icon-button';
 
 /**
  * Modal close button.
@@ -23,7 +25,13 @@ import '../icon-button';
  * @csspart close-icon The close icon.
  */
 @customElement(`${prefix}-modal-close-button`)
-class CDSModalCloseButton extends FocusMixin(LitElement) {
+class CDSModalCloseButton extends ScopedElementsMixin(FocusMixin(LitElement)) {
+  static get scopedElements() {
+    return {
+      'cds-icon-button': CDSIconButton,
+    };
+  }
+
   /**
    * Specify a label for the close button of the modal; defaults to close
    */

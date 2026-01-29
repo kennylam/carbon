@@ -7,13 +7,14 @@
 
 import { LitElement, html } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
+import { ScopedElementsMixin } from '../../globals/mixins/scoped-elements';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import styles from './combo-button.scss?lit';
 import '../button/index';
 import '../menu/index';
-import '../icon-button/index';
+import CDSIconButton from '../icon-button/icon-button';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import CDSMenu from '../menu/menu';
@@ -30,7 +31,16 @@ export { COMBO_BUTTON_SIZE, COMBO_BUTTON_TOOLTIP_ALIGNMENT };
  * @element cds-combo-button
  */
 @customElement(`${prefix}-combo-button`)
-class CDSComboButton extends HostListenerMixin(LitElement) {
+class CDSComboButton extends ScopedElementsMixin(
+  HostListenerMixin(LitElement)
+) {
+  static get scopedElements() {
+    return {
+      'cds-button': CDSButton,
+      'cds-icon-button': CDSIconButton,
+    };
+  }
+
   private _menuController = new FloatingUIController(this);
 
   @query(`${prefix}-icon-button`)
