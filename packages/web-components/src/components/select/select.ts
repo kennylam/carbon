@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property, query, queryAll } from 'lit/decorators.js';
+import { customElement, property, query, queryAll } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
@@ -19,7 +19,6 @@ import { INPUT_SIZE } from '../text-input/text-input';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './select.scss?lit';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Select box.

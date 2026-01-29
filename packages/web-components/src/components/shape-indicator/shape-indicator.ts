@@ -6,13 +6,10 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './shape-indicator.scss?lit';
-
-// Import Carbon icons
 import Critical from '@carbon/icons/es/critical/index.js';
 import CriticalSeverity from '@carbon/icons/es/critical-severity/index.js';
 import DiamondFill from '@carbon/icons/es/diamond-fill/index.js';

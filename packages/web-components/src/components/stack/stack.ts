@@ -6,8 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from './stack.scss?lit';
 import { STACK_ORIENTATION, SPACING_STEPS } from './defs';

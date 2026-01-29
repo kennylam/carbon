@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { TemplateResult, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import Close16 from '@carbon/icons/es/close/16.js';
 import { forEach } from '../../globals/internal/collection-helpers';
@@ -15,7 +15,6 @@ import CDSDropdown, { DROPDOWN_KEYBOARD_ACTION } from '../dropdown/dropdown';
 import CDSComboBoxItem from './combo-box-item';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './combo-box.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
 

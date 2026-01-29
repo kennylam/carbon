@@ -8,8 +8,7 @@
 import '../button/index';
 
 import { LitElement, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
-
+import { customElement, property, query } from 'lit/decorators.js';
 import CDSSelect from '../select/select';
 import CaretLeft16 from '@carbon/icons/es/caret--left/16.js';
 import CaretRight16 from '@carbon/icons/es/caret--right/16.js';
@@ -17,7 +16,6 @@ import FocusMixin from '../../globals/mixins/focus';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { PAGINATION_SIZE } from './defs';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { prefix } from '../../globals/settings';
 import styles from './pagination.scss?lit';

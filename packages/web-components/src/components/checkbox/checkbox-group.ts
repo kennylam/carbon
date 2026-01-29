@@ -7,14 +7,13 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import CDSCheckbox from './checkbox';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import styles from './checkbox.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { CHECKBOX_ORIENTATION } from './defs';
 
 export { CHECKBOX_ORIENTATION };

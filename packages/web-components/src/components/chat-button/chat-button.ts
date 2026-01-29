@@ -6,9 +6,8 @@
  */
 
 import { adoptStyles, html, LitElement } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import '../button/button';
 import { CHAT_BUTTON_SIZE, CHAT_BUTTON_KIND } from './defs';
 import buttonStyles from '../button/button.scss?lit';

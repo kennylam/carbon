@@ -7,6 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import {
+  customElement,
   property,
   query,
   queryAssignedElements,
@@ -18,7 +19,6 @@ import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { SIDE_PANEL_SIZE, SIDE_PANEL_PLACEMENT } from './defs';
 import { selectorTabbable } from '../../globals/settings';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ArrowLeft16 from '@carbon/icons/es/arrow--left/16.js';
 import Close20 from '@carbon/icons/es/close/20.js';
 import { moderate02 } from '@carbon/motion';

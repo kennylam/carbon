@@ -7,11 +7,10 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, TemplateResult, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { SKELETON_TEXT_TYPE } from './defs';
 import styles from './skeleton-text.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { SKELETON_TEXT_TYPE };
 

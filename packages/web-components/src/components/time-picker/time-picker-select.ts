@@ -6,7 +6,7 @@
  */
 
 import { html, LitElement } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { prefix } from '../../globals/settings';
@@ -14,7 +14,6 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import { filter } from '../../globals/internal/collection-helpers';
 import styles from './time-picker.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { TIME_PICKER_SIZE } from './defs';
 import FormMixin from '../../globals/mixins/form';
 

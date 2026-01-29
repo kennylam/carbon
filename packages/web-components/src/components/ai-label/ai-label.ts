@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { adoptStyles, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSToggleTip from '../toggle-tip/toggletip';
 import popoverStyles from '../popover/popover.scss?lit';
@@ -15,7 +15,6 @@ import toggletipStyles from '../toggle-tip/toggletip.scss?lit';
 import styles from './ai-label.scss?lit';
 import Undo16 from '@carbon/icons/es/undo/16.js';
 import { AI_LABEL_SIZE, AI_LABEL_KIND } from './defs';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 /**

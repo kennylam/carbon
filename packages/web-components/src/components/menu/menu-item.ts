@@ -6,10 +6,10 @@
  */
 
 import { LitElement, PropertyValues, html } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import styles from './menu-item.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
+
 import { consume } from '@lit/context';
 import { MenuContext } from './menu-context';
 import Checkmark16 from '@carbon/icons/es/checkmark/16.js';

@@ -6,7 +6,7 @@
  */
 
 import { TemplateResult, html } from 'lit';
-import { property, state, query } from 'lit/decorators.js';
+import { customElement, property, state, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
@@ -21,7 +21,6 @@ import CDSContentSwitcher, {
 import { TABS_KEYBOARD_ACTION, TABS_TYPE } from './defs';
 import CDSTab from './tab';
 import styles from './tabs.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { NAVIGATION_DIRECTION, TABS_KEYBOARD_ACTION, TABS_TYPE };
 

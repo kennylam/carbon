@@ -7,12 +7,11 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { adoptStyles, LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { CHAT_BUTTON_SIZE } from './defs';
 import buttonStyles from '../button/button.scss?lit';
 import styles from './chat-button.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { CHAT_BUTTON_SIZE };
 /**

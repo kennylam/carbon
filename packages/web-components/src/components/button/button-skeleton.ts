@@ -6,12 +6,12 @@
  */
 
 import { classMap } from 'lit/directives/class-map.js';
+import { customElement } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { html } from 'lit';
 import { prefix } from '../../globals/settings';
 import CDSButton from './button';
 import styles from './button.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Button skeleton.

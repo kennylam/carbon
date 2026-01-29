@@ -11,10 +11,9 @@ import InformationSquareFilled20 from '@carbon/icons/es/information--square--fil
 import WarningFilled20 from '@carbon/icons/es/warning--filled/20.js';
 import WarningAltFilled20 from '@carbon/icons/es/warning--alt--filled/20.js';
 import ErrorFilled20 from '@carbon/icons/es/error--filled/20.js';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { prefix, selectorTabbable } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { NOTIFICATION_TYPE, NOTIFICATION_KIND } from './defs';
 import CDSInlineNotification from './inline-notification';
 import styles from './actionable-notification.scss?lit';

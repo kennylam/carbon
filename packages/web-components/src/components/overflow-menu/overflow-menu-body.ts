@@ -5,18 +5,16 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { prefix } from '../../globals/settings';
 import CDSFloatingMenu, {
   FLOATING_MENU_DIRECTION,
 } from '../floating-menu/floating-menu';
 import { NAVIGATION_DIRECTION, OVERFLOW_MENU_SIZE } from './defs';
-
 import CDSOverflowMenuItem from './overflow-menu-item';
 import HostListener from '../../globals/decorators/host-listener';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import { html } from 'lit';
 import { indexOf } from '../../globals/internal/collection-helpers';
-import { prefix } from '../../globals/settings';
-import { property } from 'lit/decorators.js';
 import styles from './overflow-menu.scss?lit';
 
 /**

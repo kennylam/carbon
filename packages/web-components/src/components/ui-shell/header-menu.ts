@@ -7,7 +7,7 @@
 
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { LitElement, html } from 'lit';
-import { property, query } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
@@ -18,7 +18,6 @@ import HostListener from '../../globals/decorators/host-listener';
 import { forEach } from '../../globals/internal/collection-helpers';
 import CDSHeaderMenuItem from './header-menu-item';
 import styles from './header.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Header menu.

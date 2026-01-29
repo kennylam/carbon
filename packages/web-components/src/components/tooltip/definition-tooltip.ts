@@ -6,13 +6,12 @@
  */
 
 import { adoptStyles, html, LitElement } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import '../popover/index';
 import popoverStyles from '../popover/popover.scss?lit';
 import styles from './tooltip.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Definition tooltip.

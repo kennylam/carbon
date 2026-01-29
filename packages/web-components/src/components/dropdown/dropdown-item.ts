@@ -6,13 +6,12 @@
  */
 
 import { LitElement, html } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import Checkmark16 from '@carbon/icons/es/checkmark/16.js';
 import { DROPDOWN_SIZE } from './dropdown';
 import styles from './dropdown.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Dropdown item.

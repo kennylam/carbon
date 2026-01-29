@@ -4,10 +4,10 @@
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-/**  eslint-disable @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452 */
+
 import { styleMap } from 'lit/directives/style-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import FocusMixin from '../../globals/mixins/focus';
@@ -17,7 +17,6 @@ import Handle from '../../globals/internal/handle';
 import '../copy-button/index';
 import '../copy/copy';
 import '../button/button';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 export { CODE_SNIPPET_COLOR_SCHEME, CODE_SNIPPET_TYPE };

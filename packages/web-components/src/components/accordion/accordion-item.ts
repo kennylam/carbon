@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { LitElement, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import ChevronRight16 from '@carbon/icons/es/chevron--right/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
@@ -15,7 +15,6 @@ import FocusMixin from '../../globals/mixins/focus';
 import Handle from '../../globals/internal/handle';
 import { ACCORDION_ITEM_BREAKPOINT } from './defs';
 import styles from './accordion.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { ACCORDION_ITEM_BREAKPOINT };
 

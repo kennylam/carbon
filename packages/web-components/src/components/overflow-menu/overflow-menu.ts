@@ -6,7 +6,7 @@
  */
 
 import { adoptStyles, html } from 'lit';
-import { property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import FocusMixin from '../../globals/mixins/focus';
@@ -19,7 +19,6 @@ import CDSOverflowMenuBody from './overflow-menu-body';
 import iconButtonStyles from '../icon-button/icon-button.scss?lit';
 import styles from './overflow-menu.scss?lit';
 import CDSIconButton from '../icon-button/icon-button';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { OVERFLOW_MENU_SIZE };
 

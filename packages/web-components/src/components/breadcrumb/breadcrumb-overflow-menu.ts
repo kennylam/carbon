@@ -6,6 +6,7 @@
  */
 
 import { adoptStyles, html } from 'lit';
+import { customElement } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSOverflowMenu from '../overflow-menu/overflow-menu';
 import OverflowMenuHorizontal16 from '@carbon/icons/es/overflow-menu--horizontal/16.js';
@@ -13,7 +14,6 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 
 import overflowMenuStyles from '../overflow-menu/overflow-menu.scss?lit';
 import styles from './breadcrumb.scss?lit';
-import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
  * Overflow menu in breadcrumb.
