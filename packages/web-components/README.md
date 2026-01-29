@@ -45,7 +45,12 @@ same manner as native HTML tags:
 
 #### Scoped elements and the registry polyfill
 
-To avoid custom-element tag name collisions with other libraries, this package
+Scoped elements make it possible for different versions of the same component to
+coexist as internal dependencies, as long as those components are instantiated
+within shadow DOM and are not registered under the same global custom element
+tag names (host element).
+
+To avoid custom element tag name collisions with other libraries, this package
 uses scoped elements.
 
 Scoped elements require the Scoped Custom Element Registry polyfill, which must
@@ -61,6 +66,22 @@ import '@carbon/web-components/es/components/dropdown/dropdown-item.js';
 
 This entrypoint loads the polyfill and then re-exports the standard index. It
 still needs to be your very first custom elements import in the app.
+
+##### Supported usage
+
+`@carbon/web-components` is designed to be used as a single, canonical set of
+custom elements in a page or application. It is compatible with other UI
+libraries as long as they do not register the same custom-element tag names.
+
+##### Not supported
+
+Scoped elements only prevent collisions inside the shadow DOM. The host element
+name must still be unique in the global registry. Running
+`@carbon/web-components` alongside another library that registers the same
+`cds-\*` custom elements in the same page or runtime is not supported. Custom
+element tag names are global per page; if two libraries attempt to define the
+same tag name (for example, a global tag name `cds-modal`), the browser will
+throw a registration error and behavior is undefined.
 
 #### CDN
 
