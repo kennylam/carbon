@@ -251,7 +251,7 @@ function generateIconEntrypoint(icon, format) {
       `'use strict';`,
       '',
       `var React = require('react');`,
-      `var Icon = require('${rootRel}Icon.js');`,
+      `var Icon = require('${rootRel}Icon.js').default;`,
       `var iconPropTypes_mod = require('${rootRel}iconPropTypes.js');`
     );
   }
@@ -306,7 +306,7 @@ function generateBucketFile(bucket, format) {
       `'use strict';`,
       '',
       `var React = require('react');`,
-      `var Icon = require('../Icon.js');`,
+      `var Icon = require('../Icon.js').default;`,
       `var iconPropTypes_mod = require('../iconPropTypes.js');`
     );
   }
