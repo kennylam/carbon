@@ -434,9 +434,11 @@ function generateComponentBody(
 
   // Size-specific if statements
   for (const variant of ifVariants) {
-    lines.push(
-      `  if (size === ${variant.size} || size === "${variant.size}" || size === "${variant.size}px") {`
-    );
+    const sizeCheck =
+      typeof variant.size === 'number'
+        ? `size === ${variant.size} || size === "${variant.size}" || size === "${variant.size}px"`
+        : `size === "${variant.size}"`;
+    lines.push(`  if (${sizeCheck}) {`);
     lines.push(
       `    return ${generateCreateElement(variant.svgProps, variant.childElements)};`
     );
