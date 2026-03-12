@@ -11,9 +11,13 @@ const babel = require('@babel/core');
 const fs = require('fs-extra');
 const path = require('path');
 const ts = require('typescript');
-const { babelConfig } = require('./next/babel');
 const templates = require('./next/templates');
 const { writeTsDefinitions } = require('./next/typescript');
+
+const babelPlugins = [
+  '@babel/plugin-transform-react-constant-elements',
+  'babel-plugin-dev-expression',
+];
 
 /**
  * Process items in chunks to limit concurrent I/O and memory usage.
@@ -57,15 +61,19 @@ async function builder(metadata, { output }) {
       '@babel/preset-react',
       '@babel/preset-typescript',
     ],
-    plugins: babelConfig.plugins,
+    plugins: babelPlugins,
   });
 
   // Compile Icon.tsx for CJS (convert to CommonJS)
   const iconCjs = babel.transformSync(iconTsxSource, {
     babelrc: false,
     filename: 'Icon.tsx',
-    presets: babelConfig.presets,
-    plugins: babelConfig.plugins,
+    presets: [
+      '@babel/preset-env',
+      '@babel/preset-react',
+      '@babel/preset-typescript',
+    ],
+    plugins: babelPlugins,
   });
 
   await Promise.all([
