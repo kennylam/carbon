@@ -1802,9 +1802,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@carbon/icon-build-helpers@workspace:packages/icon-build-helpers"
   dependencies:
-    "@babel/generator": "npm:^7.27.3"
-    "@babel/template": "npm:^7.27.2"
-    "@babel/types": "npm:^7.27.3"
+    "@babel/core": "npm:^7.27.3"
+    "@babel/plugin-transform-react-constant-elements": "npm:^7.27.1"
+    "@babel/preset-env": "npm:^7.27.2"
+    "@babel/preset-react": "npm:^7.27.1"
+    "@babel/preset-typescript": "npm:^7.27.1"
     "@carbon/cli-reporter": "npm:^10.8.0"
     "@carbon/icon-helpers": "npm:^10.73.0"
     "@hapi/joi": "npm:^17.1.1"
@@ -1817,7 +1819,6 @@ __metadata:
     react: "npm:^19.2.3"
     svgo: "npm:^4.0.0"
     svgson: "npm:^5.2.1"
-    tsdown: "npm:^0.20.3"
     typescript-config-carbon: "workspace:^0.9.0"
   languageName: unknown
   linkType: soft

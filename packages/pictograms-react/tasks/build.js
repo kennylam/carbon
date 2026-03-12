@@ -172,8 +172,9 @@ async function generateBucketTypes(metadata, outDir, bucketPath) {
   const bucketContent = await fs.readFile(bucketJsPath, 'utf8');
 
   const exports = [];
-  const exportLines = bucketContent.match(/^export \{[^}]+\}/gm);
 
+  // Match `export { Name1, Name2 }` blocks (tsdown/rollup style)
+  const exportLines = bucketContent.match(/^export \{[^}]+\}/gm);
   if (exportLines) {
     for (const line of exportLines) {
       const namesMatch = line.match(/\{([^}]+)\}/);
@@ -184,6 +185,26 @@ async function generateBucketTypes(metadata, outDir, bucketPath) {
           .filter((n) => n);
         exports.push(...names);
       }
+    }
+  }
+
+  // Match `export var Name =` declarations (Babel ESM style)
+  const varExports = bucketContent.matchAll(
+    /export var ([A-Z][a-zA-Z0-9_]*)\s*=/g
+  );
+  for (const match of varExports) {
+    if (!exports.includes(match[1])) {
+      exports.push(match[1]);
+    }
+  }
+
+  // Match `exports.Name =` declarations (Babel CJS style)
+  const cjsExports = bucketContent.matchAll(
+    /exports\.([A-Z][a-zA-Z0-9_]*)\s*=/g
+  );
+  for (const match of cjsExports) {
+    if (!exports.includes(match[1])) {
+      exports.push(match[1]);
     }
   }
 

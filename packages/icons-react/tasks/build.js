@@ -7,29 +7,10 @@
 
 'use strict';
 
-const path = require('path');
-const { builders, Metadata } = require('@carbon/icon-build-helpers');
-
-async function loadMetadata() {
-  const iconsRoot = path.dirname(require.resolve('@carbon/icons/package.json'));
-  return Metadata.load({
-    input: {
-      svg: path.join(iconsRoot, 'src/svg'),
-      extensions: iconsRoot,
-    },
-    extensions: [
-      Metadata.extensions.icons,
-      Metadata.extensions.assets,
-      Metadata.extensions.deprecated,
-      Metadata.extensions.output,
-      Metadata.extensions.categories,
-      Metadata.extensions.moduleInfo,
-    ],
-  });
-}
+const { builders } = require('@carbon/icon-build-helpers');
+const metadata = require('@carbon/icons/metadata.json');
 
 async function build() {
-  const metadata = await loadMetadata();
   await builders.reactNext.run(metadata, {
     output: process.cwd(),
   });
