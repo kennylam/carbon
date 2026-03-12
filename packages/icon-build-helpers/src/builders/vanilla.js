@@ -7,8 +7,6 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const { rollup } = require('rollup');
-const virtual = require('./plugins/virtual');
 
 const BANNER = `/**
  * Copyright IBM Corp. 2016, 2023
@@ -95,34 +93,55 @@ async function builder(metadata, { output }) {
     fs.writeFile(path.join(libDir, 'index.js'), libIndex, 'utf8'),
   ]);
 
-  // UMD: still use Rollup since it needs to inline all modules into one file.
-  // Feed it only the index entry — Rollup resolves the re-exports from the
-  // already-written ES files on disk.
-  const umdIndex = esIndex;
-  const umdFiles = { 'index.js': umdIndex };
+  // Generate UMD bundle directly as a string — no Rollup needed.
+  // The UMD format inlines all icon descriptors into a single IIFE.
+  await generateUmdBundle(modules, path.join(output, 'umd/index.js'));
+}
 
-  for (const m of modules) {
-    umdFiles[m.filepath] = `export default ${JSON.stringify(m.descriptor)};`;
+/**
+ * Generate a UMD bundle by directly writing the wrapper + inlined descriptors.
+ * This avoids loading all modules into a Rollup module graph.
+ */
+async function generateUmdBundle(modules, outputPath) {
+  const chunks = [];
+
+  chunks.push(
+    `(function (global, factory) {`,
+    `\ttypeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :`,
+    `\ttypeof define === 'function' && define.amd ? define(['exports'], factory) :`,
+    `\t(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.CarbonIcons = {}));`,
+    `})(this, (function (exports) { 'use strict';`,
+    ``
+  );
+
+  // Inline each icon descriptor as a variable and export it
+  for (let i = 0; i < modules.length; i++) {
+    const m = modules[i];
+    const varName = `_icon${i}`;
+    chunks.push(`\tvar ${varName} = ${JSON.stringify(m.descriptor)};`);
   }
 
-  const umd = await rollup({
-    input: 'index.js',
-    plugins: [virtual(umdFiles)],
-  });
+  chunks.push('');
 
-  await umd.write({
-    file: path.join(output, 'umd/index.js'),
-    format: 'umd',
-    name: 'CarbonIcons',
-  });
+  for (let i = 0; i < modules.length; i++) {
+    const m = modules[i];
+    const varName = `_icon${i}`;
+    const exportName = /^[a-zA-Z_$]/.test(m.moduleName)
+      ? m.moduleName
+      : `_${m.moduleName}`;
+    chunks.push(`\texports.${exportName} = ${varName};`);
+  }
 
-  await umd.close();
+  chunks.push('', `}));`, '');
+
+  await fs.ensureFile(outputPath);
+  await fs.writeFile(outputPath, chunks.join('\n'), 'utf8');
 }
 
 /**
  * Convert a filepath like 'watson-health/3D-Cursor/32.js' into a safe JS
- * variable name that matches Rollup's convention: replace non-alphanumeric
- * chars with underscores, prefix with _ if it starts with a digit.
+ * variable name: replace non-alphanumeric chars with underscores, prefix
+ * with _ if it starts with a digit.
  */
 function filepathToVarName(filepath) {
   let name = filepath.replace(/[^a-zA-Z0-9]/g, '_');

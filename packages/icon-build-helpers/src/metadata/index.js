@@ -96,8 +96,24 @@ async function build({
   const metadataFilePath =
     output.metadata || path.join(output.extensions, 'metadata.json');
 
+  // Strip raw SVG source and SVGO output from metadata before writing.
+  // These are only needed during the build pipeline and bloat the JSON
+  // (they account for ~50% of the 24MB metadata.json file size).
+  // Downstream consumers (icons-react, icons-vue) only use `output` and
+  // `moduleInfo` fields.
+  const stripped = {
+    ...metadata,
+    icons: metadata.icons.map((icon) => ({
+      ...icon,
+      assets: icon.assets.map(({ size, filepath }) => ({
+        size,
+        filepath,
+      })),
+    })),
+  };
+
   await fs.ensureFile(metadataFilePath);
-  await fs.writeJson(metadataFilePath, metadata, {
+  await fs.writeJson(metadataFilePath, stripped, {
     spaces: 2,
   });
 

@@ -10,7 +10,6 @@
 const { pascalCase } = require('change-case-all');
 const path = require('path');
 const parser = require('svgson');
-const { svgo } = require('./output/optimizer');
 
 /**
  * @type {Extension}
@@ -28,19 +27,18 @@ const moduleInfo = () => {
           local: safe(local),
           global: safe(global),
           filepath: path.join(...icon.namespace, `${local}.js`),
-          sizes: await Promise.all(
-            icon.assets.map(async (asset) => {
-              const optimized = await svgo.optimize(asset.source, {
-                path: asset.filepath,
-              });
-              const ast = parse(optimized.data);
-
-              return {
-                size: asset.size,
-                ast,
-              };
-            })
-          ),
+          sizes: icon.assets.map((asset) => {
+            // Reuse the already-optimized SVG from the output extension
+            // instead of re-running SVGO
+            const optimizedData = asset.optimized
+              ? asset.optimized.data
+              : asset.source;
+            const ast = parse(optimizedData);
+            return {
+              size: asset.size,
+              ast,
+            };
+          }),
         };
 
         icon.moduleInfo = moduleInfo;
