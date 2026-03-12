@@ -48,7 +48,8 @@ async function builder(metadata, { output }) {
         entrypoint: createIconEntrypoint(
           size.moduleName,
           size.descriptor,
-          icon.deprecated
+          icon.deprecated,
+          size.filepath
         ),
         filepath: size.filepath,
         moduleName: size.moduleName,
@@ -76,11 +77,7 @@ async function builder(metadata, { output }) {
   const iconEs = babel.transformSync(iconTsxSource, {
     babelrc: false,
     filename: 'Icon.tsx',
-    presets: [
-      ['@babel/preset-env', { modules: false }],
-      '@babel/preset-react',
-      '@babel/preset-typescript',
-    ],
+    presets: ['@babel/preset-react', '@babel/preset-typescript'],
     plugins: babelPlugins,
   });
 
@@ -136,7 +133,7 @@ async function builder(metadata, { output }) {
     let bucketSource = `${BANNER}
 
 import React from 'react';
-import Icon from './Icon.tsx';
+import Icon from '../Icon.tsx';
 
 const didWarnAboutDeprecation = {};`;
 
@@ -191,8 +188,8 @@ const didWarnAboutDeprecation = {};`;
  */
 function compileJsx(source, format) {
   const adjusted = source.replace(
-    /from ['"]\.\/Icon\.tsx['"]/g,
-    "from './Icon.js'"
+    /from ['"](\.\.?\/)*Icon\.tsx['"]/g,
+    (match) => match.replace('Icon.tsx', 'Icon.js')
   );
 
   const result = babel.transformSync(adjusted, {
@@ -200,7 +197,10 @@ function compileJsx(source, format) {
     filename: 'component.jsx',
     presets: [
       format === 'esm'
-        ? ['@babel/preset-env', { modules: false }]
+        ? [
+            '@babel/preset-env',
+            { modules: false, targets: { esmodules: true } },
+          ]
         : '@babel/preset-env',
       '@babel/preset-react',
     ],
@@ -267,7 +267,12 @@ function createIconFlatExport(moduleName, descriptor, isDeprecated = false) {
   return createIconSource(moduleName, descriptor, deprecatedBlock);
 }
 
-function createIconEntrypoint(moduleName, descriptor, isDeprecated = false) {
+function createIconEntrypoint(
+  moduleName,
+  descriptor,
+  isDeprecated = false,
+  filepath = ''
+) {
   const deprecatedPreamble = isDeprecated
     ? 'let didWarnAboutDeprecation = false;'
     : '';
@@ -284,10 +289,12 @@ function createIconEntrypoint(moduleName, descriptor, isDeprecated = false) {
     }
     `
     : '';
+  const depth = filepath ? filepath.split('/').length - 1 : 0;
+  const rootRel = depth > 0 ? '../'.repeat(depth) : './';
   const source = createIconSource(moduleName, descriptor, deprecatedBlock);
   return `${BANNER}
 import React from 'react';
-import Icon from './Icon.tsx';
+import Icon from '${rootRel}Icon.tsx';
 ${deprecatedPreamble}
 ${source}
 export default ${moduleName};

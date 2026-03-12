@@ -103,13 +103,20 @@ async function build({
   // `moduleInfo` fields.
   const stripped = {
     ...metadata,
-    icons: metadata.icons.map((icon) => ({
-      ...icon,
-      assets: icon.assets.map(({ size, filepath }) => ({
-        size,
-        filepath,
-      })),
-    })),
+    icons: Array.isArray(metadata.icons)
+      ? metadata.icons.map((icon) => {
+          if (icon && typeof icon === 'object' && Array.isArray(icon.assets)) {
+            return {
+              ...icon,
+              assets: icon.assets.map(({ size, filepath }) => ({
+                size,
+                filepath,
+              })),
+            };
+          }
+          return icon;
+        })
+      : metadata.icons,
   };
 
   await fs.ensureFile(metadataFilePath);

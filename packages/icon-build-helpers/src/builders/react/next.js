@@ -14,6 +14,11 @@ const ts = require('typescript');
 const templates = require('./next/templates');
 const { writeTsDefinitions } = require('./next/typescript');
 
+// Names that shadow JS globals referenced by Babel's preset-env output
+// (e.g. Object.defineProperty). Using these as local `const` names causes a
+// TDZ ReferenceError when the transformed file is loaded.
+const JS_GLOBALS = new Set(['Object']);
+
 const babelPlugins = [
   '@babel/plugin-transform-react-constant-elements',
   'babel-plugin-dev-expression',
@@ -56,11 +61,7 @@ async function builder(metadata, { output }) {
   const iconEs = babel.transformSync(iconTsxSource, {
     babelrc: false,
     filename: 'Icon.tsx',
-    presets: [
-      ['@babel/preset-env', { modules: false }],
-      '@babel/preset-react',
-      '@babel/preset-typescript',
-    ],
+    presets: ['@babel/preset-react', '@babel/preset-typescript'],
     plugins: babelPlugins,
   });
 
@@ -229,19 +230,29 @@ async function builder(metadata, { output }) {
 function generateIconEntrypoint(icon, format) {
   const lines = [templates.banner];
 
+  // Calculate relative path from icon file to root-level modules
+  const depth = icon.filepath.split('/').length - 1;
+  const rootRel = depth > 0 ? '../'.repeat(depth) : './';
+
+  // Use a safe internal name when the icon name shadows a JS global (e.g.
+  // "Object").  Babel's preset-env injects `Object.defineProperty(...)` at the
+  // top of the transformed file; if the local `const Object` hasn't been
+  // initialised yet this triggers a TDZ ReferenceError.
+  const localName = JS_GLOBALS.has(icon.local) ? `_${icon.local}` : icon.local;
+
   if (format === 'esm') {
     lines.push(
       `import React from 'react';`,
-      `import Icon from './Icon.js';`,
-      `import { iconPropTypes } from './iconPropTypes.js';`
+      `import Icon from '${rootRel}Icon.js';`,
+      `import { iconPropTypes } from '${rootRel}iconPropTypes.js';`
     );
   } else {
     lines.push(
       `'use strict';`,
       '',
       `var React = require('react');`,
-      `var Icon = require('./Icon.js');`,
-      `var iconPropTypes_mod = require('./iconPropTypes.js');`
+      `var Icon = require('${rootRel}Icon.js');`,
+      `var iconPropTypes_mod = require('${rootRel}iconPropTypes.js');`
     );
   }
 
@@ -252,7 +263,7 @@ function generateIconEntrypoint(icon, format) {
   }
 
   const { varDecls, componentBody } = generateComponentBody(
-    icon.local,
+    localName,
     icon.sizes,
     icon.deprecated,
     icon.reason,
@@ -270,9 +281,9 @@ function generateIconEntrypoint(icon, format) {
   lines.push('');
 
   if (format === 'esm') {
-    lines.push(`export { ${icon.local} as default };`, '');
+    lines.push(`export { ${localName} as default };`, '');
   } else {
-    lines.push(`module.exports = ${icon.local};`, '');
+    lines.push(`module.exports = ${localName};`, '');
   }
 
   return lines.join('\n');
@@ -315,9 +326,10 @@ function generateBucketFile(bucket, format) {
   let circleCounter = 0;
 
   for (const m of bucket.modules) {
+    const localName = JS_GLOBALS.has(m.name) ? `_${m.name}` : m.name;
     const { varDecls, componentBody, nextPathCounter, nextCircleCounter } =
       generateComponentBody(
-        m.name,
+        localName,
         m.sizes,
         m.deprecated,
         m.reason,
@@ -328,7 +340,7 @@ function generateBucketFile(bucket, format) {
       );
     allVarDecls.push(...varDecls);
     allComponents.push(...componentBody);
-    exportNames.push(m.name);
+    exportNames.push({ exportName: m.name, localName });
     pathCounter = nextPathCounter;
     circleCounter = nextCircleCounter;
   }
@@ -341,10 +353,13 @@ function generateBucketFile(bucket, format) {
   lines.push(...allComponents);
 
   if (format === 'esm') {
-    lines.push(`export { ${exportNames.join(', ')} };`, '');
+    const exports = exportNames.map(({ exportName, localName }) =>
+      exportName === localName ? exportName : `${localName} as ${exportName}`
+    );
+    lines.push(`export { ${exports.join(', ')} };`, '');
   } else {
-    for (const name of exportNames) {
-      lines.push(`exports.${name} = ${name};`);
+    for (const { exportName, localName } of exportNames) {
+      lines.push(`exports.${exportName} = ${localName};`);
     }
     lines.push('');
   }
