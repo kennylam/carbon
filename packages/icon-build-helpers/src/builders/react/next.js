@@ -7,360 +7,593 @@
 
 'use strict';
 
-const t = require('@babel/types');
-const { default: generate } = require('@babel/generator');
-const { default: template } = require('@babel/template');
-const { babel } = require('@rollup/plugin-babel');
+const babel = require('@babel/core');
 const fs = require('fs-extra');
 const path = require('path');
-const { rollup } = require('rollup');
 const ts = require('typescript');
-const virtual = require('../plugins/virtual');
 const { babelConfig } = require('./next/babel');
-const { svgToJSX, jsToAST } = require('./next/convert');
 const templates = require('./next/templates');
 const { writeTsDefinitions } = require('./next/typescript');
 
-// This builder outputs a collection of CommonJS modules representing our icon
-// components. It does not generate an `index.js` entrypoint file due to the
-// number of icons we currently support (>1600)
-//
-// Each CommonJS module includes an icon component. For more information on the
-// structure of each module, checkout `createIconEntrypoint`
+/**
+ * Process items in chunks to limit concurrent I/O and memory usage.
+ */
+async function processInChunks(items, chunkSize, fn) {
+  for (let i = 0; i < items.length; i += chunkSize) {
+    const chunk = items.slice(i, i + chunkSize);
+    await Promise.all(chunk.map(fn));
+  }
+}
+
 async function builder(metadata, { output }) {
   const modules = metadata.icons.map((icon) => {
     const { moduleInfo } = icon;
-    const localPreamble = [];
-    const globalPreamble = [];
-
-    if (icon.deprecated) {
-      localPreamble.push(
-        templates.deprecatedBlock({
-          check: t.identifier('didWarnAboutDeprecation'),
-          warning: t.stringLiteral(
-            formatDeprecationWarning(moduleInfo.local, icon.reason)
-          ),
-        })
-      );
-
-      globalPreamble.push(
-        templates.deprecatedBlock({
-          check: t.memberExpression(
-            t.identifier('didWarnAboutDeprecation'),
-            t.stringLiteral(moduleInfo.global),
-            true
-          ),
-          warning: t.stringLiteral(
-            formatDeprecationWarning(moduleInfo.global, icon.reason)
-          ),
-        })
-      );
-    }
-
-    const localSource = createIconSource(
-      moduleInfo.local,
-      moduleInfo.sizes,
-      localPreamble
-    );
-
-    const globalSource = createIconSource(
-      moduleInfo.global,
-      moduleInfo.sizes,
-      globalPreamble
-    );
-
     return {
       filepath: moduleInfo.filepath,
-      entrypoint: createIconEntrypoint(
-        moduleInfo.local,
-        localSource,
-        icon.deprecated
-      ),
       name: moduleInfo.global,
-      source: globalSource,
+      local: moduleInfo.local,
+      sizes: moduleInfo.sizes,
+      deprecated: icon.deprecated,
+      reason: icon.reason,
     };
   });
 
-  // Rollup allows us to define multiple "entrypoints" instead of only one when
-  // creating a bundle. This allows us to map different input paths in the
-  // `input` object to files that we're generating for each icon component in
-  // the `files` object
-  const files = {
-    'index.ts': template.ast(`
-      import Icon from './Icon.tsx';
-      export { Icon };
-    `),
-  };
-  const input = {
-    'index.js': 'index.ts',
-    'Icon.js': './Icon.tsx',
-  };
-  const BUCKET_SIZE = 125;
-  const buckets = [
-    {
-      id: 'bucket-0',
-      modules: [],
-    },
-  ];
-  let bucket = buckets[0];
-  let bucketIndex = 0;
+  const esDir = path.join(output, 'es');
+  const libDir = path.join(output, 'lib');
+  await fs.ensureDir(esDir);
+  await fs.ensureDir(libDir);
 
-  for (const m of modules) {
-    if (bucket.modules.length === BUCKET_SIZE) {
-      bucketIndex++;
-      bucket = {
-        id: `bucket-${bucketIndex}`,
-        modules: [],
-      };
-      buckets.push(bucket);
-    }
+  // Compile Icon.tsx once with Babel (same presets Rollup was using)
+  const iconTsxSource = await fs.readFile(
+    path.resolve(__dirname, './components/Icon.tsx'),
+    'utf8'
+  );
+  // Compile Icon.tsx for ESM (preserve imports/exports)
+  const iconEs = babel.transformSync(iconTsxSource, {
+    babelrc: false,
+    filename: 'Icon.tsx',
+    presets: [
+      ['@babel/preset-env', { modules: false }],
+      '@babel/preset-react',
+      '@babel/preset-typescript',
+    ],
+    plugins: babelConfig.plugins,
+  });
 
-    bucket.modules.push(m);
-  }
+  // Compile Icon.tsx for CJS (convert to CommonJS)
+  const iconCjs = babel.transformSync(iconTsxSource, {
+    babelrc: false,
+    filename: 'Icon.tsx',
+    presets: babelConfig.presets,
+    plugins: babelConfig.plugins,
+  });
 
-  for (const m of modules) {
-    files[m.filepath] = m.entrypoint;
-    input[m.filepath] = m.filepath;
-  }
-
-  for (const bucket of buckets) {
-    const filename = `generated/${bucket.id}.js`;
-
-    input[filename] = filename;
-    files[filename] = template.ast(`
-      import React from 'react';
-      import Icon from './Icon.tsx';
-      import { iconPropTypes } from './iconPropTypes.js';
-      const didWarnAboutDeprecation = {};
-    `);
-
-    for (const m of bucket.modules) {
-      files[filename].push(...m.source, template.ast(`export { ${m.name} };`));
-    }
-
-    files[filename] = t.file(t.program(files[filename]));
-    files[filename] = generate(files[filename]).code;
-    files['index.ts'].push(template.ast(`export * from '${filename}';`));
-  }
-
-  files['index.ts'] = generate(t.file(t.program(files['index.ts']))).code;
-
-  const defaultVirtualOptions = {
-    // Each Icon module uses the "./Icon.tsx" path to import this base component
-    // Babel transforms the .tsx extension to .js
-    './Icon.tsx': await fs.readFile(
-      path.resolve(__dirname, './components/Icon.tsx'),
+  await Promise.all([
+    fs.writeFile(
+      path.join(esDir, 'Icon.js'),
+      `${templates.banner}\n${iconEs.code}\n`,
       'utf8'
     ),
-    './iconPropTypes.js': `
-    import PropTypes from 'prop-types';
+    fs.writeFile(
+      path.join(libDir, 'Icon.js'),
+      `${templates.banner}\n${iconCjs.code}\n`,
+      'utf8'
+    ),
+  ]);
 
-    export const iconPropTypes = {
-      size: PropTypes.oneOfType([
-        PropTypes.number,
-        PropTypes.string,
-      ]),
-    };
-  `,
-  };
+  // Write iconPropTypes module
+  const iconPropTypesEs = [
+    templates.banner,
+    `import PropTypes from 'prop-types';`,
+    '',
+    'export const iconPropTypes = {',
+    '  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),',
+    '};',
+    '',
+  ].join('\n');
 
-  const bundle = await rollup({
-    input,
-    external: ['@carbon/icon-helpers', 'react', 'prop-types'],
-    plugins: [
-      // We use a "virtual" plugin to pass all of our components that we
-      // created from our metadata to rollup instead of rollup trying to read
-      // these files from disk
-      virtual({
-        ...defaultVirtualOptions,
-        ...files,
-      }),
-      babel(babelConfig),
-    ],
+  const iconPropTypesCjs = [
+    templates.banner,
+    `'use strict';`,
+    '',
+    `var PropTypes = require('prop-types');`,
+    '',
+    'const iconPropTypes = {',
+    '  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),',
+    '};',
+    '',
+    'exports.iconPropTypes = iconPropTypes;',
+    '',
+  ].join('\n');
+
+  await Promise.all([
+    fs.writeFile(path.join(esDir, 'iconPropTypes.js'), iconPropTypesEs, 'utf8'),
+    fs.writeFile(
+      path.join(libDir, 'iconPropTypes.js'),
+      iconPropTypesCjs,
+      'utf8'
+    ),
+  ]);
+
+  // Build bucket structure (same BUCKET_SIZE as before)
+  const BUCKET_SIZE = 125;
+  const buckets = [];
+  for (let i = 0; i < modules.length; i += BUCKET_SIZE) {
+    buckets.push({
+      id: `bucket-${buckets.length}`,
+      modules: modules.slice(i, i + BUCKET_SIZE),
+    });
+  }
+
+  // Write individual icon entry point files directly to disk
+  const CHUNK_SIZE = 200;
+  await processInChunks(modules, CHUNK_SIZE, async (m) => {
+    const esSource = generateIconEntrypoint(m, 'esm');
+    const cjsSource = generateIconEntrypoint(m, 'cjs');
+
+    const esFile = path.join(esDir, m.filepath);
+    const libFile = path.join(libDir, m.filepath);
+
+    await Promise.all([
+      fs.ensureFile(esFile).then(() => fs.writeFile(esFile, esSource, 'utf8')),
+      fs
+        .ensureFile(libFile)
+        .then(() => fs.writeFile(libFile, cjsSource, 'utf8')),
+    ]);
   });
+
+  // Write bucket files directly to disk
+  await fs.ensureDir(path.join(esDir, 'generated'));
+  await fs.ensureDir(path.join(libDir, 'generated'));
+
+  for (const bucket of buckets) {
+    const esBucket = generateBucketFile(bucket, 'esm');
+    const cjsBucket = generateBucketFile(bucket, 'cjs');
+
+    await Promise.all([
+      fs.writeFile(
+        path.join(esDir, `generated/${bucket.id}.js`),
+        esBucket,
+        'utf8'
+      ),
+      fs.writeFile(
+        path.join(libDir, `generated/${bucket.id}.js`),
+        cjsBucket,
+        'utf8'
+      ),
+    ]);
+  }
+
+  // Write barrel index.js
+  const esIndex = [
+    templates.banner,
+    `export { default as Icon } from './Icon.js';`,
+    ...buckets.map((b) => `export * from './generated/${b.id}.js';`),
+    '',
+  ].join('\n');
+
+  const libIndex = [
+    templates.banner,
+    `'use strict';`,
+    '',
+    `var Icon_js = require('./Icon.js');`,
+    ...buckets.map(
+      (b) =>
+        `var ${b.id.replace(/-/g, '_')} = require('./generated/${b.id}.js');`
+    ),
+    '',
+    `exports.Icon = Icon_js;`,
+    ...buckets.map(
+      (b) =>
+        `Object.keys(${b.id.replace(/-/g, '_')}).forEach(function (k) { if (k !== 'default' && !Object.prototype.hasOwnProperty.call(exports, k)) exports[k] = ${b.id.replace(/-/g, '_')}[k]; });`
+    ),
+    '',
+  ].join('\n');
+
+  await Promise.all([
+    fs.writeFile(path.join(esDir, 'index.js'), esIndex, 'utf8'),
+    fs.writeFile(path.join(libDir, 'index.js'), libIndex, 'utf8'),
+  ]);
+
+  // Write TypeScript definition files (reuses existing logic)
+  const tsModules = modules.map((m) => ({
+    filepath: m.filepath,
+    name: m.name,
+  }));
   const targets = [
-    {
-      directory: path.join(output, 'es'),
-      format: 'esm',
-      tsModuleKind: ts.ModuleKind.ESNext,
-    },
-    {
-      directory: path.join(output, 'lib'),
-      format: 'commonjs',
-      tsModuleKind: ts.ModuleKind.CommonJS,
-    },
+    { directory: esDir, tsModuleKind: ts.ModuleKind.ESNext },
+    { directory: libDir, tsModuleKind: ts.ModuleKind.CommonJS },
   ];
 
   for (const target of targets) {
-    await bundle.write({
-      dir: target.directory,
-      format: target.format,
-      entryFileNames: '[name]',
-      banner: templates.banner,
-      exports: 'auto',
-    });
-
-    // write TypeScript definition files
-    writeTsDefinitions(modules, buckets, target.tsModuleKind, target.directory);
+    writeTsDefinitions(
+      tsModules,
+      buckets,
+      target.tsModuleKind,
+      target.directory
+    );
   }
 }
 
 /**
- * Generates a CommonJS entrypoint for an icon, including all size variations
- * for the icon. This helper also generates deprecation warning if the given
- * icon has been deprecated.
- *
- * The general structure of each icon module is as follows:
- *
- * ```jsx
- * import React from 'react';
- * import Icon from './Icon.tsx';
- *
- * const ComponentName = React.forwardRef(
- *   function ComponentName({ children, size = 32, ... rest}, ref) {
- *     return (
- *       <Icon width={size} height={size} ref={ref} {...rest>
- *         <path d="..." />
- *         {children}
- *      </Icon>
- *   }
- * );
- *
- * export default ComponentName;
- * ```
- *
- * @param {string} moduleName
- * @param {Array<object>} source
- * @param {boolean} [isDeprecated]
- * @returns {string}
+ * Generate a React icon component entry point as a string.
  */
-function createIconEntrypoint(moduleName, source, isDeprecated = false) {
-  const statements = [
-    // Import statements
-    template.ast(`import React from 'react';`),
-    template.ast(`import Icon from './Icon.tsx';`),
-    template.ast(`import { iconPropTypes } from './iconPropTypes.js';`),
-  ];
+function generateIconEntrypoint(icon, format) {
+  const lines = [templates.banner];
 
-  // Optional preamble block for deprecation. This block sets up our state for
-  // tracking if we've warned about the icon being deprecated
-  if (isDeprecated) {
-    statements.push(template.ast(`let didWarnAboutDeprecation = false;`));
+  if (format === 'esm') {
+    lines.push(
+      `import React from 'react';`,
+      `import Icon from './Icon.js';`,
+      `import { iconPropTypes } from './iconPropTypes.js';`
+    );
+  } else {
+    lines.push(
+      `'use strict';`,
+      '',
+      `var React = require('react');`,
+      `var Icon = require('./Icon.js');`,
+      `var iconPropTypes_mod = require('./iconPropTypes.js');`
+    );
   }
 
-  statements.push(...source);
+  lines.push('');
 
-  // Export statement
-  statements.push(template.ast(`export default ${moduleName};`));
+  if (icon.deprecated) {
+    lines.push('let didWarnAboutDeprecation = false;');
+  }
 
-  const file = t.file(t.program(statements));
-  const { code } = generate(file);
+  const { varDecls, componentBody } = generateComponentBody(
+    icon.local,
+    icon.sizes,
+    icon.deprecated,
+    icon.reason,
+    format,
+    0,
+    0,
+    false
+  );
 
-  return code;
+  if (varDecls.length > 0) {
+    lines.push(`var ${varDecls.join(', ')};`);
+  }
+
+  lines.push(...componentBody);
+  lines.push('');
+
+  if (format === 'esm') {
+    lines.push(`export { ${icon.local} as default };`, '');
+  } else {
+    lines.push(`module.exports = ${icon.local};`, '');
+  }
+
+  return lines.join('\n');
 }
 
 /**
- * Generate the source for an Icon component. This includes support for icons
- * that have a single size, along with icons that have different assets across
- * different sizes.
- *
- * In order to handle icons with different assets across sizes, we conditionally
- * render the JSX for each size inside of the Icon component
- *
- * @param {string} moduleName
- * @param {Array<object>} sizes
- * @param {Array<object>} [preamble]
+ * Generate a bucket file containing multiple icon components.
  */
-function createIconSource(moduleName, sizes, preamble = []) {
-  // We map over all of our different asset sizes to generate the JSX needed to
-  // render the asset
+function generateBucketFile(bucket, format) {
+  const lines = [templates.banner];
+
+  if (format === 'esm') {
+    lines.push(
+      `import React from 'react';`,
+      `import Icon from '../Icon.js';`,
+      `import { iconPropTypes } from '../iconPropTypes.js';`
+    );
+  } else {
+    lines.push(
+      `'use strict';`,
+      '',
+      `var React = require('react');`,
+      `var Icon = require('../Icon.js');`,
+      `var iconPropTypes_mod = require('../iconPropTypes.js');`
+    );
+  }
+
+  lines.push('');
+
+  // Check if any icon in this bucket is deprecated
+  const hasAnyDeprecated = bucket.modules.some((m) => m.deprecated);
+  if (hasAnyDeprecated) {
+    lines.push('const didWarnAboutDeprecation = {};');
+  }
+
+  const allVarDecls = [];
+  const allComponents = [];
+  const exportNames = [];
+  let pathCounter = 0;
+  let circleCounter = 0;
+
+  for (const m of bucket.modules) {
+    const { varDecls, componentBody, nextPathCounter, nextCircleCounter } =
+      generateComponentBody(
+        m.name,
+        m.sizes,
+        m.deprecated,
+        m.reason,
+        format,
+        pathCounter,
+        circleCounter,
+        true
+      );
+    allVarDecls.push(...varDecls);
+    allComponents.push(...componentBody);
+    exportNames.push(m.name);
+    pathCounter = nextPathCounter;
+    circleCounter = nextCircleCounter;
+  }
+
+  if (allVarDecls.length > 0) {
+    lines.push(`var ${allVarDecls.join(', ')};`);
+  }
+
+  lines.push('');
+  lines.push(...allComponents);
+
+  if (format === 'esm') {
+    lines.push(`export { ${exportNames.join(', ')} };`, '');
+  } else {
+    for (const name of exportNames) {
+      lines.push(`exports.${name} = ${name};`);
+    }
+    lines.push('');
+  }
+
+  return lines.join('\n');
+}
+
+/**
+ * Generate the component body for a single icon.
+ */
+function generateComponentBody(
+  moduleName,
+  sizes,
+  deprecated,
+  reason,
+  format,
+  pathCounterStart,
+  circleCounterStart,
+  isBucket
+) {
+  let pathCounter = pathCounterStart;
+  let circleCounter = circleCounterStart;
+  const varDecls = [];
+  const lines = [];
+
+  const propTypesRef =
+    format === 'esm' ? 'iconPropTypes' : 'iconPropTypes_mod.iconPropTypes';
+
+  // Process size variants
   const sizeVariants = sizes.map(({ size, ast }) => {
-    const { svgProps, children } = svgToJSX(ast);
-    const source = templates.jsx({
-      props: t.objectExpression([
-        t.objectProperty(t.identifier('width'), t.identifier('size')),
-        t.objectProperty(t.identifier('height'), t.identifier('size')),
-        t.objectProperty(t.identifier('ref'), t.identifier('ref')),
-        ...Object.entries(svgProps).map(([key, value]) => {
-          return t.objectProperty(t.identifier(key), jsToAST(value));
-        }),
-        t.spreadElement(t.identifier('rest')),
-      ]),
-      children,
-    });
+    const svgProps = {};
+    for (const [key, value] of Object.entries(ast.attributes || {})) {
+      svgProps[key] = value;
+    }
+    const children = ast.children || [];
+    const childElements = [];
 
-    return {
-      source,
-      size: size || 'glyph',
-    };
+    for (const child of children) {
+      const { code, decls, pc, cc } = generateChildElement(
+        child,
+        pathCounter,
+        circleCounter
+      );
+      childElements.push(code);
+      varDecls.push(...decls);
+      pathCounter = pc;
+      circleCounter = cc;
+    }
+
+    return { size: size || 'glyph', svgProps, childElements };
   });
 
-  // Find our max size from all of our asset sizes. The max size will be our
-  // "default" icon, meaning that it will be used if no matches come in for a
-  // specific size
-  const maxSize = sizeVariants.reduce((maxSize, { size }) => {
-    if (size > maxSize) {
-      return size;
-    }
-    return maxSize;
+  // Find max size (default)
+  const maxSize = sizeVariants.reduce((max, v) => {
+    return v.size > max ? v.size : max;
   }, -Infinity);
 
-  // Each asset that is not used for our "default" icon will conditionally
-  // render from an if statement in our component
-  const ifStatements = sizeVariants.filter(({ size }) => {
-    return size !== maxSize;
-  });
+  const ifVariants = sizeVariants.filter((v) => v.size !== maxSize);
+  const defaultVariant =
+    sizeVariants.find((v) => v.size === maxSize) || sizeVariants[0];
 
-  // The "default" icon that will be rendered, based on the max size
-  const returnStatement =
-    sizeVariants.find(({ size }) => {
-      return size === maxSize;
-    }) ?? sizeVariants[0];
+  lines.push(
+    `const ${moduleName} = /*#__PURE__*/React.forwardRef(function ${moduleName}({`,
+    `  children,`,
+    `  size = 16,`,
+    `  ...rest`,
+    `}, ref) {`
+  );
 
-  // We build up our component source by adding in any necessary deprecation
-  // blocks along with conditionally rendering all asset sizes. We also use a
-  // return statement for the "default" icon
-  const source = templates.component({
-    moduleName: t.identifier(moduleName),
-    defaultSize: t.numericLiteral(16),
-    statements: [
-      ...preamble,
-      ...ifStatements.map(({ size, source }) => {
-        // Generate if (size === 16 || size === '16' || size === '16px') {}
-        // block statements to match on numbers or strings
-        return t.ifStatement(
-          t.logicalExpression(
-            '||',
-            t.logicalExpression(
-              '||',
-              t.binaryExpression('===', t.identifier('size'), jsToAST(size)),
-              t.binaryExpression(
-                '===',
-                t.identifier('size'),
-                jsToAST('' + size)
-              )
-            ),
-            t.binaryExpression(
-              '===',
-              t.identifier('size'),
-              jsToAST(`${size}px`)
-            )
-          ),
-          t.blockStatement([t.returnStatement(source)])
-        );
-      }),
-      t.returnStatement(returnStatement.source),
-    ].filter(Boolean),
-  });
+  // Deprecation warning
+  if (deprecated) {
+    const warning = JSON.stringify(
+      formatDeprecationWarning(moduleName, reason)
+    );
+    if (isBucket) {
+      lines.push(
+        `  if (process.env.NODE_ENV !== "production") {`,
+        `    if (!didWarnAboutDeprecation["${moduleName}"]) {`,
+        `      didWarnAboutDeprecation["${moduleName}"] = true;`,
+        `      console.warn(${warning});`,
+        `    }`,
+        `  }`
+      );
+    } else {
+      lines.push(
+        `  if (process.env.NODE_ENV !== "production") {`,
+        `    if (!didWarnAboutDeprecation) {`,
+        `      didWarnAboutDeprecation = true;`,
+        `      console.warn(${warning});`,
+        `    }`,
+        `  }`
+      );
+    }
+  }
 
-  return source;
+  // Size-specific if statements
+  for (const variant of ifVariants) {
+    lines.push(
+      `  if (size === ${variant.size} || size === "${variant.size}" || size === "${variant.size}px") {`
+    );
+    lines.push(
+      `    return ${generateCreateElement(variant.svgProps, variant.childElements)};`
+    );
+    lines.push(`  }`);
+  }
+
+  // Default return
+  lines.push(
+    `  return ${generateCreateElement(defaultVariant.svgProps, defaultVariant.childElements)};`
+  );
+
+  lines.push(`});`);
+  lines.push(
+    `if (process.env.NODE_ENV !== "production") {`,
+    `  ${moduleName}.propTypes = ${propTypesRef};`,
+    `}`
+  );
+
+  return {
+    varDecls,
+    componentBody: lines,
+    nextPathCounter: pathCounter,
+    nextCircleCounter: circleCounter,
+  };
 }
 
 /**
- * Format a given module name and reason into a single warning message
- * @param {string} moduleName
- * @param {string} [reason]
- * @returns {string}
+ * Generate React.createElement call for an Icon with SVG props and children.
+ */
+function generateCreateElement(svgProps, childElements) {
+  const propsEntries = [`width: size`, `height: size`, `ref: ref`];
+
+  for (const [key, value] of Object.entries(svgProps)) {
+    const jsxKey = svgAttrToJsx(key);
+    propsEntries.push(`${quoteKey(jsxKey)}: ${JSON.stringify(value)}`);
+  }
+
+  propsEntries.push(`...rest`);
+
+  const childrenStr =
+    childElements.length > 0 ? childElements.join(', ') + ', ' : '';
+
+  return `/*#__PURE__*/React.createElement(Icon, {${propsEntries.join(', ')}}, ${childrenStr}children)`;
+}
+
+/**
+ * Generate a React.createElement call for a child SVG element with the
+ * _path || (_path = ...) caching pattern.
+ */
+function generateChildElement(node, pathCounter, circleCounter) {
+  if (node.type !== 'element') {
+    return { code: 'null', decls: [], pc: pathCounter, cc: circleCounter };
+  }
+
+  const tagName = node.tagName;
+  const attrs = {};
+  const decls = [];
+
+  // Filter attributes (same logic as the original svgToJSX)
+  const attributeAllowlist = new Set(['data-icon-path']);
+  const attributeDenylist = ['data', 'aria'];
+
+  for (const [key, value] of Object.entries(node.attributes || {})) {
+    if (attributeAllowlist.has(key)) {
+      attrs[key] = value;
+    } else if (!attributeDenylist.some((prefix) => key.startsWith(prefix))) {
+      attrs[svgAttrToJsx(key)] = value;
+    }
+  }
+
+  const attrsStr = Object.entries(attrs)
+    .map(([k, v]) => `${quoteKey(k)}: ${JSON.stringify(v)}`)
+    .join(', ');
+
+  // Determine variable name for caching
+  let varName;
+  if (tagName === 'circle') {
+    circleCounter++;
+    varName = circleCounter === 1 ? '_circle' : `_circle${circleCounter}`;
+    decls.push(varName);
+  } else {
+    pathCounter++;
+    varName = pathCounter === 1 ? '_path' : `_path${pathCounter}`;
+    decls.push(varName);
+  }
+
+  let code;
+  if (node.children && node.children.length > 0) {
+    const childCodes = [];
+    let pc = pathCounter;
+    let cc = circleCounter;
+    for (const child of node.children) {
+      const result = generateChildElement(child, pc, cc);
+      childCodes.push(result.code);
+      decls.push(...result.decls);
+      pc = result.pc;
+      cc = result.cc;
+    }
+    pathCounter = pc;
+    circleCounter = cc;
+    code = `${varName} || (${varName} = /*#__PURE__*/React.createElement("${tagName}", {${attrsStr}}, ${childCodes.join(', ')}))`;
+  } else {
+    code = `${varName} || (${varName} = /*#__PURE__*/React.createElement("${tagName}", {${attrsStr}}))`;
+  }
+
+  return { code, decls, pc: pathCounter, cc: circleCounter };
+}
+
+/**
+ * Quote a property key if it contains characters that aren't valid
+ * in unquoted JS identifiers (e.g. hyphens in data-icon-path).
+ */
+function quoteKey(key) {
+  return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(key) ? key : JSON.stringify(key);
+}
+
+/**
+ * Convert SVG attribute names to JSX camelCase equivalents.
+ */
+function svgAttrToJsx(attr) {
+  if (attr.startsWith('data-')) return attr;
+
+  const map = {
+    'fill-rule': 'fillRule',
+    'clip-rule': 'clipRule',
+    'clip-path': 'clipPath',
+    'fill-opacity': 'fillOpacity',
+    'stroke-width': 'strokeWidth',
+    'stroke-linecap': 'strokeLinecap',
+    'stroke-linejoin': 'strokeLinejoin',
+    'stroke-miterlimit': 'strokeMiterlimit',
+    'stroke-dasharray': 'strokeDasharray',
+    'stroke-dashoffset': 'strokeDashoffset',
+    'stroke-opacity': 'strokeOpacity',
+    'font-family': 'fontFamily',
+    'font-size': 'fontSize',
+    'font-weight': 'fontWeight',
+    'text-anchor': 'textAnchor',
+    'text-decoration': 'textDecoration',
+    'dominant-baseline': 'dominantBaseline',
+    'alignment-baseline': 'alignmentBaseline',
+    'baseline-shift': 'baselineShift',
+    'stop-color': 'stopColor',
+    'stop-opacity': 'stopOpacity',
+    'flood-color': 'floodColor',
+    'flood-opacity': 'floodOpacity',
+    'lighting-color': 'lightingColor',
+    'color-interpolation': 'colorInterpolation',
+    'color-interpolation-filters': 'colorInterpolationFilters',
+  };
+
+  if (map[attr]) return map[attr];
+  return attr.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+}
+
+/**
+ * Format a deprecation warning message.
  */
 function formatDeprecationWarning(moduleName, reason) {
   if (!reason) {
@@ -369,7 +602,6 @@ function formatDeprecationWarning(moduleName, reason) {
       `removed in the next major version of @carbon/icons-react.`
     );
   }
-
   return (
     `${reason}. As a result, the ${moduleName} component will be removed in ` +
     `the next major version of @carbon/icons-react.`
