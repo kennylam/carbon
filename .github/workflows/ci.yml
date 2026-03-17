@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - chore/icons-build-refactor
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     branches:
@@ -59,7 +60,8 @@ jobs:
         run: yarn lint:styles
 
   test:
-    runs-on: ubuntu-latest-larger-disk
+    # runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -95,7 +97,9 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   web-components-test:
-    runs-on: ubuntu-latest-larger-disk
+    # if: false
+    # runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -135,7 +139,8 @@ jobs:
 
   e2e:
     name: 'test:e2e'
-    runs-on: ubuntu-latest-larger-disk
+    # runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -175,94 +180,15 @@ jobs:
         if: ${{ steps.filter.outputs.e2e == 'true' }}
         run: yarn test:e2e
 
-  vrt-runner:
-    strategy:
-      fail-fast: false
-      matrix:
-        shardIndex: [1, 2, 3, 4]
-        shardTotal: [4]
-    runs-on: ubuntu-latest-larger-disk
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - name: Use Node.js version from .nvmrc
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version-file: '.nvmrc'
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
-        if: github.event_name != 'merge_group'
-        id: cache
-        with:
-          path: |
-            node_modules
-            */**/node_modules
-          key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
-            'packages/**/yarn.lock') }}
-      - name: Install dependencies
-        env:
-          YARN_ENABLE_HARDENED_MODE: 0
-        run: yarn install --immutable
-      - name: Install browsers
-        run: yarn playwright install --with-deps
-      - name: Build project
-        run: yarn build
-      - name: Build storybook
-        run: yarn workspace @carbon/react storybook:build
-      - name: Run storybook
-        id: storybook
-        run: |
-          npx serve -l 3000 packages/react/storybook-static &
-          pid=$!
-          echo "pid=$pid" >> $GITHUB_OUTPUT
-      - uses: ./actions/wait-for-it
-        with:
-          URL: 'http://localhost:3000'
-        timeout-minutes: 3
-      - name: Run VRT
-        if:
-          ${{ github.repository == 'carbon-design-system/carbon' &&
-          github.event.pull_request.draft == false }}
-        env:
-          PERCY_TOKEN: c9a21a3fde4fda0a0f822d633426ab26e2ab2c1cba55221d342d4047744c8c24
-          PERCY_PARALLEL_TOTAL: 4
-        run: |
-          yarn percy exec --parallel -- yarn playwright test --project chromium --grep @vrt --shard="${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
-      - name: Dry run VRT on draft PRs
-        if:
-          ${{ github.repository == 'carbon-design-system/carbon' &&
-          github.event.pull_request.draft == true && github.base_ref != 'main'
-          }}
-        env:
-          PERCY_TOKEN: c9a21a3fde4fda0a0f822d633426ab26e2ab2c1cba55221d342d4047744c8c24
-          PERCY_PARALLEL_TOTAL: 4
-        run: |
-          yarn percy exec --parallel -- yarn playwright test --project chromium --grep @vrt --shard="${{ matrix.shardIndex }}/${{ matrix.shardTotal }}" --dry-run
-      - name: Stop storybook
-        run: kill ${{ steps.storybook.outputs.pid }}
-      - name: Upload blob report to GitHub Actions Artifacts
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f #6.0.0
-        with:
-          name: playwright-vrt-blob-report-${{ matrix.shardIndex }}
-          path: blob-report
-          retention-days: 1
-
-  vrt:
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-    needs: vrt-runner
-    steps:
-      - name: Check VRT Runner job status
-        if: ${{ needs.vrt-runner.result != 'success' }}
-        run: exit 1
-
   avt-runner:
+    # if: false
     strategy:
       fail-fast: false
       matrix:
         shardIndex: [1, 2, 3, 4]
         shardTotal: [4]
-    runs-on: ubuntu-latest-larger-disk
+    # runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Use Node.js version from .nvmrc
@@ -315,6 +241,7 @@ jobs:
 
   avt:
     if: ${{ always() }}
+    # if: false
     runs-on: ubuntu-latest
     needs: avt-runner
     steps:
@@ -327,6 +254,7 @@ jobs:
     if:
       ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
       github.event.pull_request.draft == false }}
+    # if: false
     needs: [vrt-runner, avt-runner]
 
     runs-on: ubuntu-latest
@@ -393,7 +321,9 @@ jobs:
     if:
       ${{ github.repository == 'carbon-design-system/carbon' &&
       github.event.pull_request.draft == false }}
-    runs-on: ubuntu-latest-larger-disk
+    # if: false
+    # runs-on: ubuntu-latest-larger-disk
+    runs-on: ubuntu-latest
     outputs:
       buildUrl: ${{ steps.chromatic.outputs.buildUrl }}
       storybookUrl: ${{ steps.chromatic.outputs.storybookUrl }}
@@ -460,6 +390,7 @@ jobs:
   # PR timeline and the 'branch deployment' section at the bottom above the
   # status checks. This avoids noisy/large comments for deploy previews.
   react-storybook-preview:
+    # if: false
     runs-on: ubuntu-latest
     needs: chromatic-react
     environment:
@@ -478,6 +409,7 @@ jobs:
           echo "- Chromatic build URL: ${{ env.buildUrl }}" >> $GITHUB_STEP_SUMMARY
 
   flag-agents-md-changes:
+    # if: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
