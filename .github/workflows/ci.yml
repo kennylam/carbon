@@ -255,7 +255,7 @@ jobs:
       ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
       github.event.pull_request.draft == false }}
     # if: false
-    needs: [vrt-runner, avt-runner]
+    needs: [avt-runner]
 
     runs-on: ubuntu-latest
     steps:
@@ -279,23 +279,23 @@ jobs:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable
 
-      - name: Download vrt blob reports from GitHub Actions Artifacts
+      - name: Download avt blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v8
         with:
-          path: all-playwright-vrt-blob-reports
-          pattern: playwright-vrt-blob-report-*
+          path: all-playwright-avt-blob-reports
+          pattern: playwright-avt-blob-report-*
           merge-multiple: true
 
-      - name: Merge vrt reports into HTML Report
+      - name: Merge avt reports into HTML Report
         run:
           npx playwright merge-reports --reporter html
-          ./all-playwright-vrt-blob-reports
+          ./all-playwright-avt-blob-reports
 
-      - name: Upload vrt HTML report
+      - name: Upload avt HTML report
         uses: actions/upload-artifact@v6.0.0
         with:
-          name: html-playwright-vrt-report--attempt-${{ github.run_attempt }}
-          path: playwright-vrt-report
+          name: html-playwright-avt-report--attempt-${{ github.run_attempt }}
+          path: playwright-avt-report
           retention-days: 14
 
       - name: Download avt blob reports from GitHub Actions Artifacts
