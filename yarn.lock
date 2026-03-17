@@ -1819,6 +1819,7 @@ __metadata:
     react: "npm:^19.2.3"
     svgo: "npm:^4.0.0"
     svgson: "npm:^5.2.1"
+    tsdown: "npm:^0.20.3"
     typescript-config-carbon: "workspace:^0.9.0"
   languageName: unknown
   linkType: soft

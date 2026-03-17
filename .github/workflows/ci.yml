@@ -189,7 +189,7 @@ jobs:
         env:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable
-      - uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3.0.3
+      - uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         id: filter
         with:
           filters: |
@@ -280,11 +280,10 @@ jobs:
         run: exit 1
 
   merge-playwright-reports:
-    # Merge reports after *-runner jobs, even if some shards have failed
+    # Merge reports after avt-runner jobs, even if some shards have failed
     if:
       ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
       github.event.pull_request.draft == false }}
-    # if: false
     needs: [avt-runner]
 
     runs-on: ubuntu-latest
@@ -310,25 +309,6 @@ jobs:
         env:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable
-
-      - name: Download avt blob reports from GitHub Actions Artifacts
-        uses: actions/download-artifact@v8
-        with:
-          path: all-playwright-avt-blob-reports
-          pattern: playwright-avt-blob-report-*
-          merge-multiple: true
-
-      - name: Merge avt reports into HTML Report
-        run:
-          npx playwright merge-reports --reporter html
-          ./all-playwright-avt-blob-reports
-
-      - name: Upload avt HTML report
-        uses: actions/upload-artifact@v6.0.0
-        with:
-          name: html-playwright-avt-report--attempt-${{ github.run_attempt }}
-          path: playwright-avt-report
-          retention-days: 14
 
       - name: Download avt blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v8
@@ -451,7 +431,7 @@ jobs:
           fetch-depth: 0
       - name: Detect AGENTS.md changes
         id: changes
-        uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3.0.3
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1
         with:
           filters: |
             added_or_modified:
