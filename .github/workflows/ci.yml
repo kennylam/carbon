@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - chore/icons-build-refactor
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     branches:
