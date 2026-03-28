@@ -266,6 +266,11 @@ class CDSAccordionItem extends FocusMixin(LitElement) {
     return `.${prefix}--accordion__content`;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 

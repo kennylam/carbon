@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { selectorTabbable } from '../settings';
+import { selectorFocusable } from '../settings';
 
 /**
  * @param Base The base class.
@@ -23,8 +23,8 @@ const FocusMixin = <T extends Constructor<HTMLElement>>(Base: T) =>
       } else {
         const delegateTarget =
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
-          this.shadowRoot!.querySelector(selectorTabbable) ||
-          this.querySelector(selectorTabbable);
+          this.shadowRoot!.querySelector(selectorFocusable) ||
+          this.querySelector(selectorFocusable);
         if (delegateTarget) {
           (delegateTarget as HTMLElement).focus();
         } else {

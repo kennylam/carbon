@@ -15,7 +15,7 @@ import {
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
-import { selectorTabbable } from '../../globals/settings';
+import { selectorFocusable } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import '../button/index';
 import '../layer/index';
@@ -204,7 +204,7 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
     // * This tearsheet is open
     // * The viewport still has focus
     // * Tearsheet body used to have focus but no longer has focus
-    const { selectorTabbable: selectorTabbableForTearsheet } = this
+    const { selectorFocusable: selectorFocusableForTearsheet } = this
       .constructor as typeof CDSTearsheet;
 
     if (open && relatedTarget && oldContains && !currentContains) {
@@ -216,7 +216,7 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
         await (this.constructor as typeof CDSTearsheet)._delay();
         if (
           !tryFocusElems(
-            this.querySelectorAll(selectorTabbableForTearsheet),
+            this.querySelectorAll(selectorFocusableForTearsheet),
             true
           ) &&
           relatedTarget !== this
@@ -230,7 +230,7 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
         await (this.constructor as typeof CDSTearsheet)._delay();
         if (
           !tryFocusElems(
-            this.querySelectorAll(selectorTabbableForTearsheet),
+            this.querySelectorAll(selectorFocusableForTearsheet),
             true
           )
         ) {
@@ -713,7 +713,7 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
         } else if (
           !tryFocusElems(
             this.querySelectorAll(
-              (this.constructor as typeof CDSTearsheet).selectorTabbable
+              (this.constructor as typeof CDSTearsheet).selectorFocusable
             ),
             true
           )
@@ -750,8 +750,8 @@ class CDSTearsheet extends HostListenerMixin(LitElement) {
   /**
    * A selector selecting tabbable nodes.
    */
-  static get selectorTabbable() {
-    return selectorTabbable;
+  static get selectorFocusable() {
+    return selectorFocusable;
   }
 
   /**

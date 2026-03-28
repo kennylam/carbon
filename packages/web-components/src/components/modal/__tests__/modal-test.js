@@ -565,25 +565,29 @@ describe('cds-modal', function () {
       `);
 
       expect(el.alert).to.be.true;
-      const container = el.shadowRoot.querySelector('[role="alert"]');
+      const container = el.shadowRoot.querySelector('dialog');
       expect(container).to.exist;
+      expect(container.getAttribute('role')).to.equal('alertdialog');
     });
 
-    it('should have dialog role when alert is not set', async () => {
+    it('should not have explicit role when alert is not set', async () => {
       const el = await fixture(defaultModal);
 
       expect(el.alert).to.be.false;
-      const container = el.shadowRoot.querySelector('[role="dialog"]');
+      const container = el.shadowRoot.querySelector('dialog');
       expect(container).to.exist;
+      // Native <dialog> has implicit role="dialog", no explicit attribute needed
+      expect(container.hasAttribute('role')).to.be.false;
     });
   });
 
   describe('Accessibility', function () {
-    it('should have aria-modal attribute', async () => {
+    it('should render a native dialog element', async () => {
       const el = await fixture(defaultModal);
-      const container = el.shadowRoot.querySelector('[aria-modal]');
-      expect(container).to.exist;
-      expect(container.getAttribute('aria-modal')).to.equal('true');
+      const dialog = el.shadowRoot.querySelector('dialog');
+      expect(dialog).to.exist;
+      // Native <dialog> opened with showModal() has implicit aria-modal
+      expect(dialog.tagName.toLowerCase()).to.equal('dialog');
     });
 
     /*

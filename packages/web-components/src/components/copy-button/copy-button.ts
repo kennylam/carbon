@@ -93,6 +93,11 @@ class CDSCopyButton extends FocusMixin(LitElement) {
     `;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 

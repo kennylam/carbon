@@ -179,6 +179,11 @@ class CDSSelectableTag extends HostListenerMixin(FocusMixin(LitElement)) {
     return `${prefix}-selectable-tag-selected`;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 

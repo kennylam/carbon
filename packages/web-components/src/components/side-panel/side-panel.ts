@@ -17,7 +17,7 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { SIDE_PANEL_SIZE, SIDE_PANEL_PLACEMENT } from './defs';
-import { selectorTabbable } from '../../globals/settings';
+import { selectorFocusable } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ArrowLeft16 from '@carbon/icons/es/arrow--left/16.js';
 import Close20 from '@carbon/icons/es/close/20.js';
@@ -204,7 +204,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
     // * This side-panel is open
     // * The viewport still has focus
     // * SidePanel body used to have focus but no longer has focus
-    const { selectorTabbable: selectorTabbableForSidePanel } = this
+    const { selectorFocusable: selectorFocusableForSidePanel } = this
       .constructor as typeof CDSSidePanel;
 
     if (open && relatedTarget && oldContains && !currentContains) {
@@ -216,7 +216,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
         await (this.constructor as typeof CDSSidePanel)._delay();
         if (
           !tryFocusElems(
-            this.querySelectorAll(selectorTabbableForSidePanel),
+            this.querySelectorAll(selectorFocusableForSidePanel),
             true
           ) &&
           relatedTarget !== this
@@ -230,7 +230,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
         await (this.constructor as typeof CDSSidePanel)._delay();
         if (
           !tryFocusElems(
-            this.querySelectorAll(selectorTabbableForSidePanel),
+            this.querySelectorAll(selectorFocusableForSidePanel),
             true
           )
         ) {
@@ -914,7 +914,7 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
         } else if (
           !tryFocusElems(
             this.querySelectorAll(
-              (this.constructor as typeof CDSSidePanel).selectorTabbable
+              (this.constructor as typeof CDSSidePanel).selectorFocusable
             ),
             true
           )
@@ -944,8 +944,8 @@ class CDSSidePanel extends HostListenerMixin(LitElement) {
   /**
    * A selector selecting tabbable nodes.
    */
-  static get selectorTabbable() {
-    return selectorTabbable;
+  static get selectorFocusable() {
+    return selectorFocusable;
   }
 
   /**

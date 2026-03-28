@@ -6,14 +6,13 @@
  */
 
 import { classMap } from 'lit/directives/class-map.js';
-import { LitElement, html } from 'lit';
+import { LitElement, html, nothing } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { MODAL_SIZE } from './defs';
 import styles from './modal.scss?lit';
-import { selectorTabbable } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import '../inline-loading';
 import CDSModalFooter from './modal-footer';
@@ -58,26 +57,36 @@ class CDSModal extends HostListenerMixin(LitElement) {
   private WORKING_LOADING_STATUSES = ['active', 'finished', 'error'];
 
   /**
-   * Handles `click` event on this element.
+   * returns the native <dialog> element from the shadow DOM
+   */
+  private get _dialogEl(): HTMLDialogElement | null {
+    return this.shadowRoot?.querySelector('dialog') ?? null;
+  }
+
+  /**
+   * Handles `click` event on the native <dialog> element.
+   * Clicks on ::backdrop target dialog element itself.
    *
    * @param event The event.
    */
-  @HostListener('click')
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
-  // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
-  private _handleClick = (event: MouseEvent) => {
-    if (
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
-      event.composedPath().indexOf(this.shadowRoot!) < 0 &&
-      !this.preventCloseOnClickOutside
-    ) {
+  private _handleDialogClick = (event: MouseEvent) => {
+    if (event.target === this._dialogEl && !this.preventCloseOnClickOutside) {
       this._handleUserInitiatedClose(event.target);
     }
   };
 
   /**
+   * Handles the native `cancel` event fired by the <dialog> element
+   * when the user presses esc. We intercept it to preserve the
+   * custom event contract (cds-modal-beingclosed / cds-modal-closed).
+   */
+  private _handleNativeCancel = (event: Event) => {
+    event.preventDefault();
+    this._handleUserInitiatedClose(event.target);
+  };
+
+  /**
    * Handle the keydown event.
-   * Trap the focus inside the side-panel by tracking keydown.key == `Tab`
    *
    * @param {KeyboardEvent} event The keyboard event object.
    */
@@ -105,65 +114,7 @@ class CDSModal extends HostListenerMixin(LitElement) {
         return;
       }
     }
-    if (event.key === 'Tab') {
-      const { first: _firstElement, last: _lastElement } = this.getFocusable();
-
-      if (
-        event.shiftKey &&
-        (this.shadowRoot?.activeElement === _firstElement ||
-          document.activeElement === _firstElement)
-      ) {
-        event.preventDefault();
-
-        _lastElement?.focus();
-      } else if (!event.shiftKey && document.activeElement === _lastElement) {
-        event.preventDefault();
-
-        _firstElement?.focus();
-      }
-    }
   };
-
-  @HostListener('document:keydown')
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
-  // @ts-ignore: The decorator refers to this method but TS thinks this method is not referred to
-  private _handleKeydown = ({ key, target }: KeyboardEvent) => {
-    if (key === 'Esc' || key === 'Escape') {
-      this._handleUserInitiatedClose(target);
-    }
-  };
-
-  /**
-   * Get focusable elements.
-   *
-   * Querying all tabbable items.
-   *
-   * @returns {{first: HTMLElement, last: HTMLElement, all: HTMLElement[]}} Returns an object with various elements.
-   */
-  private getFocusable(): {
-    first: HTMLElement | undefined;
-    last: HTMLElement | undefined;
-    all: HTMLElement[];
-  } {
-    const elements: HTMLElement[] = [];
-
-    // Add tabbable elements inside light DOM
-    const tabbableItems = this.querySelectorAll<HTMLElement>(selectorTabbable);
-    if (tabbableItems?.length) {
-      elements.push(...tabbableItems);
-    }
-
-    // Flatten NodeList arrays and filter for focusable items
-    const all = elements?.filter(
-      (el): el is HTMLElement => typeof el?.focus === 'function'
-    );
-
-    return {
-      first: all[0],
-      last: all[all.length - 1],
-      all,
-    };
-  }
 
   /**
    * Handles `click` event on the modal container.
@@ -420,6 +371,13 @@ class CDSModal extends HostListenerMixin(LitElement) {
       );
       this.appendChild(bodyElement);
     }
+
+    // Attach native dialog event listeners
+    const dialogEl = this._dialogEl;
+    if (dialogEl) {
+      dialogEl.addEventListener('cancel', this._handleNativeCancel);
+      dialogEl.addEventListener('click', this._handleDialogClick);
+    }
   }
 
   /**
@@ -481,11 +439,17 @@ class CDSModal extends HostListenerMixin(LitElement) {
 
   connectedCallback() {
     super.connectedCallback?.();
+    this.dataset.modal = '';
     this._observeFooter();
     this._observeHeader();
   }
 
   disconnectedCallback() {
+    const dialogEl = this._dialogEl;
+    if (dialogEl) {
+      dialogEl.removeEventListener('cancel', this._handleNativeCancel);
+      dialogEl.removeEventListener('click', this._handleDialogClick);
+    }
     this._footerObserver?.disconnect();
     this._headerObserver?.disconnect();
     super.disconnectedCallback?.();
@@ -498,32 +462,35 @@ class CDSModal extends HostListenerMixin(LitElement) {
       .filter(Boolean)
       .reduce((acc, item) => ({ ...acc, [item]: true }), {});
     const containerClasses = classMap({
+      [`${prefix}--dialog`]: true,
       [`${prefix}--modal-container`]: true,
       [`${prefix}--modal-container--${size}`]: size,
       ...containerClass,
     });
     return html`
-      <div
+      <dialog
         aria-label=${this._computeAriaLabel()}
         part="dialog"
         class=${containerClasses}
-        aria-modal=${true}
-        role="${alert ? 'alert' : 'dialog'}"
-        tabindex="-1"
+        role=${alert ? 'alertdialog' : nothing}
         @click=${this._handleClickContainer}>
         <slot @slotchange="${this._handleSlotChange}"></slot>
         ${hasScrollingContent
           ? html` <div class="cds--modal-content--overflow-indicator"></div> `
           : ``}
-      </div>
+      </dialog>
     `;
   }
 
   async updated(changedProperties) {
     if (changedProperties.has('open')) {
+      const dialogEl = this._dialogEl;
       if (this.open) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
         this._launcher = this.ownerDocument!.activeElement;
+        if (dialogEl && !dialogEl.open) {
+          dialogEl.showModal();
+        }
         const primaryFocusNode = this.querySelector(
           (this.constructor as typeof CDSModal).selectorPrimaryFocus
         );
@@ -543,18 +510,19 @@ class CDSModal extends HostListenerMixin(LitElement) {
             } else {
               primaryButton.focus();
             }
-          } else {
-            const { first } = this.getFocusable();
-
-            first?.focus();
           }
         }
-      } else if (
-        this._launcher &&
-        typeof (this._launcher as HTMLElement).focus === 'function'
-      ) {
-        (this._launcher as HTMLElement).focus();
-        this._launcher = null;
+      } else {
+        if (dialogEl?.open) {
+          dialogEl.close();
+        }
+        if (
+          this._launcher &&
+          typeof (this._launcher as HTMLElement).focus === 'function'
+        ) {
+          (this._launcher as HTMLElement).focus();
+          this._launcher = null;
+        }
       }
     }
     if (
@@ -583,13 +551,6 @@ class CDSModal extends HostListenerMixin(LitElement) {
    */
   static get selectorCloseButton() {
     return `[data-modal-close],${prefix}-modal-close-button`;
-  }
-
-  /**
-   * A selector selecting tabbable nodes.
-   */
-  static get selectorTabbable() {
-    return selectorTabbable;
   }
 
   /**

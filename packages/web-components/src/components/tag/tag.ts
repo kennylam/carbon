@@ -243,6 +243,11 @@ class CDSTag extends HostListenerMixin(FocusMixin(LitElement)) {
     return `${prefix}-tag-closed`;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 

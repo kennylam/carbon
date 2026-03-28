@@ -12,7 +12,7 @@ import WarningFilled20 from '@carbon/icons/es/warning--filled/20.js';
 import WarningAltFilled20 from '@carbon/icons/es/warning--alt--filled/20.js';
 import ErrorFilled20 from '@carbon/icons/es/error--filled/20.js';
 import { property, query } from 'lit/decorators.js';
-import { prefix, selectorTabbable } from '../../globals/settings';
+import { prefix, selectorFocusable } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { NOTIFICATION_TYPE, NOTIFICATION_KIND } from './defs';
@@ -174,8 +174,8 @@ class CDSActionableNotification extends HostListenerMixin(
     // * Notification role attribute is set to 'alertdialog'
     // * The viewport still has focus
     // * Notification body used to have focus but no longer has focus
-    const { selectorTabbable: selectorTabbableForActionableNotification } = this
-      .constructor as typeof CDSActionableNotification;
+    const { selectorFocusable: selectorFocusableForActionableNotification } =
+      this.constructor as typeof CDSActionableNotification;
     if (
       open &&
       this.getAttribute('role') === 'alertdialog' &&
@@ -190,11 +190,11 @@ class CDSActionableNotification extends HostListenerMixin(
       // tabbable elements in Shadow root
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- https://github.com/carbon-design-system/carbon/issues/20452
       const shadowElems = this.shadowRoot!.querySelectorAll(
-        selectorTabbableForActionableNotification
+        selectorFocusableForActionableNotification
       );
       // tabbable elements in light DOM
       const lightElems = this.querySelectorAll(
-        selectorTabbableForActionableNotification
+        selectorFocusableForActionableNotification
       );
 
       if (relatedTarget === startSentinelNode || comparisonResult & PRECEDING) {
@@ -335,8 +335,8 @@ class CDSActionableNotification extends HostListenerMixin(
   /**
    * A selector selecting tabbable nodes.
    */
-  static get selectorTabbable() {
-    return selectorTabbable;
+  static get selectorFocusable() {
+    return selectorFocusable;
   }
 
   /**

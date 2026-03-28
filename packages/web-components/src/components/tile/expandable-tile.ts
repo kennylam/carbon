@@ -221,6 +221,11 @@ class CDSExpandableTile extends HostListenerMixin(FocusMixin(LitElement)) {
     return `${prefix}-expandable-tile-toggled`;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 

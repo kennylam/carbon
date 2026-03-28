@@ -14,55 +14,34 @@
 @use '@carbon/styles/scss/type' as *;
 @use '@carbon/styles/scss/utilities/convert' as *;
 @use '@carbon/styles/scss/utilities/ai-gradient' as *;
+@use '@carbon/styles/scss/components/dialog' as *;
 @use '@carbon/styles/scss/components/modal' as *;
 @use '@carbon/styles/scss/components/button' as *;
 @use '@carbon/styles/scss/utilities/focus-outline' as *;
 
-:host(#{$prefix}-modal[open]) {
-  @extend .#{$prefix}--modal;
-
-  opacity: 1;
-  transition:
-    opacity $duration-moderate-02 motion(entrance, expressive),
-    visibility 0ms linear;
-  visibility: inherit;
-
-  .#{$prefix}--modal-container {
-    transform: translate3d(0, 0, 0);
-    transition: transform $duration-moderate-02 motion(entrance, expressive);
-  }
-
-  @media screen and (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+// modal host - the native <dialog> in shadow DOM handles overlay (::backdrop),
+// positioning (top layer), and open/close transitions via .cds--dialog
+:host([data-modal]) {
+  display: contents;
 }
 
-:host(#{$prefix}-modal) {
-  @extend .#{$prefix}--modal;
-
-  opacity: 0;
-  transition:
-    opacity $duration-moderate-02 motion(exit, expressive),
-    visibility 0ms linear $duration-moderate-02;
-  visibility: hidden;
-}
-
-:host(#{$prefix}-modal[full-width]) {
+:host([data-modal][full-width]) {
   ::slotted(#{$prefix}-modal-body) {
     padding: 0;
     margin: 0;
   }
 }
 
-:host(#{$prefix}-modal[has-scrolling-content]) ::slotted(#{$prefix}-modal-body),
-:host(#{$prefix}-modal) ::slotted(#{$prefix}-modal-body[is-scrollable]) {
+:host([data-modal][has-scrolling-content]) ::slotted(#{$prefix}-modal-body),
+:host([data-modal]) ::slotted(#{$prefix}-modal-body[is-scrollable]) {
   @extend .#{$prefix}--modal-scroll-content;
 }
 
-:host(#{$prefix}-modal) ::slotted(#{$prefix}-modal-body[no-fade]) {
+:host([data-modal]) ::slotted(#{$prefix}-modal-body[no-fade]) {
   @extend .#{$prefix}--modal-scroll-content--no-fade;
 }
 
+// sub-component host styles (shared stylesheet applied to each sub-component)
 :host(#{$prefix}-modal-header) {
   @extend .#{$prefix}--modal-header;
 }
@@ -172,12 +151,11 @@
 }
 
 // AI Label
-
-:host(#{$prefix}-modal[ai-label]) {
+:host([data-modal][ai-label]) .#{$prefix}--dialog::backdrop {
   background-color: $ai-overlay;
 }
 
-:host(#{$prefix}-modal[ai-label]) .#{$prefix}--modal-container {
+:host([data-modal][ai-label]) .#{$prefix}--modal-container {
   @include ai-popover-gradient('default', 0, 'layer');
 
   border: 1px solid transparent;
@@ -187,7 +165,7 @@
     0 24px 40px -24px $ai-drop-shadow;
 }
 
-:host(#{$prefix}-modal[ai-label][has-footer]) .#{$prefix}--modal-container {
+:host([data-modal][ai-label][has-footer]) .#{$prefix}--modal-container {
   @include ai-popover-gradient('default', 64px, 'layer');
 
   box-shadow:
@@ -196,7 +174,7 @@
     0 24px 40px -24px $ai-drop-shadow;
 }
 
-:host(#{$prefix}-modal[ai-label][has-scrolling-content]) {
+:host([data-modal][ai-label][has-scrolling-content]) {
   ::slotted(#{$prefix}-modal-body:not([no-fade])) {
     mask-image: linear-gradient(
         to bottom,
@@ -210,10 +188,9 @@
   }
 }
 
-:host(#{$prefix}-modal[ai-label])
+:host([data-modal][ai-label])
   .#{$prefix}--modal-content--overflow-indicator::before,
-:host(#{$prefix}-modal[ai-label])
-  .#{$prefix}--modal-content--overflow-indicator {
+:host([data-modal][ai-label]) .#{$prefix}--modal-content--overflow-indicator {
   display: none;
 }
 

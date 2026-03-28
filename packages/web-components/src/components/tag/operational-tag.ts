@@ -195,6 +195,11 @@ class CDSOperationalTag extends HostListenerMixin(FocusMixin(LitElement)) {
     return `${prefix}-operational-tag-selected`;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 

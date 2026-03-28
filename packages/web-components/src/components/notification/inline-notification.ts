@@ -282,6 +282,11 @@ class CDSInlineNotification extends FocusMixin(LitElement) {
     return `${prefix}-notification-closed`;
   }
 
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   static styles = styles;
 }
 
