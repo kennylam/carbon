@@ -78,7 +78,6 @@ export interface IconIndicatorProps {
   size?: 16 | 20;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 export const IconIndicator = React.forwardRef(
   (
     { className: customClassName, kind, label, size = 16 }: IconIndicatorProps,

@@ -61,7 +61,6 @@ export interface FluidTimePickerProps extends FluidTextInputProps {
   readOnly?: boolean;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const FluidTimePicker = React.forwardRef<
   HTMLInputElement,
   FluidTimePickerProps

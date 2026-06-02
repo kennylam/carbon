@@ -83,7 +83,6 @@ export type SelectableTagProps<T extends React.ElementType> = PolymorphicProps<
   SelectableTagBaseProps
 >;
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const SelectableTag = forwardRef(
   <T extends React.ElementType>(
     {

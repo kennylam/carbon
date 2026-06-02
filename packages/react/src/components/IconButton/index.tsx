@@ -147,7 +147,6 @@ export interface IconButtonProps
   wrapperClasses?: string;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const IconButton = forwardRef<unknown, IconButtonProps>(
   (
     {

@@ -178,7 +178,6 @@ const getPageSize = (pageSizes: PaginationPageSize[], pageSize?: number) => {
   return pageSizes[0].value;
 };
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const Pagination = React.forwardRef(
   (
     {

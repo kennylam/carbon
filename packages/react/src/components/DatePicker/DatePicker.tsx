@@ -346,7 +346,6 @@ export interface DatePickerProps {
   prevMonthAriaLabel?: string;
 }
 
-// eslint-disable-next-line react/display-name
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
   const {
     allowInput,
@@ -940,14 +939,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) => {
     }
   }, [value, prefix, startInputField]);
 
-  let fluidError;
-
   return (
     <div className={wrapperClasses} ref={ref} {...rest}>
       <div className={datePickerClasses} ref={wrapperRef}>
         {childrenWithProps}
       </div>
-      {fluidError}
     </div>
   );
 });

@@ -53,7 +53,6 @@ export interface FluidTimePickerSelectProps {
   readOnly?: boolean;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const FluidTimePickerSelect = React.forwardRef<
   HTMLSelectElement,
   FluidTimePickerSelectProps

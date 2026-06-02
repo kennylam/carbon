@@ -109,12 +109,10 @@ const ExampleDropContainerApp = (props) => {
   };
 
   const labelClasses = classnames(`${prefix}--file--label`, {
-    // eslint-disable-next-line react/prop-types
     [`${prefix}--file--label--disabled`]: props.disabled,
   });
 
   const helperTextClasses = classnames(`${prefix}--label-description`, {
-    // eslint-disable-next-line react/prop-types
     [`${prefix}--label-description--disabled`]: props.disabled,
   });
 
@@ -146,7 +144,6 @@ const ExampleDropContainerApp = (props) => {
             filesize={file.filesize}
             errorSubject="File size exceeds limit"
             errorBody="1 MB max file size. Select a new file and try again."
-            // eslint-disable-next-line react/prop-types
             size={props.size}
             status={file.status}
             iconDescription={file.iconDescription}

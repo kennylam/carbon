@@ -797,7 +797,7 @@ const Slider = (props: SliderProps) => {
       return;
     }
 
-    let delta = 0;
+    let delta: number;
     if (matches(evt, [keys.ArrowDown, keys.ArrowLeft])) {
       delta = -step;
     } else if (matches(evt, [keys.ArrowUp, keys.ArrowRight])) {

@@ -1217,7 +1217,6 @@ export interface TabProps extends HTMLAttributes<HTMLElement> {
   secondaryLabel?: string;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const Tab = forwardRef<HTMLElement, TabProps>(
   (
     {
@@ -1593,7 +1592,6 @@ export interface IconTabProps extends DivAttributes {
    */
   leaveDelayMs?: number;
 }
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const IconTab = React.forwardRef<HTMLDivElement, IconTabProps>(
   (
     {
@@ -1694,7 +1692,6 @@ export interface TabPanelProps extends DivAttributes {
   className?: string;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const TabPanel = React.forwardRef<HTMLDivElement, TabPanelProps>(
   ({ children, className: customClassName, ...rest }, forwardRef) => {
     const prefix = usePrefix();

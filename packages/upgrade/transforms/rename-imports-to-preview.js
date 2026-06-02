@@ -38,7 +38,7 @@ function transformer(file, api) {
         if (specifier.type === 'ImportSpecifier') {
           nonStableComponentKeys.forEach((c) => {
             let importedName = specifier.imported.name;
-            let transformedImportedName = importedName;
+            let transformedImportedName;
             if (importedName === c) {
               transformedImportedName = reactPreviewMap[c];
               specifier.imported.name = transformedImportedName;

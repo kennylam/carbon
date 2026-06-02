@@ -12,7 +12,6 @@ import { usePrefix } from '../../internal/usePrefix';
 import { GridSettings, useGridSettings } from './GridContext';
 import { GridComponent, GridBaseProps } from './GridTypes';
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const CSSGrid = React.forwardRef<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
   any,
@@ -151,7 +150,6 @@ interface SubgridBaseProps {
   withRowGap?: boolean;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const Subgrid = React.forwardRef<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
   any,

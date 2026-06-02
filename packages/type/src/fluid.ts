@@ -65,13 +65,11 @@ const fluidTypeSize = (
   const defaultFontSize = defaultStyles.fontSize ?? '';
   const breakpointFontSize = fluidBreakpoint?.fontSize;
 
-  let maxFontSize = defaultFontSize;
   let minFontSize = defaultFontSize;
   if (breakpointFontSize) {
     minFontSize = breakpointFontSize;
   }
 
-  let maxViewportWidth = breakpoint.width;
   const minViewportWidth = breakpoint.width;
 
   let nextBreakpointAvailable = next(fluidBreakpointName);
@@ -93,8 +91,8 @@ const fluidTypeSize = (
       return minFontSize;
     }
 
-    maxFontSize = nextFontSize;
-    maxViewportWidth = nextFluidBreakpoint.width;
+    const maxFontSize = nextFontSize;
+    const maxViewportWidth = nextFluidBreakpoint.width;
 
     return `calc(${minFontSize} + ${subtract(
       maxFontSize,

@@ -43,7 +43,6 @@ import {
 } from '@carbon/icons-react';
 import mdx from './UIShell.mdx';
 
-/* eslint-disable react/prop-types */
 const StoryContent = ({ useResponsiveOffset = true }) => {
   const [open, setOpen] = useState(false);
   const classNameFirstColumn = cx({

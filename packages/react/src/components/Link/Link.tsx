@@ -76,7 +76,6 @@ type LinkComponent = <T extends React.ElementType = 'a'>(
 ) => React.ReactElement | any;
 
 // First create the component with basic types
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const LinkBase = React.forwardRef<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
   any,

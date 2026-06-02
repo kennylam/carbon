@@ -550,7 +550,6 @@ export const validateNumberSeparators = (
   return fullRegex.test(input);
 };
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const NumberInput = React.forwardRef<HTMLInputElement, NumberInputProps>(
   (props: NumberInputProps, forwardRef) => {
     const {

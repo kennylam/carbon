@@ -255,7 +255,6 @@ export interface OverflowMenuProps
   innerRef?: Ref<any>;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 export const OverflowMenu = forwardRef<HTMLButtonElement, OverflowMenuProps>(
   (
     {

@@ -219,7 +219,8 @@ async function cherryPickCommitsFrom(commitRange, bump) {
         await execa('git', ['cherry-pick', '--abort']);
         throw new Error(
           'Unable to proceed with cherry-picking after failed conflict ' +
-            'resolution attempt'
+            'resolution attempt',
+          { cause: error }
         );
       }
     }

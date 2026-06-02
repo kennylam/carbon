@@ -42,7 +42,7 @@ function transform(fileInfo, api, options) {
       if (specifier.type === 'ImportSpecifier') {
         let importedName = specifier.imported.name;
         let localName = specifier.local ? specifier.local.name : importedName;
-        let transformedImportedName = importedName;
+        let transformedImportedName;
         let transformedLocalName = localName;
 
         // Transform imported names and local names as necessary

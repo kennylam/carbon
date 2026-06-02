@@ -95,7 +95,6 @@ export interface ShapeIndicatorProps {
   textSize?: 12 | 14;
 }
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 export const ShapeIndicator = React.forwardRef(
   (
     {

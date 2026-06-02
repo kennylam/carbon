@@ -214,7 +214,7 @@ class CDSToggle extends HostListenerMixin(CDSCheckbox) {
       [`${prefix}--visually-hidden`]: hideLabel,
     });
 
-    let stateText = '';
+    let stateText: string;
 
     if (hideLabel) {
       stateText = labelText || '';

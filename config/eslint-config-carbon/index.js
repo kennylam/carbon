@@ -36,9 +36,6 @@ export const base = [
       'no-template-curly-in-string': 'error',
       'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
       'require-atomic-updates': 'error',
-      // newly recommended in ESLint 10. defe to a warning until existing
-      // violations are resolved, then promote back to 'error'
-      'no-unassigned-vars': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { ignoreRestSiblings: true },

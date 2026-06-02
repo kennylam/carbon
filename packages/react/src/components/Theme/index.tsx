@@ -29,7 +29,6 @@ export const ThemeContext = React.createContext<GlobalThemeProps>({
   theme: 'white',
 });
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 export const GlobalTheme = React.forwardRef(
   (
     { children, theme }: PropsWithChildren<GlobalThemeProps>,

@@ -109,7 +109,6 @@ export type DismissibleTagProps<T extends React.ElementType> = PolymorphicProps<
   DismissibleTagBaseProps
 >;
 
-// eslint-disable-next-line react/display-name -- https://github.com/carbon-design-system/carbon/issues/20452
 const DismissibleTag = forwardRef(
   <T extends React.ElementType>(
     {

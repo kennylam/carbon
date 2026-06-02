@@ -119,7 +119,6 @@ export const ExampleDropContainerApp = (props) => {
         iconDescription: 'Uploading',
         invalidFileType: file.invalidFileType,
       }));
-      // eslint-disable-next-line react/prop-types
       if (props.multiple) {
         setFiles([...files, ...newFiles]);
         newFiles.forEach(uploadFile);
@@ -128,7 +127,6 @@ export const ExampleDropContainerApp = (props) => {
         uploadFile(newFiles[0]);
       }
     },
-    // eslint-disable-next-line react/prop-types
     [files, props.multiple]
   );
 
@@ -141,12 +139,10 @@ export const ExampleDropContainerApp = (props) => {
   );
 
   const labelClasses = classnames(`${prefix}--file--label`, {
-    // eslint-disable-next-line react/prop-types
     [`${prefix}--file--label--disabled`]: props.disabled,
   });
 
   const helperTextClasses = classnames(`${prefix}--label-description`, {
-    // eslint-disable-next-line react/prop-types
     [`${prefix}--label-description--disabled`]: props.disabled,
   });
 
@@ -181,7 +177,6 @@ export const ExampleDropContainerApp = (props) => {
               uuid={uuid}
               name={name}
               filesize={filesize}
-              // eslint-disable-next-line react/prop-types
               size={props.size}
               status={status}
               iconDescription={iconDescription}
