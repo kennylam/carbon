@@ -5,15 +5,8 @@ import { dirname, join, posix, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { includeIgnoreFile } from '@eslint/compat';
-import eslint from '@eslint/js';
-import jsdoc from 'eslint-plugin-jsdoc';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import testingLibrary from 'eslint-plugin-testing-library';
+import carbon, { testing as carbonTesting } from 'eslint-config-carbon';
 import { defineConfig } from 'eslint/config';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
 /**
  * @param {string} filePath
@@ -128,41 +121,17 @@ const nestedGitignorePatterns = gitignorePaths
   .filter((gitignoreFile) => gitignoreFile !== rootGitignore)
   .flatMap((gitignoreFile) => parseNestedGitignore(gitignoreFile, repoRoot));
 
-// TODO: There is an `eslintConfig` reference in `package.json`. Investigate
-// whether it should be moved to this file or deleted.
-// https://github.com/carbon-design-system/carbon/issues/18991
-
 export default defineConfig(
   includeIgnoreFile(rootGitignore),
   {
     name: 'Imported nested .gitignore patterns',
     ignores: nestedGitignorePatterns,
   },
-  eslint.configs.recommended,
-  tseslint.configs.strict,
+  // shared rules in eslint-config-carbon
+  ...carbon,
+  ...carbonTesting,
   {
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...globals.jest,
-        ...globals.node,
-      },
-    },
-    rules: {
-      // These rules have directives in the codebase that disable them,
-      // which implies that they were set previously.
-      'no-console': 'error',
-      'no-template-curly-in-string': 'error',
-      'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
-      'require-atomic-updates': 'error',
-
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { ignoreRestSiblings: true },
-      ],
-    },
-  },
-  {
+    name: 'carbon/monorepo/no-console',
     files: [
       '**/tasks/**',
       'actions/**',
@@ -174,57 +143,12 @@ export default defineConfig(
     },
   },
   {
-    files: ['**/*.js'],
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-  },
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    plugins: {
-      'jsx-a11y': jsxA11y,
-      react: react,
-      'react-hooks': reactHooks,
-      jsdoc: jsdoc,
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-    languageOptions: {
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
-    },
-    rules: {
-      ...jsxA11y.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...reactHooks.configs.recommended.rules,
-      // ...jsdoc.configs['flat/recommended'].rules, // Too noisy at the moment. Uncomment it to enable it.
-    },
-  },
-  {
-    files: [
-      '**/__tests__/**/*.{js,jsx,ts,tsx}',
-      '**/*.{test,spec}.{js,jsx,ts,tsx}',
-    ],
-    plugins: {
-      'testing-library': testingLibrary,
-    },
-    rules: {
-      ...testingLibrary.configs.react.rules,
-    },
-  },
-  {
+    name: 'carbon/monorepo/figma',
     files: ['packages/react/code-connect/**/*.figma.tsx'],
     rules: {
       '@typescript-eslint/ban-ts-comment': ['error', { 'ts-nocheck': false }],
       '@typescript-eslint/no-unused-vars': 'off',
       'react-hooks/rules-of-hooks': 'off',
-      'react/jsx-no-undef': 'off',
     },
   },
   {
