@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
 import { find, forEach } from '../../globals/internal/collection-helpers';
@@ -32,7 +32,9 @@ export { RADIO_BUTTON_ORIENTATION };
  *   The name of the custom event fired after a radio button changes its checked state.
  */
 @customElement(`${prefix}-radio-button-group`)
-class CDSRadioButtonGroup extends FormMixin(HostListenerMixin(LitElement)) {
+class CDSRadioButtonGroup extends FormAssociatedMixin(
+  HostListenerMixin(LitElement)
+) {
   /**
    * Handles user-initiated change in selected radio button.
    */
@@ -70,18 +72,6 @@ class CDSRadioButtonGroup extends FormMixin(HostListenerMixin(LitElement)) {
       );
     }
   };
-
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (
-      !disabled &&
-      typeof name !== 'undefined' &&
-      typeof value !== 'undefined'
-    ) {
-      formData.append(name, value);
-    }
-  }
 
   /**
    * Handles `slotchange` event.
@@ -168,7 +158,7 @@ class CDSRadioButtonGroup extends FormMixin(HostListenerMixin(LitElement)) {
   /**
    * The `name` attribute for the `<input>` for selection.
    */
-  @property()
+  @property({ reflect: true })
   name!: string;
 
   /**

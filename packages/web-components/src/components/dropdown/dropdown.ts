@@ -15,7 +15,7 @@ import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import FocusMixin from '../../globals/mixins/focus';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import ValidityMixin from '../../globals/mixins/validity';
 import HostListener from '../../globals/decorators/host-listener';
@@ -65,7 +65,7 @@ export {
  */
 @customElement(`${prefix}-dropdown`)
 class CDSDropdown extends ValidityMixin(
-  HostListenerMixin(FormMixin(FocusMixin(LitElement)))
+  HostListenerMixin(FormAssociatedMixin(FocusMixin(LitElement)))
 ) {
   /**
    * `true` if there is an AI Label.
@@ -936,14 +936,6 @@ class CDSDropdown extends ValidityMixin(
    *
    * @param event The event.
    */
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
-  }
-
   /**
    * 'aria-label' of the ListBox component.
    * Specify a label to be read by screen readers on the container node
@@ -1002,7 +994,7 @@ class CDSDropdown extends ValidityMixin(
   /**
    * Name for the dropdown in the `FormData`
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**

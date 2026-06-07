@@ -40,11 +40,13 @@ const HostListenerMixin = <T extends Constructor<HTMLElement>>(
    */
   class HostListenerMixinImpl extends Base {
     /**
-     * The list of handles managed by this mix-in.
+     * The list of handles managed by this mix-in
+     * Not using TypeScript `private`
+     * https://github.com/microsoft/TypeScript/issues/17744
      *
      * @private
      */
-    _handles: Set<Handle> = new Set(); // Not using TypeScript `private` due to: microsoft/TypeScript#17744
+    _handles: Set<Handle> = new Set();
 
     connectedCallback() {
       // @ts-expect-error: Until `connectedCallback` is added to `HTMLElement` definition
@@ -94,6 +96,8 @@ const HostListenerMixin = <T extends Constructor<HTMLElement>>(
 
     /**
      * The map, keyed by method name, of event listeners that should be attached to host element or host document.
+     * Not using TypeScript `private`
+     * https://github.com/microsoft/TypeScript/issues/17744
      *
      * @private
      */
@@ -103,7 +107,7 @@ const HostListenerMixin = <T extends Constructor<HTMLElement>>(
           options?: boolean | AddEventListenerOptions;
         };
       };
-    } = {}; // Not using TypeScript `private` due to: microsoft/TypeScript#17744
+    } = {};
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

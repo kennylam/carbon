@@ -11,7 +11,7 @@ import { LitElement, html } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import styles from './checkbox.scss?lit';
 import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
@@ -27,7 +27,7 @@ import { iconLoader } from '../../globals/internal/icon-loader';
  * @csspart label The label.
  */
 @customElement(`${prefix}-checkbox`)
-class CDSCheckbox extends FocusMixin(FormMixin(LitElement)) {
+class CDSCheckbox extends FocusMixin(FormAssociatedMixin(LitElement)) {
   @query('input')
   protected _checkboxNode!: HTMLInputElement;
 
@@ -60,12 +60,24 @@ class CDSCheckbox extends FocusMixin(FormMixin(LitElement)) {
     }
   }
 
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { checked, disabled, name, value = 'on' } = this;
-    if (!disabled && checked) {
-      formData.append(name, value);
+  _getFormValue() {
+    const { checked, disabled, value } = this;
+    if (disabled || !checked) {
+      return null;
     }
+    return value ?? 'on';
+  }
+
+  formResetCallback() {
+    this.checked = Boolean(this.defaultChecked);
+    this.indeterminate = false;
+  }
+
+  formStateRestoreCallback(state: string | null) {
+    // on bfcache/autofill restore the browser returns the value we registered
+    // via setFormValue(), which we only set while checked. So a non-null state
+    // means the box was checked; restore `checked` (not `value`) accordingly.
+    this.checked = state !== null;
   }
 
   /**
@@ -127,7 +139,7 @@ class CDSCheckbox extends FocusMixin(FormMixin(LitElement)) {
   /**
    * The form name.
    */
-  @property()
+  @property({ reflect: true })
   name!: string;
 
   /**

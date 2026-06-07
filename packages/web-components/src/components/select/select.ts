@@ -13,7 +13,7 @@ import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import { filter } from '../../globals/internal/collection-helpers';
 import { INPUT_SIZE } from '../text-input/text-input';
 import { iconLoader } from '../../globals/internal/icon-loader';
@@ -32,7 +32,7 @@ import { carbonElement as customElement } from '../../globals/decorators/carbon-
  * @slot validity-message - The validity message. If present and non-empty, this input shows the UI of its invalid state.
  */
 @customElement(`${prefix}-select`)
-class CDSSelect extends FormMixin(LitElement) {
+class CDSSelect extends FormAssociatedMixin(LitElement) {
   /**
    * `true` if there is an AI Label.
    */
@@ -143,14 +143,6 @@ class CDSSelect extends FormMixin(LitElement) {
             `;
       })}
     `;
-  }
-
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
   }
 
   /**
@@ -282,7 +274,7 @@ class CDSSelect extends FormMixin(LitElement) {
   /**
    * Name for the select in the `FormData`
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**

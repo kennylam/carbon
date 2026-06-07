@@ -156,6 +156,14 @@ class CDSTextarea extends CDSTextInput {
   protected _textarea!: HTMLTextAreaElement;
 
   /**
+   * Anchor native validation bubble to the `<textarea>` rather than the
+   * inherited `<input>` query (doesn't exist in this shadow root)
+   */
+  get _validityAnchor() {
+    return this._textarea ?? undefined;
+  }
+
+  /**
    * The previous counterMode selected. This lets the counterMode state update
    * when the user toggles between both modes.
    */

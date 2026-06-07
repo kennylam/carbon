@@ -9,8 +9,19 @@ import on from './on';
 import Handle from '../internal/handle';
 
 /**
- * @param Base The base class.
- * @returns A mix-in to handle `formdata` event on the containing form.
+ * fire once per session rather than once per component that applies the mixin
+ */
+let hasWarnedFormMixinDeprecation = false;
+
+/**
+ * @param Base The base class
+ * @returns A mix-in to handle `formdata` event on the containing form
+ *
+ * @deprecated This mixin was a stop-gap for form participation before
+ *   FACE was broadly supported. Use `FormAssociatedMixin` (`./form-associated`),
+ *   which uses `ElementInternals` to participate in form submission natively.
+ *   `FormMixin` is retained for backward compatibility and will be removed in
+ *   an upcoming major version
  */
 const FormMixin = <T extends Constructor<HTMLElement>>(
   Base: T
@@ -23,16 +34,28 @@ const FormMixin = <T extends Constructor<HTMLElement>>(
     disconnectedCallback(): void;
   };
 } & T => {
+  if (!hasWarnedFormMixinDeprecation) {
+    hasWarnedFormMixinDeprecation = true;
+    // eslint-disable-next-line no-console
+    console.warn(
+      '`FormMixin` is deprecated and will be removed in an upcoming major ' +
+        'version. Use `FormAssociatedMixin` (globals/mixins/form-associated), ' +
+        'which participates in form submission natively via `ElementInternals`.'
+    );
+  }
+
   /**
-   * A mix-in class to handle `formdata` event on the containing form.
+   * A mix-in class to handle `formdata` event on the containing form
    */
   abstract class FormMixinImpl extends Base {
     /**
-     * The handle for `formdata` event listener on the containing form.
+     * The handle for `formdata` event listener on the containing form
+     * Not using TypeScript `private`
+     * https://github.com/microsoft/TypeScript/issues/17744
      *
      * @private
      */
-    _hFormdata: Handle | null = null; // Not using TypeScript `private` due to: microsoft/TypeScript#17744
+    _hFormdata: Handle | null = null;
 
     /**
      * Handles `formdata` event.

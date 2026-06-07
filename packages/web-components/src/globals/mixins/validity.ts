@@ -31,6 +31,9 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
   new (...args: any[]): {
     _getValidityMessage(state: string): string | undefined;
     _testValidity(): string;
+    _customValidityMessage: string;
+    _refreshInternalsValidity(): void;
+    get _validityAnchor(): HTMLElement | undefined;
     invalid: boolean;
     required: boolean;
     requiredValidityMessage: string;
@@ -38,13 +41,16 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
     get value(): string;
     set value(v: string);
     checkValidity(): boolean;
+    reportValidity(): boolean;
     setCustomValidity(validityMessage: string): void;
   };
 } & T => {
   abstract class ValidityMixinImpl extends Base {
-    // Not using TypeScript `protected` due to: microsoft/TypeScript#17744
     // Using `string` instead of `VALIDATION_STATUS` until we can require TypeScript 3.8
     /**
+     * Not using TypeScript `private`
+     * https://github.com/microsoft/TypeScript/issues/17744
+     *
      * @param state The form validation status.
      * @returns The form validation error messages associated with the given status.
      * @protected
@@ -56,10 +62,11 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
       }[state];
     }
 
-    // Not using TypeScript `protected` due to: microsoft/TypeScript#17744
     // Using `string` instead of `VALIDATION_STATUS` until we can require TypeScript 3.8
     /**
      * Checks if the value meets the constraints.
+     * Not using TypeScript `private`
+     * https://github.com/microsoft/TypeScript/issues/17744
      *
      * @returns `VALIDATION_STATUS.NO_ERROR` if the value meets the constraints. Some other values otherwise.
      * @protected
@@ -97,6 +104,73 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
     abstract value: string;
 
     /**
+     * Message from `setCustomValidity()`, combined with intrinsic constraints
+     * into a single `setValidity()` call
+     */
+    _customValidityMessage = '';
+
+    /**
+     * The element the validation bubble anchors to. Defaults to the `<input>`;
+     * override when the editable element isn't an `<input>`, e.g. textarea
+     * `undefined` (not `null`) when absent - `setValidity`'s anchor is a
+     * non-nullable `HTMLElement`
+     *
+     * @protected
+     */
+    get _validityAnchor(): HTMLElement | undefined {
+      return (this as unknown as { _input?: HTMLElement })._input ?? undefined;
+    }
+
+    /**
+     * Sync to `ElementInternals.setValidity()` so native
+     * validation (`:invalid`, submission gating, `reportValidity()`) tracks the
+     * component without explicit `checkValidity()`. `required` and empty maps
+     * to `valueMissing`; `setCustomValidity()` adds `customError`
+     *
+     * @protected
+     */
+    _refreshInternalsValidity() {
+      const internals = (this as unknown as { _internals?: ElementInternals })
+        ._internals;
+      if (!internals || typeof internals.setValidity !== 'function') {
+        return;
+      }
+
+      const anchor = this._validityAnchor;
+      const status = this._testValidity();
+      const flags: ValidityStateFlags = {};
+      let message = '';
+
+      if (status === VALIDATION_STATUS.ERROR_REQUIRED) {
+        flags.valueMissing = true;
+        message = this.requiredValidityMessage;
+      }
+
+      if (this._customValidityMessage) {
+        flags.customError = true;
+        message = this._customValidityMessage;
+      }
+
+      // throw if flags are set without message
+      if (Object.keys(flags).length === 0) {
+        internals.setValidity({});
+      } else {
+        internals.setValidity(flags, message, anchor);
+      }
+    }
+
+    /**
+     * Refresh native validity on every render. Does not dispatch `invalid`
+     * or change the visual `invalid` state (those stay with `checkValidity()`)
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    update(changedProperties: any) {
+      // @ts-expect-error - `update` exists on the Lit base class
+      super.update(changedProperties);
+      this._refreshInternalsValidity();
+    }
+
+    /**
      * Checks if the value meets the constraints.
      * Fires cancelable `invalid` event if it doesn't.
      *
@@ -117,11 +191,28 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
           this.invalid = true;
           this.validityMessage = this._getValidityMessage(status) as string;
         }
+        this._refreshInternalsValidity();
         return false;
       }
       this.invalid = false;
       this.validityMessage = '';
+      this._refreshInternalsValidity();
       return true;
+    }
+
+    /**
+     * Checks validity and surface native validation UI
+     *
+     * @returns `true` if value meets constraints
+     */
+    reportValidity() {
+      this._refreshInternalsValidity();
+      const internals = (this as unknown as { _internals?: ElementInternals })
+        ._internals;
+      if (internals && typeof internals.reportValidity === 'function') {
+        return internals.reportValidity();
+      }
+      return this.checkValidity();
     }
 
     /**
@@ -130,8 +221,10 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
      * @param validityMessage The custom validity message
      */
     setCustomValidity(validityMessage: string) {
+      this._customValidityMessage = validityMessage;
       this.invalid = Boolean(validityMessage);
       this.validityMessage = validityMessage;
+      this._refreshInternalsValidity();
     }
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

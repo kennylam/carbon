@@ -16,7 +16,7 @@ import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import View16 from '@carbon/icons/es/view/16.js';
 import ViewOff16 from '@carbon/icons/es/view--off/16.js';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import ValidityMixin from '../../globals/mixins/validity';
 import {
   INPUT_COLOR_SCHEME,
@@ -44,7 +44,7 @@ export {
  * @slot validity-message - The validity message. If present and non-empty, this input shows the UI of its invalid state.
  */
 @customElement(`${prefix}-text-input`)
-class CDSTextInput extends ValidityMixin(FormMixin(LitElement)) {
+class CDSTextInput extends ValidityMixin(FormAssociatedMixin(LitElement)) {
   /**
    * `true` if there is an AI Label.
    */
@@ -94,14 +94,6 @@ class CDSTextInput extends ValidityMixin(FormMixin(LitElement)) {
    */
   protected _handleInput({ target }: Event) {
     this.value = (target as HTMLInputElement).value;
-  }
-
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
   }
 
   protected _handleHelperTextSlotChange() {
@@ -183,7 +175,7 @@ class CDSTextInput extends ValidityMixin(FormMixin(LitElement)) {
   /**
    * Name for the input in the `FormData`
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**

@@ -13,7 +13,7 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import ValidityMixin from '../../globals/mixins/validity';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import { prefix } from '../../globals/settings';
 import styles from './time-picker.scss?lit';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
@@ -27,7 +27,7 @@ import { TIME_PICKER_SIZE } from './defs';
  * @slot validity-message - The validity message. If present and non-empty, this input shows the UI of its invalid state.
  */
 @customElement(`${prefix}-time-picker`)
-class CDSTimePicker extends ValidityMixin(FormMixin(LitElement)) {
+class CDSTimePicker extends ValidityMixin(FormAssociatedMixin(LitElement)) {
   /**
    * The underlying input element
    */
@@ -56,15 +56,6 @@ class CDSTimePicker extends ValidityMixin(FormMixin(LitElement)) {
    */
   protected _handleSlotChange() {
     this.requestUpdate();
-  }
-
-  _handleFormdata(event: Event) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-    const { formData } = event as any;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
   }
 
   /**
@@ -106,7 +97,7 @@ class CDSTimePicker extends ValidityMixin(FormMixin(LitElement)) {
   /**
    * Name for the input in FormData
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**

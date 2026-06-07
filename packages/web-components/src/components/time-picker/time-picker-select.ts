@@ -16,7 +16,7 @@ import { filter } from '../../globals/internal/collection-helpers';
 import styles from './time-picker.scss?lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { TIME_PICKER_SIZE } from './defs';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 
 /**
  * Time picker select dropdown.
@@ -24,7 +24,7 @@ import FormMixin from '../../globals/mixins/form';
  * @element cds-time-picker-select
  */
 @customElement(`${prefix}-time-picker-select`)
-class CDSTimePickerSelect extends FormMixin(LitElement) {
+class CDSTimePickerSelect extends FormAssociatedMixin(LitElement) {
   /**
    * The mutation observer for DOM mutation.
    */
@@ -69,7 +69,7 @@ class CDSTimePickerSelect extends FormMixin(LitElement) {
   /**
    * Name for the select in the `FormData`
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**
@@ -140,15 +140,6 @@ class CDSTimePickerSelect extends FormMixin(LitElement) {
         </option>
       `;
     });
-  }
-
-  _handleFormdata(event: Event) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-    const { formData } = event as any; // TODO: Wait for `FormDataEvent` being available in `lib.dom.d.ts`
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
   }
 
   connectedCallback() {

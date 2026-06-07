@@ -11,7 +11,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import throttle from 'lodash-es/throttle';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
 import CDSSliderInput from './slider-input';
@@ -54,7 +54,9 @@ const EVENT_THROTTLE = 16; // ms
  * @fires cds-slider-changed - The custom event fired after the value is changed by user gesture.
  */
 @customElement(`${prefix}-slider`)
-class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
+class CDSSlider extends HostListenerMixin(
+  FormAssociatedMixin(FocusMixin(LitElement))
+) {
   private _cachedRateUpper: number = 1;
   private _cachedRate: number = 0;
   private dragCooldownTimeout: number | null = null;
@@ -196,12 +198,12 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
     }
   }
 
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, String(value));
+  _getFormValue() {
+    const { disabled, value } = this;
+    if (disabled || value === undefined || value === null) {
+      return null;
     }
+    return String(value);
   }
 
   /**
@@ -711,7 +713,7 @@ class CDSSlider extends HostListenerMixin(FormMixin(FocusMixin(LitElement))) {
   /**
    * The form name.
    */
-  @property()
+  @property({ reflect: true })
   name!: string;
 
   /**

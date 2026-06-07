@@ -13,7 +13,7 @@ import Search16 from '@carbon/icons/es/search/16.js';
 import Close16 from '@carbon/icons/es/close/16.js';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
 import FocusMixin from '../../globals/mixins/focus';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import { SEARCH_SIZE } from './defs';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
@@ -35,7 +35,9 @@ export { SEARCH_SIZE };
  * @fires cds-search-input - The custom event fired after the search content is changed upon a user gesture.
  */
 @customElement(`${prefix}-search`)
-class CDSSearch extends HostListenerMixin(FocusMixin(FormMixin(LitElement))) {
+class CDSSearch extends HostListenerMixin(
+  FocusMixin(FormAssociatedMixin(LitElement))
+) {
   /**
    * Handles `input` event on the `<input>` in the shadow DOM.
    */
@@ -182,14 +184,6 @@ class CDSSearch extends HostListenerMixin(FocusMixin(FormMixin(LitElement))) {
     this.hasCustomIcon = true;
   }
 
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
-  }
-
   /**
    * Move focus back to the magnifier element.
    * Adds tabindex="-1" if it is not focusable yet.
@@ -255,7 +249,7 @@ class CDSSearch extends HostListenerMixin(FocusMixin(FormMixin(LitElement))) {
   /**
    * The form name in `FormData`.
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**

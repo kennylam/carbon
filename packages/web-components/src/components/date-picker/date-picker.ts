@@ -15,7 +15,7 @@ import {
   Plugin as FlatpickrPlugin,
 } from 'flatpickr/dist/types/options';
 import { prefix } from '../../globals/settings';
-import FormMixin from '../../globals/mixins/form';
+import FormAssociatedMixin from '../../globals/mixins/form-associated';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
 import { getISODateString, parseISODateString } from './iso-date';
@@ -73,7 +73,7 @@ flatpickr!.l10ns!.en!.weekdays.shorthand.forEach((_day, index) => {
  *   The name of the custom event when Flatpickr throws an error.
  */
 @customElement(`${prefix}-date-picker`)
-class CDSDatePicker extends HostListenerMixin(FormMixin(LitElement)) {
+class CDSDatePicker extends HostListenerMixin(FormAssociatedMixin(LitElement)) {
   /**
    * The slotted `<cds-date-input kind="from">`.
    */
@@ -229,14 +229,6 @@ class CDSDatePicker extends HostListenerMixin(FormMixin(LitElement)) {
       .map((date) => getISODateString(date))
       .join('/');
   };
-
-  _handleFormdata(event: FormDataEvent) {
-    const { formData } = event;
-    const { disabled, name, value } = this;
-    if (!disabled) {
-      formData.append(name, value);
-    }
-  }
 
   /**
    * Handles `slotchange` event in the `<slot>`.
@@ -482,7 +474,7 @@ class CDSDatePicker extends HostListenerMixin(FormMixin(LitElement)) {
   /**
    * Name for the input in the `FormData`
    */
-  @property()
+  @property({ reflect: true })
   name = '';
 
   /**
