@@ -23,7 +23,17 @@ let hasWarnedFormMixinDeprecation = false;
  *   `FormMixin` is retained for backward compatibility and will be removed in
  *   an upcoming major version
  */
-const FormMixin = <T extends Constructor<HTMLElement>>(
+const FormMixin = <
+  T extends Constructor<
+    // `connectedCallback`/`disconnectedCallback` are custom-element reactions,
+    // not part of the DOM's `HTMLElement` type, constrain base to
+    // include them.
+    HTMLElement & {
+      connectedCallback(): void;
+      disconnectedCallback(): void;
+    }
+  >,
+>(
   Base: T
 ): {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -65,8 +75,6 @@ const FormMixin = <T extends Constructor<HTMLElement>>(
     abstract _handleFormdata(event: Event): void;
 
     connectedCallback() {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       super.connectedCallback();
       const form = this.closest('form');
       if (form) {
@@ -78,8 +86,6 @@ const FormMixin = <T extends Constructor<HTMLElement>>(
       if (this._hFormdata) {
         this._hFormdata = this._hFormdata.release();
       }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       super.disconnectedCallback();
     }
   }

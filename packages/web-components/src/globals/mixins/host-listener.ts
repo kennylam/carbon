@@ -15,10 +15,22 @@ const EVENT_NAME_FORMAT =
   /^((document|window|parentRoot|shadowRoot):)?([\w-]+)$/;
 
 /**
+ * The custom-element reactions this mixin chains into. They are not part of
+ * the DOM's `HTMLElement` type (they are custom-element reactions the user
+ * agent calls), so the base is constrained to include them.
+ */
+interface ReactiveElementLifecycle {
+  connectedCallback(): void;
+  disconnectedCallback(): void;
+}
+
+/**
  * @param Base The base class.
  * @returns A mix-in that sets up and cleans up event listeners defined by `@HostListener` decorator.
  */
-const HostListenerMixin = <T extends Constructor<HTMLElement>>(
+const HostListenerMixin = <
+  T extends Constructor<HTMLElement & ReactiveElementLifecycle>,
+>(
   Base: T
 ): {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,7 +61,6 @@ const HostListenerMixin = <T extends Constructor<HTMLElement>>(
     _handles: Set<Handle> = new Set();
 
     connectedCallback() {
-      // @ts-expect-error: Until `connectedCallback` is added to `HTMLElement` definition
       super.connectedCallback();
       const hostListeners = (this.constructor as typeof HostListenerMixinImpl)
         ._hostListeners;
@@ -90,7 +101,6 @@ const HostListenerMixin = <T extends Constructor<HTMLElement>>(
         handle.release();
         this._handles.delete(handle);
       });
-      // @ts-expect-error: Until `disconnectedCallback` is added to `HTMLElement` definition
       super.disconnectedCallback();
     }
 

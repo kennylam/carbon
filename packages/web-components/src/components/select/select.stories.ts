@@ -10,7 +10,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 // Below path will be there when an application installs `carbon-web-components` package.
 // In our dev env, we auto-generate the file and re-map below path to to point to the generated file.
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- https://github.com/carbon-design-system/carbon/issues/20452
-// @ts-ignore
+// @ts-ignore: path is re-mapped to the generated file in dev (see note above)
 import { prefix } from '../../globals/settings';
 import { INPUT_SIZE } from '../text-input/text-input';
 import './index';

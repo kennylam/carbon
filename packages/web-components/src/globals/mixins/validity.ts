@@ -46,7 +46,8 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
   };
 } & T => {
   abstract class ValidityMixinImpl extends Base {
-    // Using `string` instead of `VALIDATION_STATUS` until we can require TypeScript 3.8
+    // Typed as `string` rather than `VALIDATION_STATUS` so subclasses can
+    // return their own statuses, e.g. `NUMBER_INPUT_VALIDATION_STATUS`
     /**
      * Not using TypeScript `private`
      * https://github.com/microsoft/TypeScript/issues/17744
@@ -62,7 +63,8 @@ const ValidityMixin = <T extends Constructor<HTMLElement>>(
       }[state];
     }
 
-    // Using `string` instead of `VALIDATION_STATUS` until we can require TypeScript 3.8
+    // Typed as `string` rather than `VALIDATION_STATUS` so subclasses can
+    // return their own statuses, e.g. `NUMBER_INPUT_VALIDATION_STATUS`
     /**
      * Checks if the value meets the constraints.
      * Not using TypeScript `private`
