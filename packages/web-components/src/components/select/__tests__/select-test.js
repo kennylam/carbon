@@ -294,4 +294,42 @@ describe('cds-select', () => {
     const internalSelect = el.shadowRoot.querySelector('select');
     expect(internalSelect.getAttribute('aria-invalid')).to.equal('false');
   });
+
+  describe('form association', () => {
+    const selectForm = html`
+      <form>
+        <cds-select name="opt" label-text="Select" value="b">
+          <cds-select-item value="a">A</cds-select-item>
+          <cds-select-item value="b">B</cds-select-item>
+        </cds-select>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-select').formAssociated).to.be.true;
+    });
+
+    it('should submit its value under the name', async () => {
+      const form = await fixture(selectForm);
+      await form.querySelector('cds-select').updateComplete;
+      expect(new FormData(form).get('opt')).to.equal('b');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-select name="opt" label-text="Select" value="b" disabled>
+            <cds-select-item value="a">A</cds-select-item>
+            <cds-select-item value="b">B</cds-select-item>
+          </cds-select>
+        </form>
+      `);
+      expect(new FormData(form).get('opt')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(selectForm);
+      expect(form.querySelector('cds-select').form).to.equal(form);
+    });
+  });
 });

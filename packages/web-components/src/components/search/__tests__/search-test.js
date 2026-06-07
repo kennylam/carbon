@@ -163,4 +163,51 @@ describe('cds-search', () => {
       expect(input).to.have.property('value', 'test-value');
     });
   });
+
+  describe('form association', () => {
+    const searchForm = html`
+      <form>
+        <cds-search name="q" label-text="Search" value="hello"></cds-search>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-search').formAssociated).to.be.true;
+    });
+
+    it('should submit its value under the name', async () => {
+      const form = await fixture(searchForm);
+      await form.querySelector('cds-search').updateComplete;
+      expect(new FormData(form).get('q')).to.equal('hello');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-search
+            name="q"
+            label-text="Search"
+            value="hello"
+            disabled></cds-search>
+        </form>
+      `);
+      expect(new FormData(form).get('q')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(searchForm);
+      expect(form.querySelector('cds-search').form).to.equal(form);
+    });
+
+    it('should reset to its default value on form reset', async () => {
+      const form = await fixture(searchForm);
+      const el = form.querySelector('cds-search');
+      await el.updateComplete;
+      el.value = 'changed';
+      await el.updateComplete;
+      form.reset();
+      await el.updateComplete;
+      expect(el.value).to.equal('hello');
+    });
+  });
 });

@@ -270,4 +270,86 @@ describe('cds-time-picker', () => {
       expect(inputEl).to.not.have.class('cds--time-picker__input-field-error');
     });
   });
+
+  describe('form association', () => {
+    const timeForm = html`
+      <form>
+        <cds-time-picker name="time" value="12:30"></cds-time-picker>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-time-picker').formAssociated).to.be.true;
+    });
+
+    it('should submit its value under the name', async () => {
+      const form = await fixture(timeForm);
+      await form.querySelector('cds-time-picker').updateComplete;
+      expect(new FormData(form).get('time')).to.equal('12:30');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-time-picker name="time" value="12:30" disabled></cds-time-picker>
+        </form>
+      `);
+      expect(new FormData(form).get('time')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(timeForm);
+      expect(form.querySelector('cds-time-picker').form).to.equal(form);
+    });
+
+    it('should report `valueMissing` for an empty required field', async () => {
+      const el = await fixture(html`
+        <cds-time-picker name="time" required></cds-time-picker>
+      `);
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(el.validity.valid).to.be.false;
+    });
+  });
+});
+
+describe('cds-time-picker-select', () => {
+  describe('form association', () => {
+    const selectForm = html`
+      <form>
+        <cds-time-picker-select name="period" value="pm">
+          <cds-select-item value="am">AM</cds-select-item>
+          <cds-select-item value="pm">PM</cds-select-item>
+        </cds-time-picker-select>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-time-picker-select').formAssociated).to.be
+        .true;
+    });
+
+    it('should submit its value under the name', async () => {
+      const form = await fixture(selectForm);
+      await form.querySelector('cds-time-picker-select').updateComplete;
+      expect(new FormData(form).get('period')).to.equal('pm');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-time-picker-select name="period" value="pm" disabled>
+            <cds-select-item value="am">AM</cds-select-item>
+            <cds-select-item value="pm">PM</cds-select-item>
+          </cds-time-picker-select>
+        </form>
+      `);
+      expect(new FormData(form).get('period')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(selectForm);
+      expect(form.querySelector('cds-time-picker-select').form).to.equal(form);
+    });
+  });
 });

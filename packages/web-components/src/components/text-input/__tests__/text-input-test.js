@@ -302,4 +302,113 @@ describe('cds-text-input', () => {
     expect(wrapper.classList.contains('cds--text-input-wrapper--inline')).to.be
       .true;
   });
+
+  describe('form association', () => {
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-text-input').formAssociated).to.be.true;
+    });
+
+    it('should participate in native form submission', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-text-input name="username" value="ada"></cds-text-input>
+        </form>
+      `);
+      const formData = new FormData(form);
+      expect(formData.get('username')).to.equal('ada');
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-text-input name="username" value="ada"></cds-text-input>
+        </form>
+      `);
+      const el = form.querySelector('cds-text-input');
+      expect(el.form).to.equal(form);
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-text-input name="username" value="ada" disabled></cds-text-input>
+        </form>
+      `);
+      const formData = new FormData(form);
+      expect(formData.get('username')).to.be.null;
+    });
+
+    it('should reset to its default value on form reset', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-text-input name="username" value="ada"></cds-text-input>
+        </form>
+      `);
+      const el = form.querySelector('cds-text-input');
+      el.value = 'changed';
+      await el.updateComplete;
+      form.reset();
+      await el.updateComplete;
+      expect(el.value).to.equal('ada');
+    });
+  });
+
+  describe('constraint validation', () => {
+    it('should report `valueMissing` for an empty required field without an explicit check', async () => {
+      const el = await fixture(html`
+        <cds-text-input name="username" required></cds-text-input>
+      `);
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(el.validity.valid).to.be.false;
+      expect(el.willValidate).to.be.true;
+    });
+
+    it('should clear `valueMissing` once a value is provided', async () => {
+      const el = await fixture(html`
+        <cds-text-input name="username" required></cds-text-input>
+      `);
+      el.value = 'ada';
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.false;
+      expect(el.validity.valid).to.be.true;
+    });
+
+    it('should block native submission while an empty required field is invalid', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-text-input name="username" required></cds-text-input>
+        </form>
+      `);
+      // A form with an invalid required control should not pass validation.
+      expect(form.checkValidity()).to.be.false;
+      form.querySelector('cds-text-input').value = 'ada';
+      await form.querySelector('cds-text-input').updateComplete;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it('should layer a custom validity message as `customError`', async () => {
+      const el = await fixture(html`
+        <cds-text-input name="username" value="ada"></cds-text-input>
+      `);
+      el.setCustomValidity('Nope');
+      await el.updateComplete;
+      expect(el.validity.customError).to.be.true;
+      expect(el.validationMessage).to.equal('Nope');
+      el.setCustomValidity('');
+      await el.updateComplete;
+      expect(el.validity.customError).to.be.false;
+      expect(el.validity.valid).to.be.true;
+    });
+
+    it('should keep `customError` alongside an intrinsic `valueMissing`', async () => {
+      const el = await fixture(html`
+        <cds-text-input name="username" required></cds-text-input>
+      `);
+      el.setCustomValidity('Nope');
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(el.validity.customError).to.be.true;
+    });
+  });
 });

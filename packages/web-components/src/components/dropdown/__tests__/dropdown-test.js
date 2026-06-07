@@ -760,4 +760,57 @@ describe('cds-dropdown-skeleton', function () {
       }
     });
   });
+
+  describe('form association', () => {
+    const dropdownForm = html`
+      <form>
+        <cds-dropdown name="fruit" title-text="Fruit" value="option-2">
+          <cds-dropdown-item value="option-1">Option 1</cds-dropdown-item>
+          <cds-dropdown-item value="option-2">Option 2</cds-dropdown-item>
+        </cds-dropdown>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-dropdown').formAssociated).to.be.true;
+    });
+
+    it('should submit its value under the name', async () => {
+      const form = await fixture(dropdownForm);
+      await form.querySelector('cds-dropdown').updateComplete;
+      expect(new FormData(form).get('fruit')).to.equal('option-2');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-dropdown
+            name="fruit"
+            title-text="Fruit"
+            value="option-2"
+            disabled>
+            <cds-dropdown-item value="option-1">Option 1</cds-dropdown-item>
+            <cds-dropdown-item value="option-2">Option 2</cds-dropdown-item>
+          </cds-dropdown>
+        </form>
+      `);
+      expect(new FormData(form).get('fruit')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(dropdownForm);
+      expect(form.querySelector('cds-dropdown').form).to.equal(form);
+    });
+
+    it('should report `valueMissing` for an empty required dropdown', async () => {
+      const el = await fixture(html`
+        <cds-dropdown name="fruit" title-text="Fruit" required>
+          <cds-dropdown-item value="option-1">Option 1</cds-dropdown-item>
+        </cds-dropdown>
+      `);
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(el.validity.valid).to.be.false;
+    });
+  });
 });

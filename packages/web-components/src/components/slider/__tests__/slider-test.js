@@ -544,4 +544,68 @@ describe('cds-slider', () => {
     const expectedValue = -10 + (90 / 100) * (10 - -10);
     expect(el.value).to.equal(expectedValue);
   });
+
+  describe('form association', () => {
+    const sliderForm = html`
+      <form>
+        <cds-slider
+          name="volume"
+          label-text="Volume"
+          min="0"
+          max="100"
+          step="1"
+          value="42">
+          <cds-slider-input
+            aria-label="Volume"
+            type="number"></cds-slider-input>
+        </cds-slider>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-slider').formAssociated).to.be.true;
+    });
+
+    it('should submit its value as a string', async () => {
+      const form = await fixture(sliderForm);
+      await form.querySelector('cds-slider').updateComplete;
+      expect(new FormData(form).get('volume')).to.equal('42');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-slider
+            name="volume"
+            label-text="Volume"
+            min="0"
+            max="100"
+            step="1"
+            value="42"
+            disabled>
+            <cds-slider-input
+              aria-label="Volume"
+              type="number"></cds-slider-input>
+          </cds-slider>
+        </form>
+      `);
+      expect(new FormData(form).get('volume')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(sliderForm);
+      expect(form.querySelector('cds-slider').form).to.equal(form);
+    });
+
+    it('should reset to its default value on form reset', async () => {
+      const form = await fixture(sliderForm);
+      const el = form.querySelector('cds-slider');
+      await el.updateComplete;
+      el.value = 10;
+      await el.updateComplete;
+      form.reset();
+      await el.updateComplete;
+      expect(el.value).to.equal(42);
+    });
+  });
 });

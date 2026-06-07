@@ -253,4 +253,35 @@ describe('cds-textarea', () => {
       expect(content.textContent.trim()).to.equal('Slotted Warning');
     });
   });
+
+  describe('constraint validation', () => {
+    it('should report `valueMissing` for an empty required field', async () => {
+      const el = await fixture(html`
+        <cds-textarea name="bio" required></cds-textarea>
+      `);
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(el.validity.valid).to.be.false;
+    });
+
+    it('should clear `valueMissing` once a value is provided', async () => {
+      const el = await fixture(html`
+        <cds-textarea name="bio" required></cds-textarea>
+      `);
+      el.value = 'hello';
+      await el.updateComplete;
+      expect(el.validity.valueMissing).to.be.false;
+      expect(el.validity.valid).to.be.true;
+    });
+
+    it('should anchor validity to the textarea element', async () => {
+      const el = await fixture(html`
+        <cds-textarea name="bio" required></cds-textarea>
+      `);
+      await el.updateComplete;
+      expect(el._validityAnchor).to.equal(
+        el.shadowRoot.querySelector('textarea')
+      );
+    });
+  });
 });

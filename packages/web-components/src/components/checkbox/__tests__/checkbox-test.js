@@ -361,4 +361,66 @@ describe('cds-checkbox', function () {
     expect(aiLabel).to.exist;
     expect(aiLabel.getAttribute('size')).to.equal('md');
   });
+
+  describe('form association', () => {
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-checkbox').formAssociated).to.be.true;
+    });
+
+    it('should submit its value only when checked', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-checkbox name="terms" value="accepted" checked
+            >Terms</cds-checkbox
+          >
+        </form>
+      `);
+      expect(new FormData(form).get('terms')).to.equal('accepted');
+    });
+
+    it('should default the submitted value to "on"', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-checkbox name="terms" checked>Terms</cds-checkbox>
+        </form>
+      `);
+      expect(new FormData(form).get('terms')).to.equal('on');
+    });
+
+    it('should not submit a value when unchecked', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-checkbox name="terms" value="accepted">Terms</cds-checkbox>
+        </form>
+      `);
+      expect(new FormData(form).get('terms')).to.be.null;
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-checkbox name="terms" value="accepted" checked disabled
+            >Terms</cds-checkbox
+          >
+        </form>
+      `);
+      expect(new FormData(form).get('terms')).to.be.null;
+    });
+
+    it('should reset to its default checked state on form reset', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-checkbox name="terms" value="accepted" default-checked
+            >Terms</cds-checkbox
+          >
+        </form>
+      `);
+      const el = form.querySelector('cds-checkbox');
+      el.checked = false;
+      await el.updateComplete;
+      form.reset();
+      await el.updateComplete;
+      expect(el.checked).to.be.true;
+    });
+  });
 });

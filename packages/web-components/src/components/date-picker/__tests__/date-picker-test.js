@@ -252,4 +252,39 @@ describe('cds-date-picker', () => {
       expect(formRequirement?.textContent?.trim()).to.equal(warnText);
     });
   });
+
+  describe('form association', () => {
+    const dateForm = (extra = '') => html`
+      <form>
+        <cds-date-picker name="dob" value="2024-01-15" ?disabled="${!!extra}">
+          <cds-date-picker-input
+            kind="single"
+            label-text="Date"
+            placeholder="mm/dd/yyyy">
+          </cds-date-picker-input>
+        </cds-date-picker>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-date-picker').formAssociated).to.be.true;
+    });
+
+    it('should submit its value under the name', async () => {
+      const form = await fixture(dateForm());
+      await form.querySelector('cds-date-picker').updateComplete;
+      expect(new FormData(form).get('dob')).to.equal('2024-01-15');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(dateForm('disabled'));
+      await form.querySelector('cds-date-picker').updateComplete;
+      expect(new FormData(form).get('dob')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(dateForm());
+      expect(form.querySelector('cds-date-picker').form).to.equal(form);
+    });
+  });
 });

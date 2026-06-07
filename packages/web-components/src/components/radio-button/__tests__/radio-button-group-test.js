@@ -286,4 +286,56 @@ describe('cds-radio-button-group', () => {
         .to.be.false;
     });
   });
+
+  describe('form association', () => {
+    const groupForm = html`
+      <form>
+        <cds-radio-button-group name="plan" value="pro">
+          <cds-radio-button label-text="Basic" value="basic"></cds-radio-button>
+          <cds-radio-button label-text="Pro" value="pro"></cds-radio-button>
+        </cds-radio-button-group>
+      </form>
+    `;
+
+    it('should be a form-associated custom element', () => {
+      expect(customElements.get('cds-radio-button-group').formAssociated).to.be
+        .true;
+    });
+
+    it('should submit the selected value under the group name', async () => {
+      const form = await fixture(groupForm);
+      await form.querySelector('cds-radio-button-group').updateComplete;
+      expect(new FormData(form).get('plan')).to.equal('pro');
+    });
+
+    it('should not submit a value when disabled', async () => {
+      const form = await fixture(html`
+        <form>
+          <cds-radio-button-group name="plan" value="pro" disabled>
+            <cds-radio-button
+              label-text="Basic"
+              value="basic"></cds-radio-button>
+            <cds-radio-button label-text="Pro" value="pro"></cds-radio-button>
+          </cds-radio-button-group>
+        </form>
+      `);
+      expect(new FormData(form).get('plan')).to.be.null;
+    });
+
+    it('should expose the containing form via the `form` property', async () => {
+      const form = await fixture(groupForm);
+      expect(form.querySelector('cds-radio-button-group').form).to.equal(form);
+    });
+
+    it('should reset to its default value on form reset', async () => {
+      const form = await fixture(groupForm);
+      const el = form.querySelector('cds-radio-button-group');
+      await el.updateComplete;
+      el.value = 'basic';
+      await el.updateComplete;
+      form.reset();
+      await el.updateComplete;
+      expect(el.value).to.equal('pro');
+    });
+  });
 });
