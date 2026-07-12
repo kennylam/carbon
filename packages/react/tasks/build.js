@@ -111,6 +111,10 @@ async function build() {
           ...options,
           chunkFileNames: '[name].js',
           entryFileNames: '[name].js',
+          // `unbundle` already emits `exports.default` for modules
+          // use `named` to keep output and silence `MIXED_EXPORTS` warning for
+          // components like `ContainedList` that expose both named and default exports
+          exports: 'named',
         };
       },
       platform: 'browser',
