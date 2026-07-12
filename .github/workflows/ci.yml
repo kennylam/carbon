@@ -35,17 +35,22 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -61,17 +66,22 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -89,18 +99,23 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         id: cache
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -133,18 +148,23 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         id: cache
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -175,17 +195,22 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -204,22 +229,6 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
-        id: cache
-        with:
-          path: |
-            node_modules
-            */**/node_modules
-          key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
-            'packages/**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        env:
-          YARN_ENABLE_HARDENED_MODE: 0
-        run: yarn install --immutable
       - uses: dorny/paths-filter@7b450fff21473bca461d4b92ce414b9d0420d706 # v4.0.2
         id: filter
         with:
@@ -233,6 +242,29 @@ jobs:
               - 'packages/pictograms/**'
               - 'packages/pictograms-react/**'
               - 'packages/icon-build-helpers/**'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
+        if: ${{ steps.filter.outputs.e2e == 'true' }}
+        id: cache
+        with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
+          path: |
+            node_modules
+            */**/node_modules
+          key:
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            'packages/**/yarn.lock') }}
+          restore-keys: |
+            carbon/ci-cache/${{ runner.os }}-yarn-
+      - name: Install dependencies
+        if: ${{ steps.filter.outputs.e2e == 'true' }}
+        env:
+          YARN_ENABLE_HARDENED_MODE: 0
+        run: yarn install --immutable
       - name: Build project
         if: ${{ steps.filter.outputs.e2e == 'true' }}
         run: yarn build
@@ -248,18 +280,23 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         id: cache
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -295,22 +332,42 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         id: cache
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable
+      - name: Cache Playwright browsers
+        uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
+        with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
+          path: ~/.cache/ms-playwright
+          key:
+            carbon/ci-cache/${{ runner.os }}-playwright-${{
+            hashFiles('yarn.lock') }}
+          restore-keys: |
+            carbon/ci-cache/${{ runner.os }}-playwright-
       - name: Install browsers
         run: yarn playwright install --with-deps
       - name: Download storybook artifacts
@@ -367,18 +424,23 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         id: cache
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
@@ -422,18 +484,23 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
+      - uses: tespkg/actions-cache@e07e2d4953dc8c020d447363e5064e36d04f3cf9 # v1.10.2
         id: cache
         with:
+          endpoint: s3.us-south.cloud-object-storage.appdomain.cloud
+          region: ${{ vars.CARBON_COS_REGION }}
+          bucket: ${{ vars.CARBON_COS_BUCKET }}
+          accessKey: ${{ secrets.CARBON_COS_ACCESS_KEY_ID }}
+          secretKey: ${{ secrets.CARBON_COS_SECRET_ACCESS_KEY }}
+          use-fallback: 'false'
           path: |
             node_modules
             */**/node_modules
           key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
+            carbon/ci-cache/${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
             'packages/**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            carbon/ci-cache/${{ runner.os }}-yarn-
       - name: Install dependencies
         env:
           YARN_ENABLE_HARDENED_MODE: 0
