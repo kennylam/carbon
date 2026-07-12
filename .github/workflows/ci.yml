@@ -1,5 +1,6 @@
 name: ci
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -116,6 +117,7 @@ jobs:
       - name: Merge coverage reports
         run: cat coverage/scss-generator/lcov.info >> coverage/lcov.info
       - name: Upload coverage reports to Codecov with GitHub Action
+        if: github.repository == 'carbon-design-system/carbon'
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           files: ./coverage/lcov.info
@@ -156,6 +158,7 @@ jobs:
           cd packages/web-components
           yarn test --coverage
       - name: Upload web-components coverage reports to Codecov
+        if: github.repository == 'carbon-design-system/carbon'
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           files: ./packages/web-components/coverage/lcov.info
@@ -326,14 +329,14 @@ jobs:
           URL: 'http://localhost:3000'
         timeout-minutes: 3
       - name: Run AVT
-        if: github.repository == 'carbon-design-system/carbon'
+        if: github.repository == 'kennylam/carbon'
         run: |
           yarn playwright test --project chromium --grep @avt --shard="${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
       - name: Stop storybook
         run: kill ${{ steps.storybook.outputs.pid }}
       - name: Upload blob report to GitHub Actions Artifacts
         if:
-          ${{ !cancelled() && github.repository == 'carbon-design-system/carbon'
+          ${{ !cancelled() && github.repository == 'kennylam/carbon'
           }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #7.0.1
         with:
@@ -353,7 +356,7 @@ jobs:
   merge-playwright-reports:
     # Merge reports after avt-runner jobs, even if some shards have failed
     if:
-      ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
+      ${{ github.repository == 'kennylam/carbon' && !cancelled() &&
       github.event.pull_request.draft == false }}
     needs: [avt-runner]
 
