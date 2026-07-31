@@ -359,10 +359,11 @@ function buildDTCGMotionSurfacesJS() {
       `export const ${exportName} = ${JSON.stringify(recipe, null, 2)};`
     );
     dtsLines.push(
-      `export declare const ${exportName}: ${JSON.stringify(recipe, null, 2)
-        .replace(/"([^"]+)":/g, '$1:')
-        .replace(/: "([^"]+)"/g, ': string')
-        .replace(/: (\d+)/g, ': number')};`
+      `export declare const ${exportName}: ${JSON.stringify(
+        recipe,
+        null,
+        2
+      ).replace(/"([^"]+)":/g, '$1:')};`
     );
     jsLines.push('');
     dtsLines.push('');
@@ -398,9 +399,7 @@ function buildDTCGMotionSurfacesJS() {
   );
 
   dtsLines.push(
-    `export declare function getMotionSurface(name: ${surfaceNames
-      .map((n) => `'${n}'`)
-      .join(' | ')}): (typeof surfaces)[typeof name];`,
+    `export declare function getMotionSurface<N extends keyof typeof surfaces>(name: N): (typeof surfaces)[N];`,
     ``
   );
 
