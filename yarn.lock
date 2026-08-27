@@ -20217,7 +20217,6 @@ __metadata:
   resolution: "promote-packages-to-latest@workspace:actions/promote"
   dependencies:
     "@actions/core": "npm:^3.0.0"
-    execa: "npm:^10.0.0"
     fast-glob: "npm:^3.3.3"
     fs-extra: "npm:^11.0.0"
     got: "npm:^15.0.0"

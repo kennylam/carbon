@@ -182,7 +182,12 @@ git push upstream v11.2.0
 - [ ] Verify that this triggers a run of the
       [Release Workflow](https://github.com/carbon-design-system/carbon/actions/workflows/release.yml)
 
-This automatically promotes Carbon packages with new release versions to latest.
+This publishes packages under the `next` dist-tag, then promotes new versions to
+`latest` using GitHub Actions OIDC (no npm token). If promote fails after
+publish succeeds, re-run the Release workflow's `packages` job, or use **Actions
+→ Release → Run workflow**. Do not use the Promote workflow to write dist-tags;
+npm trusted publishing is bound to `release.yml`.
+
 Next you will need to:
 
 - [ ] Verify the packages have been promoted to latest
@@ -584,7 +589,12 @@ git push
 
 ### Something failed in the Release workflow
 
-If the Version workflow fails for some reason and you can't determine the cause,
+If only the `packages` (promote) job failed, packages are already on npm under
+`next` and `latest` is unchanged. Re-run that job on the same workflow run, or
+use **Actions → Release → Run workflow**. Promote uses OIDC from `release.yml`;
+it does not use `CARBON_BOT_NPM_TOKEN`.
+
+If publish or an earlier Release step fails and you can't determine the cause,
 you can always run the same commands from the workflow file in your local dev
 environment as long as you have push access to the repo and publishing access in
 npm.

@@ -4,6 +4,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# npm trusted publishing is bound to the workflow filename `release.yml`.
+# This workflow can dry-run a promote. To actually update dist-tags, re-run the
+# Release `packages` job or use Actions → Release → Run workflow.
 on:
   workflow_dispatch:
     inputs:
@@ -11,7 +14,7 @@ on:
         type: boolean
         description:
           'Run as dry run (will not actually update dist tags)'
-        default: false
+        default: true
 
 jobs:
   packages:
@@ -20,5 +23,4 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./actions/promote
         with:
-          NPM_TOKEN: ${{ secrets.CARBON_BOT_NPM_TOKEN }}
           DRY_RUN: ${{ github.event.inputs.dry_run == 'true' }}
