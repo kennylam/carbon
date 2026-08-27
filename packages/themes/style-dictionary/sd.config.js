@@ -162,10 +162,13 @@ function themeConfig(themeName) {
 // ── Helper: build config for one component ───────────────────────────────────
 function componentConfig(componentName) {
   return {
-    source: [
-      path.join(DTCG_DIR, 'color-palette.json'),
-      path.join(DTCG_DIR, 'components', `${componentName}.json`),
-    ],
+    // The palette is reference-only: it resolves aliases but is filtered out of
+    // every output below. It goes in `include` rather than `source` because SD
+    // runs its collision check only over `source`, and both files carry a
+    // root-level `$description` — a metadata key nothing reads, which would
+    // otherwise warn on every component build.
+    include: [path.join(DTCG_DIR, 'color-palette.json')],
+    source: [path.join(DTCG_DIR, 'components', `${componentName}.json`)],
     preprocessors: ['carbon/component-tokens'],
     platforms: {
       // SCSS component token map
