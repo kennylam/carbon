@@ -1517,6 +1517,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -2756,9 +2757,7 @@ Map {
       "allowInput": {
         "type": "bool",
       },
-      "appendTo": {
-        "type": "object",
-      },
+      "appendTo": [Function],
       "children": {
         "type": "node",
       },
@@ -2781,15 +2780,9 @@ Map {
         ],
         "type": "oneOf",
       },
-      "disable": {
-        "type": "array",
-      },
-      "enable": {
-        "type": "array",
-      },
-      "inline": {
-        "type": "bool",
-      },
+      "disable": [Function],
+      "enable": [Function],
+      "inline": [Function],
       "invalid": {
         "type": "bool",
       },
@@ -2910,9 +2903,7 @@ Map {
       "onOpen": {
         "type": "func",
       },
-      "parseDate": {
-        "type": "func",
-      },
+      "parseDate": [Function],
       "prevMonthAriaLabel": {
         "type": "string",
       },
@@ -3327,6 +3318,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -3371,6 +3363,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -3570,6 +3563,9 @@ Map {
         "type": "bool",
       },
       "enableV12Overflowmenu": {
+        "type": "bool",
+      },
+      "enableV12Release": {
         "type": "bool",
       },
       "enableV12TileDefaultIcons": {
@@ -4099,6 +4095,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -5887,6 +5884,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -7070,6 +7068,7 @@ Map {
       "size": {
         "args": [
           [
+            "xs",
             "sm",
             "md",
             "lg",
@@ -7796,6 +7795,17 @@ Map {
       "backwardText": {
         "type": "string",
       },
+      "backwardTextTooltipPosition": {
+        "args": [
+          [
+            "top",
+            "right",
+            "bottom",
+            "left",
+          ],
+        ],
+        "type": "oneOf",
+      },
       "className": {
         "type": "string",
       },
@@ -7804,6 +7814,17 @@ Map {
       },
       "forwardText": {
         "type": "string",
+      },
+      "forwardTextTooltipPosition": {
+        "args": [
+          [
+            "top",
+            "right",
+            "bottom",
+            "left",
+          ],
+        ],
+        "type": "oneOf",
       },
       "id": {
         "args": [
@@ -7856,18 +7877,12 @@ Map {
       },
       "pageSizes": {
         "args": [
-          [
-            {
-              "args": [
+          {
+            "args": [
+              [
                 {
-                  "isRequired": true,
                   "type": "number",
                 },
-              ],
-              "type": "arrayOf",
-            },
-            {
-              "args": [
                 {
                   "args": [
                     {
@@ -7881,22 +7896,23 @@ Map {
                       },
                     },
                   ],
-                  "isRequired": true,
                   "type": "shape",
                 },
               ],
-              "type": "arrayOf",
-            },
-          ],
+            ],
+            "type": "oneOfType",
+          },
         ],
-        "isRequired": true,
-        "type": "oneOfType",
+        "type": "arrayOf",
       },
       "pageText": {
         "type": "func",
       },
       "pagesUnknown": {
         "type": "bool",
+      },
+      "renderPageSelect": {
+        "type": "func",
       },
       "size": {
         "args": [
@@ -9867,6 +9883,16 @@ Map {
       "scrollIntoView": {
         "type": "bool",
       },
+      "size": {
+        "args": [
+          [
+            "sm",
+            "md",
+            "lg",
+          ],
+        ],
+        "type": "oneOf",
+      },
     },
   },
   "TabListVertical" => {
@@ -9888,6 +9914,17 @@ Map {
       },
       "className": {
         "type": "string",
+      },
+      "size": {
+        "args": [
+          [
+            "sm",
+            "md",
+            "lg",
+            "xl",
+          ],
+        ],
+        "type": "oneOf",
       },
     },
   },
@@ -11794,6 +11831,9 @@ Map {
       "enableV12Overflowmenu": {
         "type": "bool",
       },
+      "enableV12Release": {
+        "type": "bool",
+      },
       "enableV12TileDefaultIcons": {
         "type": "bool",
       },
@@ -12089,6 +12129,68 @@ Map {
       },
     },
   },
+  "preview__Card" => {
+    "Card": {
+      "$$typeof": Symbol(react.forward_ref),
+      "Action": [Function],
+      "Actions": [Function],
+      "Body": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "Footer": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "Header": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "HeaderMedia": [Function],
+      "Media": [Function],
+      "Title": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "TitleMedia": {
+        "$$typeof": Symbol(react.forward_ref),
+        "render": [Function],
+      },
+      "render": [Function],
+    },
+    "CardAction": {
+      "displayName": "Card.Action",
+    },
+    "CardActions": {
+      "displayName": "Card.Actions",
+    },
+    "CardBody": {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+    "CardFooter": {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+    "CardHeader": {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+    "CardHeaderMedia": {
+      "displayName": "Card.HeaderMedia",
+    },
+    "CardMedia": {
+      "displayName": "Card.Media",
+    },
+    "CardTitle": {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+    "CardTitleMedia": {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+  },
   "preview__ChatButton" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
@@ -12161,6 +12263,16 @@ Map {
         "type": "oneOf",
       },
     },
+  },
+  "preview__DatePicker" => {
+    "DatePicker": {
+      "displayName": "DatePicker",
+    },
+    "DatePickerInput": {
+      "$$typeof": Symbol(react.forward_ref),
+      "render": [Function],
+    },
+    "DatePickerSkeleton": {},
   },
   "preview__Dialog" => {
     "Dialog": {
@@ -13473,7 +13585,35 @@ Map {
   "preview__IconIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
+        "type": "string",
+      },
+      "compact": {
+        "type": "bool",
+      },
+      "iconDescription": {
         "type": "string",
       },
       "kind": {
@@ -13721,8 +13861,33 @@ Map {
   "preview__ShapeIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
         "type": "string",
+      },
+      "compact": {
+        "type": "bool",
       },
       "kind": {
         "args": [
@@ -13745,6 +13910,9 @@ Map {
       },
       "label": {
         "isRequired": true,
+        "type": "string",
+      },
+      "shapeDescription": {
         "type": "string",
       },
       "textSize": {
@@ -13968,6 +14136,9 @@ Map {
         "type": "bool",
       },
       "enableV12Overflowmenu": {
+        "type": "bool",
+      },
+      "enableV12Release": {
         "type": "bool",
       },
       "enableV12TileDefaultIcons": {
@@ -15456,7 +15627,35 @@ Map {
   "unstable__IconIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
+        "type": "string",
+      },
+      "compact": {
+        "type": "bool",
+      },
+      "iconDescription": {
         "type": "string",
       },
       "kind": {
@@ -15704,8 +15903,33 @@ Map {
   "unstable__ShapeIndicator" => {
     "$$typeof": Symbol(react.forward_ref),
     "propTypes": {
+      "align": {
+        "args": [
+          [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end",
+          ],
+        ],
+        "type": "oneOf",
+      },
+      "autoAlign": {
+        "type": "bool",
+      },
       "className": {
         "type": "string",
+      },
+      "compact": {
+        "type": "bool",
       },
       "kind": {
         "args": [
@@ -15728,6 +15952,9 @@ Map {
       },
       "label": {
         "isRequired": true,
+        "type": "string",
+      },
+      "shapeDescription": {
         "type": "string",
       },
       "textSize": {

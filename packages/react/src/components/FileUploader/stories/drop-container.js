@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2016, 2025
+ * Copyright IBM Corp. 2016, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -105,6 +105,7 @@ const ExampleDropContainerApp = (props) => {
   const onAddFiles = useCallback(
     (evt, { addedFiles }) => {
       evt.stopPropagation();
+      props.onAddFiles?.(evt, { addedFiles });
       const newFiles = addedFiles.map((file) => ({
         uuid: uniqueId + file.name + file.size,
         name: file.name,
@@ -121,7 +122,7 @@ const ExampleDropContainerApp = (props) => {
         uploadFile(newFiles[0]);
       }
     },
-    [files, props.multiple]
+    [files, props.multiple, props.onAddFiles]
   );
 
   const handleFileUploaderItemClick = useCallback(

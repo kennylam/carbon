@@ -1,5 +1,5 @@
 /**
- * Copyright IBM Corp. 2023, 2024
+ * Copyright IBM Corp. 2023, 2026
  *
  * This source code is licensed under the Apache-2.0 license found in the
  * LICENSE file in the root directory of this source tree.
@@ -12,6 +12,7 @@ import { mergeConfig } from 'vite';
 import { litStyleLoader, litTemplateLoader } from '@mordech/vite-lit-loader';
 import glob from 'fast-glob';
 import remarkGfm from 'remark-gfm';
+import { productMigratedStoryGlobs } from '../product-migrated-components.mjs';
 
 const configDir = fileURLToPath(new URL('.', import.meta.url));
 
@@ -22,7 +23,11 @@ const stories = glob.sync(
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   {
-    ignore: ['../src/**/docs/*.mdx'],
+    ignore: [
+      '../src/**/docs/*.mdx',
+      // ibm-products components in migration are v12-only; exclude from v11 Storybook
+      ...productMigratedStoryGlobs,
+    ],
     cwd: configDir,
   }
 );
@@ -57,6 +62,13 @@ const config: StorybookConfig = {
       optimizeDeps: {
         include: ['@storybook/web-components-vite'],
         exclude: ['lit', 'lit-html'],
+      },
+      build: {
+        /**
+         * Use esbuild for CSS minification because Lightning CSS (Vite 8.0 default)
+         * fails when additional selectors are appended after ::slotted(), ::part(), etc.
+         */
+        cssMinify: 'esbuild',
       },
       define: {
         'process.env.NODE_ENV': JSON.stringify(

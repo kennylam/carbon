@@ -51,6 +51,19 @@
     - new
     - additional
     - add
+- name: add-comments--mobile
+  friendly_name: Add comments mobile
+  aliases:
+    - comments
+    - new
+    - additional
+    - add
+    - plus
+    - plus sign
+    - mobile
+    - phone
+    - device
+    - message
 - name: advanced--fraud--protection
   friendly_name: Advanced fraud protection
   aliases:
@@ -532,7 +545,7 @@
     - Audio data
     - cloud
 - name: audit-trail
-  friendly_name: Audit Trail
+  friendly_name: Audit trail
   aliases:
     - audit trail
     - cloud
@@ -2252,6 +2265,21 @@
     - commercial financing 02
     - financing
     - finance
+- name: complete-work--technician
+  friendly_name: Complete work technician
+  aliases:
+    - done
+    - complete
+    - finished
+    - checkmark
+    - work
+    - work order
+    - technician
+    - man
+    - person
+    - mobile
+    - phone
+    - device
 - name: compliant
   friendly_name: Compliant
   aliases:
@@ -2589,6 +2617,18 @@
     - sea
     - marine life
     - animal
+- name: create-work
+  friendly_name: Create work
+  aliases:
+    - clipboard
+    - work
+    - create
+    - create work
+    - work order
+    - new work
+    - plus
+    - plus sign
+    - add
 - name: credit--card
   friendly_name: Credit card
   aliases:
@@ -3670,10 +3710,10 @@
   aliases:
     - event driven
     - cloud
-- name: expand--horz
-  friendly_name: Expand horz
+- name: expand--horizontal
+  friendly_name: Expand horizontal
   aliases:
-    - expand horz
+    - expand horizontal
     - expand
     - horizontal
 - name: expand--user
@@ -3682,10 +3722,10 @@
     - expand user
     - expand
     - user
-- name: expand--vert
-  friendly_name: Expand vert
+- name: expand--vertical
+  friendly_name: Expand vertical
   aliases:
-    - expand vert
+    - expand vertical
     - expand
     - vertical
 - name: expansion
@@ -4090,6 +4130,12 @@
   friendly_name: Flashing content
   aliases:
     - flashing content
+    - content
+    - container
+    - window
+    - play
+    - play button
+    - video
 - name: flexibility
   friendly_name: Flexibility
   aliases:
@@ -4302,7 +4348,7 @@
     - functions-as-a-service
     - cloud
 - name: gastro-health
-  friendly_name: Gastro Health
+  friendly_name: Gastro health
   aliases:
     - intestines
     - gastro health
@@ -5160,6 +5206,17 @@
     - investments
     - financial
     - insights
+- name: ibm--atx-office
+  friendly_name: IBM® ATX office
+  aliases:
+    - austin
+    - ibm
+    - atx
+    - texas
+    - office
+    - location
+    - work
+    - building
 - name: ibm--automation-platform
   friendly_name: IBM Automation platform
   aliases:
@@ -5635,6 +5692,20 @@
     - communication
     - entry
     - security
+- name: international--standard
+  friendly_name: International standard
+  aliases:
+    - standard
+    - standardization
+    - cohesion
+    - consistency
+    - norm
+    - international
+    - organization
+    - globe
+    - nodes
+    - medal
+    - badge
 - name: internet-of-things
   friendly_name: Internet of things (IoT)
   aliases:
@@ -6260,7 +6331,7 @@
     - management
     - cloud
 - name: managing--containers
-  friendly_name: Managing Containers
+  friendly_name: Managing containers
   aliases:
     - managing containers
     - Cloud
@@ -7713,7 +7784,7 @@
     - security
     - people
 - name: popsicle
-  friendly_name: popsicle
+  friendly_name: Popsicle
   aliases:
     - popsicle
     - sweet
@@ -8358,6 +8429,18 @@
     - data
     - analytics
     - chart
+- name: report-time--technician
+  friendly_name: Report time technician
+  aliases:
+    - time
+    - time card
+    - timesheet
+    - entry
+    - report
+    - technician
+    - man
+    - person
+    - clock
 - name: research
   friendly_name: Research
   aliases:
@@ -8442,6 +8525,16 @@
     - rank
     - watson
     - AI
+- name: review-checklist
+  friendly_name: Review checklist
+  aliases:
+    - checklist
+    - checkbox
+    - clipboard
+    - tasks
+    - items
+    - review
+    - review checklist
 - name: rich--text--format
   friendly_name: Rich text format
   aliases:
@@ -9297,6 +9390,22 @@
   aliases:
     - start-ups
     - cloud
+- name: start-work--technician
+  friendly_name: Start work technician
+  aliases:
+    - begin
+    - start
+    - in progress
+    - play
+    - play button
+    - work
+    - work order
+    - technician
+    - man
+    - person
+    - mobile
+    - phone
+    - device
 - name: station--hydration
   friendly_name: Hydration station
   aliases:
@@ -9488,6 +9597,32 @@
     - weather
     - sky
     - forecast
+- name: supervisor
+  friendly_name: Supervisor
+  aliases:
+    - supervisor
+    - field
+    - dispatcher
+    - work
+    - man
+    - person
+    - helmet
+- name: supervisor-close--work
+  friendly_name: Supervisor close work
+  aliases:
+    - supervisor
+    - close work
+    - manage work
+    - checkmark
+    - dashboard
+    - graph
+    - kpi
+    - field
+    - dispatcher
+    - work
+    - man
+    - person
+    - helmet
 - name: supply--chain--optimization--01
   friendly_name: Supply chain optimization 01
   aliases:
@@ -10544,6 +10679,23 @@
     - endpoint
     - management
     - security
+- name: union
+  friendly_name: Union
+  aliases:
+    - union
+    - globe
+    - people
+    - unity
+- name: union--act
+  friendly_name: Act of union
+  aliases:
+    - union
+    - act
+    - globe
+    - people
+    - document
+    - treaty
+    - agreement
 - name: united-governance
   friendly_name: United governance
   aliases:
