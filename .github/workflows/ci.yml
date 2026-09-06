@@ -419,7 +419,11 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #7.0.1
         with:
           name: html-playwright-avt-report--attempt-${{ github.run_attempt }}
-          path: playwright-avt-report
+          # `playwright merge-reports --reporter html` writes to
+          # playwright-report; this step was looking for playwright-avt-report,
+          # so every run has been logging "No files were found with the provided
+          # path" and uploading nothing.
+          path: playwright-report
           retention-days: 1
 
   chromatic-react:
