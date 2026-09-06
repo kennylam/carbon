@@ -39,7 +39,7 @@ on:
         type: choice
         options: ['default', '1', '50%', '100%']
       offline_ace:
-        description: 'Blackhole able.ibm.com — baseline should fail, a fixed build should pass'
+        description: 'Blackhole the a11y engine CDN — baseline should fail, a fixed build should pass'
         type: boolean
         default: false
       simulate_merge_queue:
@@ -93,7 +93,7 @@ jobs:
             echo "| repeats × shards | ${{ inputs.repeats }} × ${{ inputs.shards }} = ${{ steps.plan.outputs.cells }} shard-jobs |"
             echo "| workers | ${{ inputs.workers }} |"
             echo "| grep | \`${{ inputs.grep }}\` |"
-            echo "| able.ibm.com blackholed | ${{ inputs.offline_ace }} |"
+            echo "| engine CDN blackholed | ${{ inputs.offline_ace }} |"
             echo "| dep cache disabled (merge-queue sim) | ${{ inputs.simulate_merge_queue }} |"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -147,10 +147,11 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=6144
         run: yarn workspace @carbon/react storybook:build
 
-      # Present only on branches that have taken the F1 fix. Harmless elsewhere.
-      - name: Vendor ACE rule archive into the storybook artifact
-        if: hashFiles('tasks/vendor-ace-rules.mjs') != ''
-        run: node tasks/vendor-ace-rules.mjs --out packages/react/storybook-static/rules
+      # Present only on branches that have taken the offline-engine fix.
+      # Harmless elsewhere.
+      - name: Stage ACE rule engine into the storybook artifact
+        if: hashFiles('tasks/stage-ace-rules.mjs') != ''
+        run: node tasks/stage-ace-rules.mjs --out packages/react/storybook-static/rules
 
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -198,14 +199,22 @@ jobs:
           name: avtlab-storybook-static
           path: packages/react/storybook-static
 
-      # The point of the whole lab. With able.ibm.com unreachable, a build that
-      # still fetches the a11y engine at test time cannot pass; a build that
-      # serves it locally is unaffected. Intermittent becomes deterministic.
-      - name: Blackhole able.ibm.com
+      # The point of the whole lab. With the engine CDN unreachable, a build
+      # that still fetches the a11y engine at worker startup cannot pass; a
+      # build that serves it locally is unaffected. Intermittent becomes
+      # deterministic.
+      #
+      # accessibility-checker@4 pulls archives.json, ace.js and ace-node.js from
+      # cdn.jsdelivr.net -- NOT from able.ibm.com, which is commented out as a
+      # default in its own ACConstants. able.ibm.com is blackholed too, so this
+      # stays honest if the default is ever switched back.
+      - name: Blackhole the a11y engine CDN
         if: inputs.offline_ace
         run: |
-          echo "127.0.0.1 able.ibm.com" | sudo tee -a /etc/hosts
-          echo "::warning title=Offline ACE::able.ibm.com resolves to 127.0.0.1 for this job"
+          for host in cdn.jsdelivr.net able.ibm.com; do
+            echo "127.0.0.1 $host" | sudo tee -a /etc/hosts
+          done
+          echo "::warning title=Offline ACE::cdn.jsdelivr.net and able.ibm.com resolve to 127.0.0.1 for this job"
 
       - name: Serve storybook
         id: storybook
