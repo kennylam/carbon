@@ -77,7 +77,7 @@ test.describe('@avt StructuredList', () => {
     });
 
     await expect(page.getByRole('table')).toBeVisible();
-    page.locator('input#row-1').click({ force: true });
+    await page.locator('input#row-1').click({ force: true });
     const row = page.getByRole('row');
     await expect(row.nth(2)).toHaveClass(/cds--structured-list-row--selected/);
 
