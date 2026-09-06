@@ -1,0 +1,289 @@
+# AVT Lab — a measurement harness, not a gate.
+#
+# This workflow exists to answer one question that `ci.yml` cannot: *how often*
+# does AVT fail, and does a given change move that number? A single green run
+# proves nothing about flake, so every dispatch runs the shard matrix N times
+# with `continue-on-error`, collects every outcome, and reports a flake rate.
+#
+# It is intended to live on a fork branch and never be merged upstream.
+#
+# Two deliberate differences from ci.yml:
+#   1. No `github.repository == 'carbon-design-system/carbon'` guard. That guard
+#      makes the "Run AVT" step a no-op on any fork, so a fork run of ci.yml
+#      tells you nothing.
+#   2. `offline_ace` can blackhole able.ibm.com, turning the intermittent
+#      "engine failed to load" flake into a deterministic pass/fail test.
+name: avt-lab
+
+on:
+  workflow_dispatch:
+    inputs:
+      label:
+        description: 'Name for this measurement (shows in the summary)'
+        required: true
+        default: 'baseline'
+      repeats:
+        description: 'How many times to run the full shard matrix (1-10)'
+        required: true
+        default: '3'
+      shards:
+        description: 'Shard count'
+        required: true
+        default: '4'
+        type: choice
+        options: ['1', '4', '6', '8']
+      workers:
+        description: 'Playwright workers per shard (raises race pressure)'
+        required: true
+        default: 'default'
+        type: choice
+        options: ['default', '1', '50%', '100%']
+      offline_ace:
+        description: 'Blackhole able.ibm.com — baseline should fail, a fixed build should pass'
+        type: boolean
+        default: false
+      simulate_merge_queue:
+        description: 'Disable the dependency cache, as merge_group does today'
+        type: boolean
+        default: false
+      grep:
+        description: 'Optional Playwright --grep filter (default: @avt)'
+        required: false
+        default: '@avt'
+
+concurrency:
+  group: avt-lab-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      shards: ${{ steps.plan.outputs.shards }}
+      cells: ${{ steps.plan.outputs.cells }}
+    steps:
+      - id: plan
+        env:
+          REPEATS: ${{ inputs.repeats }}
+          SHARDS: ${{ inputs.shards }}
+        run: |
+          set -euo pipefail
+          repeats=$(( REPEATS > 10 ? 10 : (REPEATS < 1 ? 1 : REPEATS) ))
+          shards="$SHARDS"
+          include=""
+          for r in $(seq 1 "$repeats"); do
+            for s in $(seq 1 "$shards"); do
+              include="${include}{\"repeat\":$r,\"shard\":$s},"
+            done
+          done
+          matrix="{\"include\":[${include%,}]}"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "shards=$shards" >> "$GITHUB_OUTPUT"
+          echo "cells=$(( repeats * shards ))" >> "$GITHUB_OUTPUT"
+
+      - name: Describe the run
+        run: |
+          {
+            echo "## AVT Lab — \`${{ inputs.label }}\`"
+            echo ""
+            echo "| setting | value |"
+            echo "| --- | --- |"
+            echo "| ref | \`${{ github.ref_name }}\` @ \`${{ github.sha }}\` |"
+            echo "| repeats × shards | ${{ inputs.repeats }} × ${{ inputs.shards }} = ${{ steps.plan.outputs.cells }} shard-jobs |"
+            echo "| workers | ${{ inputs.workers }} |"
+            echo "| grep | \`${{ inputs.grep }}\` |"
+            echo "| able.ibm.com blackholed | ${{ inputs.offline_ace }} |"
+            echo "| dep cache disabled (merge-queue sim) | ${{ inputs.simulate_merge_queue }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.sb-cache.outputs.cache-hit }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Key the built Storybook on the inputs that can change it, so repeat
+      # measurements on the same tree skip an 11-minute rebuild entirely.
+      - name: Compute storybook cache key
+        id: key
+        run: |
+          hash=$(git ls-tree -r HEAD --format='%(objectname) %(path)' \
+                 -- packages/react packages/styles packages/themes packages/type \
+                    packages/layout packages/grid packages/colors packages/motion \
+                    yarn.lock \
+                 | sha256sum | cut -c1-32)
+          echo "hash=$hash" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: sb-cache
+        with:
+          path: packages/react/storybook-static
+          key: ${{ runner.os }}-avtlab-storybook-${{ steps.key.outputs.hash }}
+
+      - name: Use Node.js version from .nvmrc
+        if: steps.sb-cache.outputs.cache-hit != 'true'
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        if: steps.sb-cache.outputs.cache-hit != 'true'
+        env:
+          YARN_ENABLE_HARDENED_MODE: 0
+        run: yarn install --immutable
+
+      - name: Build @carbon/react
+        if: steps.sb-cache.outputs.cache-hit != 'true'
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: yarn lerna run build --scope='@carbon/react' --include-dependencies
+
+      - name: Build storybook
+        if: steps.sb-cache.outputs.cache-hit != 'true'
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
+        run: yarn workspace @carbon/react storybook:build
+
+      # Present only on branches that have taken the F1 fix. Harmless elsewhere.
+      - name: Vendor ACE rule archive into the storybook artifact
+        if: hashFiles('tasks/vendor-ace-rules.mjs') != ''
+        run: node tasks/vendor-ace-rules.mjs --out packages/react/storybook-static/rules
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: avtlab-storybook-static
+          path: packages/react/storybook-static
+          retention-days: 1
+
+  run:
+    needs: [plan, build]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Use Node.js version from .nvmrc
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: ${{ inputs.simulate_merge_queue && '' || 'yarn' }}
+
+      - name: Install dependencies
+        env:
+          YARN_ENABLE_HARDENED_MODE: 0
+        run: yarn install --immutable
+
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('yarn.lock') }}
+
+      - name: Install browsers
+        run: |
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
+            yarn playwright install-deps chromium
+          else
+            yarn playwright install --with-deps chromium
+          fi
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: avtlab-storybook-static
+          path: packages/react/storybook-static
+
+      # The point of the whole lab. With able.ibm.com unreachable, a build that
+      # still fetches the a11y engine at test time cannot pass; a build that
+      # serves it locally is unaffected. Intermittent becomes deterministic.
+      - name: Blackhole able.ibm.com
+        if: inputs.offline_ace
+        run: |
+          echo "127.0.0.1 able.ibm.com" | sudo tee -a /etc/hosts
+          echo "::warning title=Offline ACE::able.ibm.com resolves to 127.0.0.1 for this job"
+
+      - name: Serve storybook
+        id: storybook
+        run: |
+          npx --yes serve -l 3000 packages/react/storybook-static &
+          echo "pid=$!" >> "$GITHUB_OUTPUT"
+          npx --yes wait-on http://localhost:3000 --timeout 120000
+
+      - name: Run AVT
+        id: avt
+        continue-on-error: true
+        env:
+          WORKERS: ${{ inputs.workers }}
+        run: |
+          set -o pipefail
+          args=(--project chromium --grep "${{ inputs.grep }}")
+          if [ "${{ inputs.shards }}" != "1" ]; then
+            args+=(--shard="${{ matrix.shard }}/${{ inputs.shards }}")
+          fi
+          if [ "$WORKERS" != "default" ]; then
+            args+=(--workers="$WORKERS")
+          fi
+          start=$(date +%s)
+          set +e
+          yarn playwright test "${args[@]}" 2>&1 | tee avt-output.txt
+          code=$?
+          set -e
+          end=$(date +%s)
+          echo "duration=$(( end - start ))" >> "$GITHUB_OUTPUT"
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Record result
+        run: |
+          mkdir -p lab-results
+          passed=$(grep -oE '[0-9]+ passed' avt-output.txt | tail -1 | grep -oE '[0-9]+' || echo 0)
+          failed=$(grep -oE '[0-9]+ failed' avt-output.txt | tail -1 | grep -oE '[0-9]+' || echo 0)
+          flaky=$(grep -oE '[0-9]+ flaky'  avt-output.txt | tail -1 | grep -oE '[0-9]+' || echo 0)
+          cat > "lab-results/r${{ matrix.repeat }}-s${{ matrix.shard }}.json" <<EOF
+          {
+            "repeat": ${{ matrix.repeat }},
+            "shard": ${{ matrix.shard }},
+            "exitCode": ${{ steps.avt.outputs.code }},
+            "durationSeconds": ${{ steps.avt.outputs.duration }},
+            "passed": ${passed:-0},
+            "failed": ${failed:-0},
+            "flaky": ${flaky:-0}
+          }
+          EOF
+          cat "lab-results/r${{ matrix.repeat }}-s${{ matrix.shard }}.json"
+
+      - name: Stop storybook
+        if: always()
+        run: kill ${{ steps.storybook.outputs.pid }} || true
+
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: lab-result-r${{ matrix.repeat }}-s${{ matrix.shard }}
+          path: |
+            lab-results
+            avt-output.txt
+          retention-days: 3
+
+  report:
+    needs: [plan, run]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@v8
+        with:
+          path: all-results
+          pattern: lab-result-*
+          merge-multiple: true
+
+      - name: Summarise
+        env:
+          LABEL: ${{ inputs.label }}
+          CELLS: ${{ needs.plan.outputs.cells }}
+        run: node tasks/avt-lab-report.mjs all-results/lab-results
