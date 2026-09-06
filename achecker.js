@@ -50,12 +50,22 @@ module.exports = {
         'potentialrecommendation',
         'manual',
       ],
-  // don't share parallel workers
+  // Don't share the engine cache between parallel workers.
+  //
+  // This intent predates the move to Playwright: JEST_WORKER_ID is never set
+  // under Playwright, so the ternary always took the fallback branch and every
+  // worker shared one folder. That matters because `loadEngineLocal` writes
+  // <cacheFolder>/engine/ace-node-<tool>_<archive>.js and then require()s it --
+  // memoised within a process, but not across them. Two workers reaching that
+  // write together leave a truncated file, the require() throws, and every test
+  // in the worker fails. Retries land in fresh processes while the bad file is
+  // still on disk, which is why these failures take out whole shards and never
+  // reproduce as a specific test.
   cacheFolder: path.join(
     os.tmpdir(),
-    process.env.JEST_WORKER_ID
-      ? `accessibility-checker-${process.env.JEST_WORKER_ID}`
-      : 'accessibility-checker'
+    `accessibility-checker-${
+      process.env.TEST_WORKER_INDEX ?? process.env.JEST_WORKER_ID ?? 'single'
+    }`
   ),
   outputFormat: ['json'],
   outputFolder: path.join('.avt', 'reports'),
