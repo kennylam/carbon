@@ -285,6 +285,13 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=6144
         run: yarn workspace @carbon/react storybook:build
+      # Ship the pinned ACE rule engine inside the storybook artifact, so the
+      # shards read it from the same localhost origin as the stories and no
+      # worker fetches it from cdn.jsdelivr.net at test time. achecker.js points
+      # ruleServer/rulePack here under CI, so this step is required: without it
+      # every shard falls back to the public CDN.
+      - name: Stage ACE rule engine
+        run: node tasks/stage-ace-rules.mjs --out packages/react/storybook-static/rules
       - name: Upload storybook static files
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #7.0.1
         with:
