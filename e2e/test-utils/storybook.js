@@ -36,10 +36,18 @@ async function visitStory(page, options) {
   await page.goto(url);
   await expect(page).toContainAStory(options);
 
-  // Ensure Plex assets are fully available for accurate VRT
-  await page.evaluate(async () => {
-    await document.fonts.ready;
-  });
+  // Ensure Plex assets are fully available for accurate VRT.
+  //
+  // There are no *.vrt.e2e.js files in this repo -- visual regression is
+  // Chromatic's job -- so on every AVT run this awaits font loading a few
+  // hundred times to support assertions that do not exist. Gated rather than
+  // deleted so it comes back for free if Playwright VRT is reintroduced;
+  // `playwright.config.js` still lists a vrt testMatch pattern.
+  if (process.env.AVT_WAIT_FOR_FONTS === 'true') {
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+    });
+  }
 }
 
 function getStoryUrl({ component, story, id }) {
