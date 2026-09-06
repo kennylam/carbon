@@ -340,15 +340,22 @@ jobs:
           URL: 'http://localhost:3000'
         timeout-minutes: 3
       - name: Run AVT
-        if: github.repository == 'carbon-design-system/carbon'
+        # Runs on the canonical repo, or on any fork that opts in by setting the
+        # ENABLE_AVT repository variable (Settings -> Secrets and variables ->
+        # Actions -> Variables). Opting in via a variable rather than editing
+        # this condition means a fork validating CI changes runs byte-identical
+        # workflow files, so nothing has to be reverted before opening a PR.
+        if:
+          ${{ github.repository == 'carbon-design-system/carbon' ||
+          vars.ENABLE_AVT == 'true' }}
         run: |
           yarn playwright test --project chromium --grep @avt --shard="${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
       - name: Stop storybook
         run: kill ${{ steps.storybook.outputs.pid }}
       - name: Upload blob report to GitHub Actions Artifacts
         if:
-          ${{ !cancelled() && github.repository == 'carbon-design-system/carbon'
-          }}
+          ${{ !cancelled() && (github.repository ==
+          'carbon-design-system/carbon' || vars.ENABLE_AVT == 'true') }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #7.0.1
         with:
           name: playwright-avt-blob-report-${{ matrix.shardIndex }}
@@ -367,7 +374,8 @@ jobs:
   merge-playwright-reports:
     # Merge reports after avt-runner jobs, even if some shards have failed
     if:
-      ${{ github.repository == 'carbon-design-system/carbon' && !cancelled() &&
+      ${{ (github.repository == 'carbon-design-system/carbon' ||
+      vars.ENABLE_AVT == 'true') && !cancelled() &&
       github.event.pull_request.draft == false }}
     needs: [avt-runner]
 
