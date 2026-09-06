@@ -25,10 +25,21 @@ const config = {
   testMatch: /.*-test(.avt|.vrt)?.e2e\.m?js$/,
 
   // https://playwright.dev/docs/api/class-testconfig#test-config-timeout
-  timeout: 10000 * 30,
+  //
+  // Was 300s per test with a 100s expect timeout. At those values a single
+  // broken assertion costs 100s, and with retries: 2 a broken test occupies a
+  // worker for up to 15 minutes before its shard reports -- which is most of
+  // the gap between the ~4 minutes of actual test work per shard and the ~22
+  // minutes observed. Raise individual cases with test.setTimeout() instead.
+  timeout: 30_000,
 
   // https://playwright.dev/docs/test-timeouts
-  expect: { timeout: 100000 },
+  expect: { timeout: 10_000 },
+
+  // Run tests within a file in parallel, not just files against each other.
+  // Without this the 28 tests in DataTable-test.avt.e2e.js run serially in one
+  // worker, which is the largest source of shard imbalance.
+  fullyParallel: true,
 
   // https://playwright.dev/docs/api/class-testconfig#test-config-output-dir
   outputDir: path.join(__dirname, '.playwright', 'results'),
@@ -36,9 +47,14 @@ const config = {
 
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? '100%' : undefined,
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    // Determinism knobs. Animations in flight during an a11y scan change what
+    // the checker sees; a fixed viewport removes runner-dependent layout.
+    contextOptions: { reducedMotion: 'reduce' },
+    viewport: { width: 1280, height: 720 },
   },
   projects: [
     // Desktop
