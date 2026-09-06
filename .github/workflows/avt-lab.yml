@@ -122,15 +122,16 @@ jobs:
           path: packages/react/storybook-static
           key: ${{ runner.os }}-avtlab-storybook-${{ steps.key.outputs.hash }}
 
+      # Node and dependencies are needed even on a cache hit: the ACE staging
+      # step below copies the engine out of node_modules. Only the two
+      # expensive build steps are skipped when the storybook cache hits.
       - name: Use Node.js version from .nvmrc
-        if: steps.sb-cache.outputs.cache-hit != 'true'
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
 
       - name: Install dependencies
-        if: steps.sb-cache.outputs.cache-hit != 'true'
         env:
           YARN_ENABLE_HARDENED_MODE: 0
         run: yarn install --immutable
