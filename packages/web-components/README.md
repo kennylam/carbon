@@ -82,9 +82,10 @@ at version `v1.16.0`):
 The next major release (v3) changes how components register. See the
 [v3 migration guide](../../docs/guides/cwc-v3-migration.md) to prepare.
 
-**Available now.** Both the opt-in registration API — `defineCustomElement`
-(`es/globals/register.js`) and the `static is` tag field — are available in v2,
-so you can write v3-ready code today.
+**Available now.** The opt-in registration API — `defineCustomElement`
+(`es/globals/register.js`) — ships in v2, and you can adopt the `static is`
+convention in your own element classes today. Carbon's own components still
+self-register in v2; that is what changes in v3.
 
 **Deprecated (will be removed in v3):**
 
@@ -98,9 +99,9 @@ so you can write v3-ready code today.
 
 **Breaking in v3:** In v3, importing a component's class file no longer
 registers its element, e.g. importing `button/button.js` instead of
-`button/index.js`. Test using the `v3` tag — built from the
-[`feat/web-components-v3`](https://github.com/carbon-design-system/carbon/tree/feat/web-components-v3)
-branch.
+`button/index.js`. Prepare today by importing component barrels — they behave
+identically in v2 — and by running the
+[codemods](../../docs/guides/cwc-v3-migration.md#codemods).
 
 ### Other usage guides
 
