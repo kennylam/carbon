@@ -15,7 +15,7 @@ import '../ai-label';
 import '../icon-button';
 import '../link';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './tile-story.scss?lit';
+import styles from './tile-story.scss.js';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
 import '../../../.storybook/templates/with-feature-flags';
 import storyDocs from './tile.featureflag.mdx';

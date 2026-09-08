@@ -12,7 +12,7 @@ import { carbonElement as customElement } from '../../globals/decorators/carbon-
 import { prefix } from '../../globals/settings';
 import '../tooltip/index';
 
-import styles from './truncated-text.scss?lit';
+import styles from './truncated-text.scss.js';
 
 const componentName = 'truncated-text';
 export const blockClass = `${prefix}--${componentName}`;

@@ -10,7 +10,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { DROPDOWN_SIZE } from './defs';
-import styles from './dropdown.scss?lit';
+import styles from './dropdown.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

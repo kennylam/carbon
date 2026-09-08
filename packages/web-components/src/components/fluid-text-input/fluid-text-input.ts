@@ -10,7 +10,7 @@ import { html } from 'lit';
 import { query } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSTextInput from '../text-input/text-input';
-import styles from './fluid-text-input.scss?lit';
+import styles from './fluid-text-input.scss.js';
 
 /**
  * Fluid text input.

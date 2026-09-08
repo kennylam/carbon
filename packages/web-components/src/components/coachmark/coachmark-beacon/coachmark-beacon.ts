@@ -10,7 +10,7 @@ import { property } from 'lit/decorators.js';
 import { prefix } from '../../../globals/settings';
 import HostListenerMixin from '../../../globals/mixins/host-listener';
 import { carbonElement as customElement } from '../../../globals/decorators/carbon-element';
-import styles from './coachmark-beacon.scss?lit';
+import styles from './coachmark-beacon.scss.js';
 import '../../button/button';
 import { BEACON_KIND } from './defs';
 

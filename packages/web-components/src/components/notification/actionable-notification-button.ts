@@ -7,7 +7,7 @@
 
 import { prefix } from '../../globals/settings';
 import CDSButton from '../button/button';
-import styles from './actionable-notification.scss?lit';
+import styles from './actionable-notification.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

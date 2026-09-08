@@ -12,7 +12,7 @@ import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import CaretDown16 from '@carbon/icons/es/caret--down/16.js';
 
-import styles from './tree-view.scss?lit';
+import styles from './tree-view.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

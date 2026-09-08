@@ -17,7 +17,7 @@ import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';
 import { forEach } from '../../globals/internal/collection-helpers';
 import CDSHeaderMenuItem from './header-menu-item';
-import styles from './header.scss?lit';
+import styles from './header.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

@@ -7,8 +7,8 @@
 import { adoptStyles } from 'lit';
 import { prefix } from '../../globals/settings';
 import CDSPopoverContent from '../popover/popover-content';
-import styles from './tooltip.scss?lit';
-import popoverStyles from '../popover/popover.scss?lit';
+import styles from './tooltip.scss.js';
+import popoverStyles from '../popover/popover.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

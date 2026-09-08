@@ -12,7 +12,7 @@ import { prefix } from '../../globals/settings';
 import { forEach } from '../../globals/internal/collection-helpers';
 import FocusMixin from '../../globals/mixins/focus';
 import CDSStructuredListRow from './structured-list-row';
-import styles from './structured-list.scss?lit';
+import styles from './structured-list.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

@@ -9,7 +9,7 @@ import { html, nothing } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { action } from 'storybook/actions';
 import { TABS_ICON_SIZE, TABS_TYPE } from './tabs';
-import styles from './tabs-story.scss?lit';
+import styles from './tabs-story.scss.js';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import Activity16 from '@carbon/icons/es/activity/16.js';

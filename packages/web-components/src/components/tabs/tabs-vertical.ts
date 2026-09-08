@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { breakpoints } from '@carbon/layout';
 import { prefix } from '../../globals/settings';
-import styles from './tabs.scss?lit';
+import styles from './tabs.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

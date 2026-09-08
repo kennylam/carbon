@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
@@ -15,7 +15,7 @@ import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import ValidityMixin from '../../globals/mixins/validity';
 import FormMixin from '../../globals/mixins/form';
 import { prefix } from '../../globals/settings';
-import styles from './time-picker.scss?lit';
+import styles from './time-picker.scss.js';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
 import { TIME_PICKER_SIZE } from './defs';
 
@@ -314,7 +314,7 @@ class CDSTimePicker extends ValidityMixin(FormMixin(LitElement)) {
     delegatesFocus: true,
   };
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSTimePicker;

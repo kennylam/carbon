@@ -8,7 +8,7 @@
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
 import { property, state, query } from 'lit/decorators.js';
-import styles from './menu.scss?lit';
+import styles from './menu.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';

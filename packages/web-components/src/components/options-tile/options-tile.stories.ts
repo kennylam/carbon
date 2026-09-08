@@ -11,7 +11,7 @@ import './index';
 import '@carbon/web-components/es/components/toggle/index.js';
 import '@carbon/web-components/es/components/dropdown/index.js';
 import { languages, locales, blockClass } from './option-tile-helpers.ts';
-import styles from './story-styles.scss?lit';
+import styles from './story-styles.scss.js';
 
 const argTypes = {
   body: {

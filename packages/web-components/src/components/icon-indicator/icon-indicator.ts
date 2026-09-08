@@ -38,7 +38,7 @@ import WarningSquareFilled20 from '@carbon/icons/es/warning-square--filled/20.js
 export { ICON_INDICATOR_KIND };
 
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './icon-indicator.scss?lit';
+import styles from './icon-indicator.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 const iconMap = {

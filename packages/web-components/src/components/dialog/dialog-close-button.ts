@@ -10,7 +10,7 @@ import { prefix } from '../../globals/settings';
 import Close20 from '@carbon/icons/es/close/20.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import styles from './dialog.scss?lit';
+import styles from './dialog.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSModalCloseButton from '../modal/modal-close-button';
 

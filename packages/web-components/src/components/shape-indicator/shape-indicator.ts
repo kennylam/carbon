@@ -12,7 +12,7 @@ import { carbonElement as customElement } from '../../globals/decorators/carbon-
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import '../tooltip/definition-tooltip';
-import styles from './shape-indicator.scss?lit';
+import styles from './shape-indicator.scss.js';
 
 // Import Carbon icons
 import Critical from '@carbon/icons/es/critical/index.js';

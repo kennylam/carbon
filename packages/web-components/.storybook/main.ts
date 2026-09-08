@@ -9,7 +9,6 @@ import type { StorybookConfig } from '@storybook/web-components-vite';
 
 import { fileURLToPath } from 'node:url';
 import { mergeConfig } from 'vite';
-import { litStyleLoader, litTemplateLoader } from '@mordech/vite-lit-loader';
 import glob from 'fast-glob';
 import remarkGfm from 'remark-gfm';
 import { productMigratedStoryGlobs } from '../product-migrated-components.mjs';
@@ -60,7 +59,6 @@ const config: StorybookConfig = {
   async viteFinal(config) {
     // Merge custom configuration into the default config
     return mergeConfig(config, {
-      plugins: [litStyleLoader(), litTemplateLoader()],
       optimizeDeps: {
         include: ['@storybook/web-components-vite'],
         exclude: ['lit', 'lit-html'],

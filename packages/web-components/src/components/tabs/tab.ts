@@ -11,7 +11,7 @@ import { property, state, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import CDSContentSwitcherItem from '../content-switcher/content-switcher-item';
 import { TABS_ICON_SIZE, TABS_TYPE } from './defs';
-import styles from './tabs.scss?lit';
+import styles from './tabs.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import HostListener from '../../globals/decorators/host-listener';

@@ -10,7 +10,7 @@ import { property, query } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
-import styles from './dialog.scss?lit';
+import styles from './dialog.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSModalBase from '../modal/modal-base';
 

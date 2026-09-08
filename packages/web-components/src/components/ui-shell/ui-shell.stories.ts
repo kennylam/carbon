@@ -15,14 +15,13 @@ import Fade16 from '@carbon/icons/es/fade/16.js';
 import Search20 from '@carbon/icons/es/search/20.js';
 import Notification20 from '@carbon/icons/es/notification/20.js';
 import SwitcherIcon20 from '@carbon/icons/es/switcher/20.js';
-import contentStyles from '@carbon/styles/scss/components/ui-shell/content/_content.scss?lit';
 import { SIDE_NAV_COLLAPSE_MODE, SIDE_NAV_USAGE_MODE } from './side-nav';
 import { classMap } from 'lit/directives/class-map.js';
 import './index';
 import '../skip-to-content';
 import '../modal/modal';
 import '../button/button';
-import styles from './ui-shell-story.scss?lit';
+import styles from './ui-shell-story.scss.js';
 import { prefix } from '../../globals/settings';
 import '../badge-indicator/index';
 const linksHref = 'https://www.carbondesignsystem.com/';
@@ -104,9 +103,6 @@ const StoryContent = ({ useResponsiveOffset = true }) => {
     document.querySelector('cds-modal')?.toggleAttribute('open');
   };
   return html`
-    <style type="text/css">
-      ${contentStyles.cssText}
-    </style>
     <main class="${prefix}--content ${prefix}-ce-demo-devenv--ui-shell-content">
       <div class="${prefix}--grid">
         <div class="${prefix}--row">

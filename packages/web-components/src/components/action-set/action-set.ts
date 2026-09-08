@@ -11,7 +11,7 @@ import { property, state } from 'lit/decorators.js';
 import { ref } from 'lit/directives/ref.js';
 import { prefix } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './action-set.scss?lit';
+import styles from './action-set.scss.js';
 import CDSButton from '../button/button';
 import '../button/index';
 

@@ -13,7 +13,7 @@ import { LitElement, html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import { property } from 'lit/decorators.js';
-import styles from './page-header.scss?lit';
+import styles from './page-header.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

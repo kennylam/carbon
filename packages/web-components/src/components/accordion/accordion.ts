@@ -10,7 +10,7 @@ import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { forEach } from '../../globals/internal/collection-helpers';
 import { ACCORDION_SIZE, ACCORDION_ALIGNMENT } from './defs';
-import styles from './accordion.scss?lit';
+import styles from './accordion.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { ACCORDION_SIZE, ACCORDION_ALIGNMENT };

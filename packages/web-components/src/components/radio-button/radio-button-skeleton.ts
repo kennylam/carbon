@@ -7,7 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
-import styles from './radio-button.scss?lit';
+import styles from './radio-button.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

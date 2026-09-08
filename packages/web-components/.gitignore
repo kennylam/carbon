@@ -6,3 +6,7 @@ custom-elements.json
 
 # Storybook
 storybook-static
+storybook-static-v12
+
+# Generated lit style modules (see tasks/build-styles.js)
+*.scss.ts

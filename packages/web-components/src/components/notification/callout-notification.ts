@@ -14,7 +14,7 @@ import CDSActionableNotification, {
   iconsForKinds,
 } from './actionable-notification';
 import { NOTIFICATION_KIND } from './defs';
-import styles from './actionable-notification.scss?lit';
+import styles from './actionable-notification.scss.js';
 
 /**
  * Callout notification.

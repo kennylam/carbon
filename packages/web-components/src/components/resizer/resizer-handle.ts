@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './resizer-handle.scss?lit';
+import styles from './resizer-handle.scss.js';
 import type { ResizerAxis, Position } from './defs';
 import {
   DOUBLE_TAP,

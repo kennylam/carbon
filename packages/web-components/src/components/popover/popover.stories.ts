@@ -16,7 +16,7 @@ import Settings16 from '@carbon/icons/es/settings/16.js';
 import '../checkbox';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
-import styles from './popover-story.scss?lit';
+import styles from './popover-story.scss.js';
 const sharedArgTypes = {
   align: {
     control: 'select',

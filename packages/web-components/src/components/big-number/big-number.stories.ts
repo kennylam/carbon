@@ -21,7 +21,7 @@ import { prefix } from '../../globals/settings';
 import './index';
 
 import { BigNumberSize } from './constants';
-import styles from './story-styles.scss?lit';
+import styles from './story-styles.scss.js';
 
 const storyPrefix = `${prefix}--big-number-stories`;
 

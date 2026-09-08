@@ -16,7 +16,7 @@ import HostListenerMixin from '../../globals/mixins/host-listener';
 import { TAG_SIZE, TAG_TYPE } from './defs';
 import CDSTag from '../tag/tag';
 import '../tooltip/index';
-import styles from './tag.scss?lit';
+import styles from './tag.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { TAG_SIZE, TAG_TYPE };

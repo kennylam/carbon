@@ -8,7 +8,7 @@
 import type { PropertyValues } from 'lit';
 import { prefix } from '../../globals/settings';
 import CDSDropdownItem from '../dropdown/dropdown-item';
-import styles from './combo-box.scss?lit';
+import styles from './combo-box.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 type NextSiblingAttribute =

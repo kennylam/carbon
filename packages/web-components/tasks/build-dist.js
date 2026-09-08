@@ -9,13 +9,8 @@
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
 import fs from 'fs/promises';
-import postcss from 'postcss';
 
-import fixHostPseudo from '../tools/postcss-fix-host-pseudo.js';
-import litSCSS from '../tools/lit-scss-plugin.js';
 import * as packageJson from '../package.json' with { type: 'json' };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -42,7 +37,6 @@ async function buildDist() {
   const { build: tsdown } = await import('tsdown');
   const packageRoot = path.resolve(__dirname, '..');
   const componentsDir = path.resolve(packageRoot, 'src/components');
-  const postCSSPlugins = [fixHostPseudo(), autoprefixer(), cssnano()];
   const licenseBanner = await createLicenseBanner(packageRoot);
   const folders = await getFolders(componentsDir);
   const entry = {};
@@ -67,10 +61,7 @@ async function buildDist() {
     },
     failOnWarn: true,
     format: 'esm',
-    inputOptions: withInputCompatibilityAndPlugins({
-      postCSSPlugins,
-      packageRoot,
-    }),
+    inputOptions: withInputCompatibilityAndPlugins(),
     logLevel: 'warn',
     minify: true,
     outDir: path.resolve(packageRoot, 'dist'),
@@ -90,24 +81,11 @@ async function buildDist() {
   });
 }
 
-function withInputCompatibilityAndPlugins({ postCSSPlugins }) {
+function withInputCompatibilityAndPlugins() {
   return function patchInputOptions(inputOptions) {
     const options = { ...inputOptions };
 
-    options.plugins = [
-      ...(options.plugins || []),
-      replaceNodeEnvProduction(),
-      litSCSS({
-        includePaths: [
-          path.resolve(__dirname, '../node_modules'),
-          path.resolve(__dirname, '../../../node_modules'),
-        ],
-        async preprocessor(contents, id) {
-          return (await postcss(postCSSPlugins).process(contents, { from: id }))
-            .css;
-        },
-      }),
-    ];
+    options.plugins = [...(options.plugins || []), replaceNodeEnvProduction()];
 
     return options;
   };

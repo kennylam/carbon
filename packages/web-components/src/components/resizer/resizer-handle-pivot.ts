@@ -8,7 +8,7 @@
 import { LitElement, html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './resizer-handle-pivot.scss?lit';
+import styles from './resizer-handle-pivot.scss.js';
 import { SELECTORS } from './defs';
 import type CDSResizerHandle from './resizer-handle';
 

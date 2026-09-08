@@ -14,7 +14,7 @@
 import { html } from 'lit';
 import CDSButton from '../../src/components/button/button';
 import { defineCustomElement } from '../../src/globals/register';
-import hostStyles from './register-story.scss?lit';
+import hostStyles from './register-story.scss.js';
 
 // default barrel registraion
 import '../../src/components/button/index';

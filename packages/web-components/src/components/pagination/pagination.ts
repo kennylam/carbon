@@ -20,7 +20,7 @@ import { PAGINATION_SIZE, PAGINATION_TOOLTIP_POSITION } from './defs';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { prefix } from '../../globals/settings';
-import styles from './pagination.scss?lit';
+import styles from './pagination.scss.js';
 
 const selectorPagesSelect = `${prefix}-select#pages-select`;
 const selectorPageSizesSelect = `${prefix}-select`;

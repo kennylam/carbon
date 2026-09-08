@@ -11,7 +11,7 @@ import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import Checkmark16 from '@carbon/icons/es/checkmark/16.js';
 import { DROPDOWN_SIZE } from './dropdown';
-import styles from './dropdown.scss?lit';
+import styles from './dropdown.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

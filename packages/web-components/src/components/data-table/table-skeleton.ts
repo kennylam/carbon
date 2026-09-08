@@ -10,7 +10,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './data-table.scss?lit';
+import styles from './data-table.scss.js';
 
 /**
  * Data table skeleton

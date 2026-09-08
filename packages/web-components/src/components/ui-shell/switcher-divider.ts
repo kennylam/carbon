@@ -7,7 +7,7 @@
 
 import { LitElement } from 'lit';
 import { prefix } from '../../globals/settings';
-import styles from './header.scss?lit';
+import styles from './header.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

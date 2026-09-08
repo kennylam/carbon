@@ -9,7 +9,7 @@ import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSNumberInput from '../number-input/number-input';
-import styles from './fluid-number-input.scss?lit';
+import styles from './fluid-number-input.scss.js';
 import { classMap } from 'lit/directives/class-map.js';
 
 /**

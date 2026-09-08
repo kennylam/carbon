@@ -10,7 +10,7 @@ import { property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './coachmark.scss?lit';
+import styles from './coachmark.scss.js';
 import { SignalWatcher } from '@lit-labs/signals';
 import '../popover/index';
 import { POPOVER_ALIGNMENT } from '../popover/defs';

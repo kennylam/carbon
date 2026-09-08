@@ -19,7 +19,7 @@ import { html } from 'lit';
 import { indexOf } from '../../globals/internal/collection-helpers';
 import { prefix } from '../../globals/settings';
 import { property } from 'lit/decorators.js';
-import styles from './overflow-menu.scss?lit';
+import styles from './overflow-menu.scss.js';
 
 /**
  * @param index The index

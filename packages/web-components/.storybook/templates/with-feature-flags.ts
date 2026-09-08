@@ -6,12 +6,12 @@
  */
 
 import { LitElement, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 import { iconLoader } from '../../src/globals/internal/icon-loader';
 import Chemistry16 from '@carbon/icons/es/chemistry/16.js';
 import { prefix } from '../../src/globals/settings';
 import '../../src/components/layer/index.js';
-import styles from './with-feature-flags.scss?lit';
+import styles from './with-feature-flags.scss.js';
 import { linkTo } from '@storybook/addon-links';
 
 /**

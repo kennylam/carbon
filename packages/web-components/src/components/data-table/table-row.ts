@@ -11,7 +11,7 @@ import { prefix } from '../../globals/settings';
 import ChevronRight16 from '@carbon/icons/es/chevron--right/16.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import FocusMixin from '../../globals/mixins/focus';
-import styles from './data-table.scss?lit';
+import styles from './data-table.scss.js';
 import '../checkbox';
 import '../radio-button';
 

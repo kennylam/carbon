@@ -8,7 +8,7 @@
 import { LitElement } from 'lit';
 import { prefix } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './side-nav.scss?lit';
+import styles from './side-nav.scss.js';
 
 /**
  * A divider in side nav.

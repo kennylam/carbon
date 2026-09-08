@@ -16,7 +16,7 @@ import CDSTimePicker from '../time-picker/time-picker';
 import { INPUT_SIZE } from '../text-input/text-input';
 import type CDSFluidTimePickerSelect from './fluid-time-picker-select';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
-import styles from './fluid-time-picker.scss?lit';
+import styles from './fluid-time-picker.scss.js';
 
 /**
  * Fluid Time Picker component.

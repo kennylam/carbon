@@ -21,7 +21,7 @@ import {
   getMonthYearLabel,
   getWeekdayLabels,
 } from '@carbon/utilities/date-picker';
-import styles from './date-picker.scss?lit';
+import styles from './date-picker.scss.js';
 
 /**
  * Calendar renderer for date picker.

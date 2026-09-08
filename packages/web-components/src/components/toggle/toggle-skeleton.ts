@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './toggle.scss?lit';
+import styles from './toggle.scss.js';
 
 /**
  * @element cds-toggle-skeleton

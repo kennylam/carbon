@@ -11,7 +11,7 @@ import { GridContext, gridContext } from './grid-context';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './grid.scss?lit';
+import styles from './grid.scss.js';
 import { GridAlignmentType, SUB_GRID_MODE } from './defs';
 export { GRID_ALIGNMENT } from './defs';
 /**

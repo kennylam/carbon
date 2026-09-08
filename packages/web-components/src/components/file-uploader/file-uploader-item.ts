@@ -14,7 +14,7 @@ import Close16 from '@carbon/icons/es/close/16.js';
 import CheckmarkFilled16 from '@carbon/icons/es/checkmark--filled/16.js';
 import { LOADING_TYPE } from '../loading/loading';
 import { FILE_UPLOADER_ITEM_SIZE, FILE_UPLOADER_ITEM_STATE } from './defs';
-import styles from './file-uploader.scss?lit';
+import styles from './file-uploader.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { FILE_UPLOADER_ITEM_SIZE, FILE_UPLOADER_ITEM_STATE };

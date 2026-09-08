@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property, query, queryAll } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
@@ -17,7 +17,7 @@ import FormMixin from '../../globals/mixins/form';
 import { filter } from '../../globals/internal/collection-helpers';
 import { INPUT_SIZE } from '../text-input/text-input';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './select.scss?lit';
+import styles from './select.scss.js';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
@@ -599,7 +599,7 @@ class CDSSelect extends FormMixin(LitElement) {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
   };
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSSelect;

@@ -9,7 +9,7 @@ import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSSelect from '../select/select';
-import styles from './fluid-select.scss?lit';
+import styles from './fluid-select.scss.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { state } from 'lit/decorators.js';
 

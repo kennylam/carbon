@@ -16,8 +16,8 @@ import HostListenerMixin from '../../globals/mixins/host-listener';
 import FocusMixin from '../../globals/mixins/focus';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import FloatingUIController from '../../globals/controllers/floating-controller';
-import styles from './toggletip.scss?lit';
-import popoverStyles from '../popover/popover.scss?lit';
+import styles from './toggletip.scss.js';
+import popoverStyles from '../popover/popover.scss.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { deepShadowContains } from '../../globals/internal/deep-shadow-contains';
 

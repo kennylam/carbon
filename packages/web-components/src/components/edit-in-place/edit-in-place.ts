@@ -15,7 +15,7 @@ import { carbonElement as customElement } from '../../globals/decorators/carbon-
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import HostListenerMixin from '../../globals/mixins/host-listener';
-import styles from './edit-in-place.scss?lit';
+import styles from './edit-in-place.scss.js';
 import Edit16 from '@carbon/icons/es/edit/16';
 import EditOff16 from '@carbon/icons/es/edit--off/16';
 import Checkmark16 from '@carbon/icons/es/checkmark/16';

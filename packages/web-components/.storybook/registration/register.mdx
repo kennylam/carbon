@@ -122,6 +122,40 @@ tag. Carbon's mixins do the work, so there are no values to copy:
 }
 ```
 
+Lit needs that Sass as a `CSSResult`, which means a build step turns
+`my-button.scss` into a JavaScript module. Carbon precompiles its own styles
+this way — each `.scss` becomes a sibling module that exports a `css` tagged
+template — and you can do the same with a few lines of Sass and Node:
+
+```js
+// my-button.css.js, generated from my-button.scss
+import { css } from 'lit';
+
+export default css`
+  :host(cwc-custom-button) {
+    display: inline-flex;
+  } /* … */
+`;
+```
+
+If you would rather import the `.scss` directly, a loader plugin can do it for
+you:
+[`rollup-plugin-lit-css`](https://www.npmjs.com/package/rollup-plugin-lit-css),
+[`esbuild-plugin-lit-css`](https://www.npmjs.com/package/esbuild-plugin-lit-css),
+or [`vite-plugin-lit-css`](https://www.npmjs.com/package/vite-plugin-lit-css).
+That is a choice in your own build; Carbon does not require it.
+
+<blockquote>
+
+**Deprecated: the `?lit` query.** Earlier versions of this page imported styles
+as `'./my-button.scss?lit'`. That suffix was never part of Carbon's API — it was
+a marker for a loader plugin in _your_ bundler, and Carbon no longer uses it
+internally. Nothing breaks if you keep it, because it is resolved entirely by
+your own build. You can drop it whenever your loader is configured to match
+`.scss` by extension, or when you precompile as shown above.
+
+</blockquote>
+
 Then declare the subclass so it can carry those styles alongside the
 component's. `static is` is how a v3 component names its tag, and
 `defineCustomElement` reads it:
@@ -129,7 +163,7 @@ component's. `static is` is how a v3 component names its tag, and
 ```js
 import CDSButton from '@carbon/web-components/es/components/button/button.js';
 import { defineCustomElement } from '@carbon/web-components/es/globals/register.js';
-import hostStyles from './my-button.scss?lit';
+import hostStyles from './my-button.css.js';
 
 class CWCButton extends CDSButton {
   static is = 'cwc-custom-button';

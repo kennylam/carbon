@@ -8,7 +8,7 @@
 import { html } from 'lit';
 import { keyed } from 'lit/directives/keyed.js';
 import './index';
-import styles from './tooltip-story.scss?lit';
+import styles from './tooltip-story.scss.js';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 
 const tooltipAlignments = {

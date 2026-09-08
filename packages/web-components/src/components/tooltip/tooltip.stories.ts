@@ -13,7 +13,7 @@ import { html } from 'lit';
 import './index';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './tooltip-story.scss?lit';
+import styles from './tooltip-story.scss.js';
 import OverflowMenuVertical16 from '@carbon/icons/es/overflow-menu--vertical/16.js';
 import '../button';
 

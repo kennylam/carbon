@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import { html } from 'lit';
-import styles from '../story-styles.scss?lit';
+import styles from '../story-styles.scss.js';
 import { BUTTON_KIND } from '../../button/defs';
 import TrashCan16 from '@carbon/icons/es/trash-can/16';
 import Settings16 from '@carbon/icons/es/settings/16';

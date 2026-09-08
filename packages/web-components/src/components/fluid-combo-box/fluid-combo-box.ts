@@ -9,7 +9,7 @@ import { prefix } from '../../globals/settings';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSComboBox from '../combo-box/combo-box';
-import styles from './fluid-combo-box.scss?lit';
+import styles from './fluid-combo-box.scss.js';
 
 /**
  * Fluid combo box.

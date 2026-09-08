@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './side-nav.scss?lit';
+import styles from './side-nav.scss.js';
 
 /**
  * Header Side Nav Items section

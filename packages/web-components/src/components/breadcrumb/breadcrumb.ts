@@ -10,7 +10,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { BREADCRUMB_SIZE } from './defs';
-import styles from './breadcrumb.scss?lit';
+import styles from './breadcrumb.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 /**
  * Breadcrumb.

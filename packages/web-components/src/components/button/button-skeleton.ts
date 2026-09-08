@@ -10,7 +10,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import { html } from 'lit';
 import { prefix } from '../../globals/settings';
 import CDSButton from './button';
-import styles from './button.scss?lit';
+import styles from './button.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

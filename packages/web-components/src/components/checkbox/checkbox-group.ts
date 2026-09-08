@@ -13,7 +13,7 @@ import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';
 import CDSCheckbox from './checkbox';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './checkbox.scss?lit';
+import styles from './checkbox.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { CHECKBOX_ORIENTATION } from './defs';
 

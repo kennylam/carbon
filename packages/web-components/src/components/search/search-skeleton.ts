@@ -6,11 +6,11 @@
  */
 
 import { classMap } from 'lit/directives/class-map.js';
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { SEARCH_SIZE } from './defs';
-import styles from './search.scss?lit';
+import styles from './search.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
@@ -37,7 +37,7 @@ class CDSSearchSkeleton extends LitElement {
     `;
   }
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSSearchSkeleton;

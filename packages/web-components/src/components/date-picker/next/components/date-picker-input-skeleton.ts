@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../../../globals/settings';
 import { DATE_PICKER_INPUT_KIND } from '../../defs';
-import styles from './date-picker.scss?lit';
+import styles from './date-picker.scss.js';
 import { carbonElement as customElement } from '../../../../globals/decorators/carbon-element';
 
 /**

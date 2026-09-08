@@ -7,7 +7,7 @@
 
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { LitElement, html, TemplateResult } from 'lit';
+import { LitElement, html, TemplateResult, type CSSResultGroup } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { iconLoader } from '../../globals/internal/icon-loader';
@@ -33,7 +33,7 @@ import {
   NAVIGATION_DIRECTION,
 } from './defs';
 import CDSDropdownItem from './dropdown-item';
-import styles from './dropdown.scss?lit';
+import styles from './dropdown.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSAILabel from '../ai-label/ai-label';
 
@@ -1500,7 +1500,7 @@ class CDSDropdown extends ValidityMixin(
     delegatesFocus: true,
   };
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 
   /**
    * @returns A action for dropdown for the given key symbol.

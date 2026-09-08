@@ -13,9 +13,9 @@ import '../tooltip/index';
 import '../button/index';
 import CDSButton from '../button/button';
 import { ICON_BUTTON_SIZE, ICON_BUTTON_TOOLTIP_ALIGNMENT } from './defs';
-import tooltipStyles from '../tooltip/tooltip.scss?lit';
-import buttonStyles from '../button/button.scss?lit';
-import styles from './icon-button.scss?lit';
+import tooltipStyles from '../tooltip/tooltip.scss.js';
+import buttonStyles from '../button/button.scss.js';
+import styles from './icon-button.scss.js';
 
 export { ICON_BUTTON_SIZE, ICON_BUTTON_TOOLTIP_ALIGNMENT };
 

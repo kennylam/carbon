@@ -5,8 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+// Global side-effect stylesheets (Storybook decorators, preview containers).
+// Component styles are generated as typed `.scss.ts` modules by
+// tasks/build-styles.js and do not rely on this wildcard.
 declare module '*.scss';
-declare module '*.scss?lit';
 
 declare module '*.mdx' {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452

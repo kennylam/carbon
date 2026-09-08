@@ -8,7 +8,7 @@
 import { LitElement, html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './column-hang.scss?lit';
+import styles from './column-hang.scss.js';
 
 /**
  * The column component.

@@ -18,7 +18,7 @@ import '../icon-button';
 import '../link';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import storyDocs from './tile.mdx';
-import styles from './tile-story.scss?lit';
+import styles from './tile-story.scss.js';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
 
 const content = html`

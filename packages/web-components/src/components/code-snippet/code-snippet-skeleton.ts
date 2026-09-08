@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { CODE_SNIPPET_TYPE } from './code-snippet';
-import styles from './code-snippet.scss?lit';
+import styles from './code-snippet.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

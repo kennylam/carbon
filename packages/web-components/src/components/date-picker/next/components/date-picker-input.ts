@@ -16,7 +16,7 @@ import {
   DATE_PICKER_INPUT_COLOR_SCHEME,
   DATE_PICKER_INPUT_KIND,
 } from '../../defs';
-import styles from './date-picker.scss?lit';
+import styles from './date-picker.scss.js';
 import Calendar16 from '@carbon/icons/es/calendar/16.js';
 import WarningFilled16 from '@carbon/icons/es/warning--filled/16.js';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16.js';

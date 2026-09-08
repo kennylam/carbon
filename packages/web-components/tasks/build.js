@@ -9,12 +9,8 @@
 
 import { fileURLToPath } from 'url';
 import { globby } from 'globby';
-import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
 import fs from 'fs-extra';
-import litSCSS from '../tools/lit-scss-plugin.js';
 import path from 'path';
-import postcss from 'postcss';
 import ts from 'typescript';
 
 import * as packageJson from '../package.json' with { type: 'json' };
@@ -38,6 +34,10 @@ async function build() {
   const esInputs = await globby([
     'src/**/*.ts',
     '!src/**/*.stories.ts',
+    // Story-only styles are generated alongside component styles but are not
+    // part of the published surface, matching the `*.stories.ts` exclusion.
+    '!src/**/*-story.scss.ts',
+    '!src/**/story-styles.scss.ts',
     '!src/**/*.d.ts',
     '!src/globals/internal/storybook-cdn.ts',
     '!src/polyfills',
@@ -80,29 +80,11 @@ async function build() {
       },
       failOnWarn: true,
       format: format.type,
-      inputOptions: withInputCompatibilityAndPlugins,
       logLevel: 'warn',
       outDir: path.resolve(packageRoot, format.directory),
       outputOptions(options) {
         return {
           ...options,
-          // Keep style module filenames aligned with historical rollup output.
-          // Without this, tsdown emits collision suffixes like `*2.js` for
-          // component files that also have a same-basename `.scss?lit` import.
-          chunkFileNames(chunkInfo) {
-            const id = chunkInfo.facadeModuleId ?? '';
-            if (id.endsWith('.scss') || id.endsWith('.scss?lit')) {
-              return '[name].scss.js';
-            }
-            return '[name].js';
-          },
-          entryFileNames(chunkInfo) {
-            const id = chunkInfo.facadeModuleId ?? '';
-            if (id.endsWith('.scss') || id.endsWith('.scss?lit')) {
-              return '[name].scss.js';
-            }
-            return '[name].js';
-          },
           exports: 'named',
           preserveModules: true,
           preserveModulesRoot: path.resolve(packageRoot, 'src'),
@@ -119,29 +101,6 @@ async function build() {
   await copyScssSources();
   await generateDeclarations();
   await postBuild();
-}
-
-function withInputCompatibilityAndPlugins(inputOptions) {
-  const options = { ...inputOptions };
-
-  options.plugins = [
-    ...(options.plugins || []),
-    litSCSS({
-      includePaths: [
-        path.resolve(packageRoot, './node_modules'),
-        path.resolve(packageRoot, '../../node_modules'),
-      ],
-      async preprocessor(contents, id) {
-        return (
-          await postcss([autoprefixer(), cssnano()]).process(contents, {
-            from: id,
-          })
-        ).css;
-      },
-    }),
-  ];
-
-  return options;
 }
 
 function getExternalPatterns() {

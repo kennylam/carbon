@@ -7,7 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
-import styles from './ai-skeleton.scss?lit';
+import styles from './ai-skeleton.scss.js';
 import '../skeleton-placeholder/skeleton-placeholder';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 

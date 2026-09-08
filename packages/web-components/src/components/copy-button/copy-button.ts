@@ -11,7 +11,7 @@ import { carbonElement as customElement } from '../../globals/decorators/carbon-
 import Copy16 from '@carbon/icons/es/copy/16.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
-import styles from './copy-button.scss?lit';
+import styles from './copy-button.scss.js';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import '../copy/copy';
 import { iconLoader } from '../../globals/internal/icon-loader';

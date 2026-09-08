@@ -11,7 +11,7 @@ import './coachmark-beacon/index';
 import '../popover/defs';
 import '../button/index';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
-import styles from './story-styles.scss?lit';
+import styles from './story-styles.scss.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import Crossroads from '@carbon/icons/es/crossroads/16.js';
 import { handleClick } from './coachmark-helpers';

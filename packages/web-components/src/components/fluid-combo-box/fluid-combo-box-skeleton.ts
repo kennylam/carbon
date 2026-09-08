@@ -8,7 +8,7 @@
 import { prefix } from '../../globals/settings';
 import { html, LitElement } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './fluid-combo-box.scss?lit';
+import styles from './fluid-combo-box.scss.js';
 
 /**
  * Fluid combo box skeleton.

@@ -20,7 +20,7 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import FocusMixin from '../../globals/mixins/focus';
 import { NOTIFICATION_KIND, NOTIFICATION_TYPE } from './defs';
-import styles from './inline-notification.scss?lit';
+import styles from './inline-notification.scss.js';
 
 export { NOTIFICATION_KIND, NOTIFICATION_TYPE };
 

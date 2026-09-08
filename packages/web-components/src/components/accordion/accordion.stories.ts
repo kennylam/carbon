@@ -10,7 +10,7 @@ import { prefix } from '../../globals/settings';
 import { ACCORDION_SIZE } from './accordion';
 import './index';
 import '../layer/index';
-import styles from './accordion.scss?lit';
+import styles from './accordion.scss.js';
 import { withLayers } from '../../../.storybook/decorators/with-layers';
 
 const sizes = {

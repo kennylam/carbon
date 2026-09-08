@@ -20,8 +20,8 @@ import { MENU_SIZE } from '../menu/defs';
 import { isFeatureFlagEnabled } from '../feature-flags/index';
 import FloatingUIController from '../../globals/controllers/floating-controller';
 
-import iconButtonStyles from '../icon-button/icon-button.scss?lit';
-import styles from './overflow-menu.scss?lit';
+import iconButtonStyles from '../icon-button/icon-button.scss.js';
+import styles from './overflow-menu.scss.js';
 import CDSIconButton from '../icon-button/icon-button';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 

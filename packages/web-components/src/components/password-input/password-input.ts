@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { classMap } from 'lit/directives/class-map.js';
@@ -18,7 +18,7 @@ import { iconLoader } from '../../globals/internal/icon-loader';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
 import '../tooltip';
 import '../tooltip/tooltip-content';
-import styles from './password-input.scss?lit';
+import styles from './password-input.scss.js';
 import CDSTextInput from '../text-input/text-input';
 import CDSTooltip from '../tooltip/tooltip';
 
@@ -374,7 +374,7 @@ class CDSPasswordInput extends CDSTextInput {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
   };
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSPasswordInput;

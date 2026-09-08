@@ -6,7 +6,7 @@
  */
 
 import { classMap } from 'lit/directives/class-map.js';
-import { TemplateResult, html } from 'lit';
+import { TemplateResult, html, type CSSResultGroup } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import Close16 from '@carbon/icons/es/close/16.js';
@@ -14,7 +14,7 @@ import { forEach } from '../../globals/internal/collection-helpers';
 import CDSDropdown, { DROPDOWN_KEYBOARD_ACTION } from '../dropdown/dropdown';
 import CDSComboBoxItem from './combo-box-item';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './combo-box.scss?lit';
+import styles from './combo-box.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ifNonEmpty from '../../globals/directives/if-non-empty';
 import spread from '../../globals/directives/spread';
@@ -730,7 +730,7 @@ class CDSComboBox extends CDSDropdown {
     return `${prefix}-combo-box-selected`;
   }
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSComboBox;

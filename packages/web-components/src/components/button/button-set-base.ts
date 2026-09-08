@@ -6,7 +6,7 @@
  */
 
 import { LitElement, html } from 'lit';
-import styles from './button.scss?lit';
+import styles from './button.scss.js';
 import { prefix } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 

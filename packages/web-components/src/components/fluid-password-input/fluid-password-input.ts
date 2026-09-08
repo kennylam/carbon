@@ -9,7 +9,7 @@ import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { query } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './fluid-password-input.scss?lit';
+import styles from './fluid-password-input.scss.js';
 import CDSPasswordInput from '../password-input/password-input';
 
 /**

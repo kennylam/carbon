@@ -13,7 +13,7 @@ import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
 import { SIDE_PANEL_SIZE, SIDE_PANEL_PLACEMENT } from './defs';
-import styles from './side-panel.scss?lit';
+import styles from './side-panel.scss.js';
 import { selectorTabbable } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ArrowLeft16 from '@carbon/icons/es/arrow--left/16';

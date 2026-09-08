@@ -10,7 +10,7 @@ import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import FocusMixin from '../../globals/mixins/focus';
-import styles from './skip-to-content.scss?lit';
+import styles from './skip-to-content.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

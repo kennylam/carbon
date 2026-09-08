@@ -8,7 +8,7 @@
 import { prefix } from '../../globals/settings';
 import { LitElement, html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './fluid-multi-select.scss?lit';
+import styles from './fluid-multi-select.scss.js';
 
 /**
  * Fluid multi select skeleton.

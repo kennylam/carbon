@@ -10,8 +10,8 @@ import { property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { POPOVER_ALIGNMENT } from '../popover/defs';
 import '../popover/index';
-import popoverStyles from '../popover/popover.scss?lit';
-import styles from './tooltip.scss?lit';
+import popoverStyles from '../popover/popover.scss.js';
+import styles from './tooltip.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

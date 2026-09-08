@@ -11,7 +11,7 @@ import { prefix } from '../../globals/settings';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16.js';
 import FocusMixin from '../../globals/mixins/focus';
 import { CODE_SNIPPET_COLOR_SCHEME, CODE_SNIPPET_TYPE } from './defs';
-import styles from './code-snippet.scss?lit';
+import styles from './code-snippet.scss.js';
 import Handle from '../../globals/internal/handle';
 import '../copy-button/index';
 import '../copy/copy';

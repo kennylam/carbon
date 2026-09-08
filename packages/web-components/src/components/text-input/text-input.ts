@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { classMap } from 'lit/directives/class-map.js';
@@ -26,7 +26,7 @@ import {
   INPUT_TOOLTIP_DIRECTION,
   INPUT_TYPE,
 } from './defs';
-import styles from './text-input.scss?lit';
+import styles from './text-input.scss.js';
 
 export {
   INPUT_COLOR_SCHEME,
@@ -633,7 +633,7 @@ class CDSTextInput extends ValidityMixin(FormMixin(LitElement)) {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
   };
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSTextInput;

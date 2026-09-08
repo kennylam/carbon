@@ -20,9 +20,9 @@ import FolderOpen16 from '@carbon/icons/es/folder--open/16.js';
 import Folders16 from '@carbon/icons/es/folders/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
-import styles from './popover-story.scss?lit';
-import aiLabelStyles from '../ai-label/ai-label-story.scss?lit';
-import tooltipStyles from '../tooltip/tooltip-story.scss?lit';
+import styles from './popover-story.scss.js';
+import aiLabelStyles from '../ai-label/ai-label-story.scss.js';
+import tooltipStyles from '../tooltip/tooltip-story.scss.js';
 
 const popoverAlignments = {
   [`top`]: POPOVER_ALIGNMENT.TOP,

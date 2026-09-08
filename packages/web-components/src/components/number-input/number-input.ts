@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
@@ -19,7 +19,7 @@ import {
   NUMBER_INPUT_VALIDATION_STATUS,
   NUMBER_INPUT_STEP_DIRECTION,
 } from './defs';
-import styles from './number-input.scss?lit';
+import styles from './number-input.scss.js';
 import CDSTextInput, { INPUT_SIZE } from '../text-input/text-input';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { NumberFormatter, NumberParser } from '@carbon/utilities';
@@ -1012,7 +1012,7 @@ class CDSNumberInput extends CDSTextInput {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
   };
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSNumberInput;

@@ -8,7 +8,7 @@
 import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './fluid-select.scss?lit';
+import styles from './fluid-select.scss.js';
 import CDSSelectSkeleton from '../select/select-skeleton';
 /**
  * Fluid text area input.

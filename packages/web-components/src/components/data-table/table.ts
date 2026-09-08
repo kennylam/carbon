@@ -10,7 +10,7 @@ import { property, state } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { forEach } from '../../globals/internal/collection-helpers';
 import { TABLE_SIZE, TABLE_SORT_DIRECTION } from './defs';
-import styles from './data-table.scss?lit';
+import styles from './data-table.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 import HostListener from '../../globals/decorators/host-listener';

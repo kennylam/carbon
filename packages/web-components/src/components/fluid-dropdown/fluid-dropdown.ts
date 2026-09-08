@@ -9,7 +9,7 @@ import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSDropdown from '../dropdown/dropdown';
-import styles from './fluid-dropdown.scss?lit';
+import styles from './fluid-dropdown.scss.js';
 import { property } from 'lit/decorators.js';
 
 /**

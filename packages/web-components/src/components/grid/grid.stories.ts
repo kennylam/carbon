@@ -7,7 +7,7 @@
 
 import { html } from 'lit';
 import './index';
-import styles from './grid-story.scss?lit';
+import styles from './grid-story.scss.js';
 
 const defaultArgs = {
   align: 'center',

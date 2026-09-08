@@ -7,7 +7,7 @@
 
 import { html } from 'lit';
 import './index';
-import styles from './truncated-text-story.scss?lit';
+import styles from './truncated-text-story.scss.js';
 import '../layer/index';
 
 const storyPrefix = 'truncated-text-stories__';

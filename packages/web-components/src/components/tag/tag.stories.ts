@@ -8,7 +8,7 @@
 import { html } from 'lit';
 import { TAG_SIZE } from './tag';
 import './index';
-import styles from './tag-story.scss?lit';
+import styles from './tag-story.scss.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import View16 from '@carbon/icons/es/view/16.js';
 import FolderOpen16 from '@carbon/icons/es/folder--open/16.js';

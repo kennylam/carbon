@@ -8,7 +8,7 @@
 import { html, LitElement } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import styles from './heading.scss?lit';
+import styles from './heading.scss.js';
 import { HEADING_LEVEL } from './defs';
 import { prefix } from '../../globals/settings';
 

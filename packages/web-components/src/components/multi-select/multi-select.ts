@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { html, PropertyValues, TemplateResult } from 'lit';
+import { html, PropertyValues, TemplateResult, type CSSResultGroup } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
@@ -18,7 +18,7 @@ import CDSDropdown, {
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { SELECTION_FEEDBACK_OPTION } from './defs';
 import CDSMultiSelectItem from './multi-select-item';
-import styles from './multi-select.scss?lit';
+import styles from './multi-select.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import HostListener from '../../globals/decorators/host-listener';
 import CDSAILabel from '../ai-label/ai-label';
@@ -1067,7 +1067,7 @@ class CDSMultiSelect extends CDSDropdown {
     return `${prefix}-multi-select-selected`;
   }
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSMultiSelect;

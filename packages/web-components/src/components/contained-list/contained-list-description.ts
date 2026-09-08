@@ -7,7 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
-import styles from './contained-list.scss?lit';
+import styles from './contained-list.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

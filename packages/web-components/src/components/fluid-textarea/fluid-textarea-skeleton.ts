@@ -9,7 +9,7 @@ import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSTextareaSkeleton from '../textarea/textarea-skeleton';
-import styles from './fluid-textarea.scss?lit';
+import styles from './fluid-textarea.scss.js';
 
 /**
  * Fluid text area skeleton.

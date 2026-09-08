@@ -7,7 +7,7 @@
 
 import { html } from 'lit';
 import { prefix } from '../../globals/settings';
-import styles from './layer-story.scss?lit';
+import styles from './layer-story.scss.js';
 import './index';
 
 const controls = {

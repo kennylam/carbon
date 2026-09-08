@@ -7,7 +7,7 @@
 
 import { LitElement, html } from 'lit';
 import { prefix } from '../../globals/settings';
-import styles from './breadcrumb.scss?lit';
+import styles from './breadcrumb.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import type CDSOverflowMenuBody from '../overflow-menu/overflow-menu-body';
 /**

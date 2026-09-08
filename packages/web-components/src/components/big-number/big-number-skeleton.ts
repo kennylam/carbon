@@ -13,7 +13,7 @@ import '../skeleton-placeholder/index';
 
 import { prefix } from '../../globals/settings';
 import { BigNumberSize, BigNumberSizeValues } from './constants';
-import styles from './big-number-skeleton.scss?lit';
+import styles from './big-number-skeleton.scss.js';
 
 const blockClass = `${prefix}--big-number-skeleton`;
 

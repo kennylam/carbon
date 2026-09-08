@@ -12,7 +12,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import type { Args, Meta } from '@storybook/web-components';
 import { action } from 'storybook/actions';
 import './index';
-import styles from './story-styles.scss?lit';
+import styles from './story-styles.scss.js';
 import {
   storyClass,
   sizes,

@@ -8,7 +8,7 @@
 import { prefix } from '../../globals/settings';
 import { html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './fluid-multi-select.scss?lit';
+import styles from './fluid-multi-select.scss.js';
 import { classMap } from 'lit/directives/class-map.js';
 import CDSMultiSelect from '../multi-select/multi-select';
 import { property } from 'lit/decorators.js';

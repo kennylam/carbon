@@ -11,8 +11,8 @@ import CDSOverflowMenu from '../overflow-menu/overflow-menu';
 import OverflowMenuHorizontal16 from '@carbon/icons/es/overflow-menu--horizontal/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
-import overflowMenuStyles from '../overflow-menu/overflow-menu.scss?lit';
-import styles from './breadcrumb.scss?lit';
+import overflowMenuStyles from '../overflow-menu/overflow-menu.scss.js';
+import styles from './breadcrumb.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

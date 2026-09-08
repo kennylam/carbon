@@ -9,7 +9,7 @@ import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSFluidSelect from '../fluid-select/fluid-select';
-import styles from './fluid-time-picker.scss?lit';
+import styles from './fluid-time-picker.scss.js';
 
 /**
  * Fluid time picker select.

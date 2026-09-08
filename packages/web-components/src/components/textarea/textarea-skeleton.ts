@@ -5,10 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
-import styles from './textarea.scss?lit';
+import styles from './textarea.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
@@ -34,7 +34,7 @@ class CDSTextareaSkeleton extends LitElement {
     `;
   }
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSTextareaSkeleton;

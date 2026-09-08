@@ -10,7 +10,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './fluid-time-picker.scss?lit';
+import styles from './fluid-time-picker.scss.js';
 import '../fluid-text-input/fluid-text-input-skeleton';
 import '../fluid-select/fluid-select-skeleton';
 

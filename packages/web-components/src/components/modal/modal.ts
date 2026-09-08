@@ -11,7 +11,7 @@ import { property } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import { MODAL_SIZE } from './defs';
-import styles from './modal.scss?lit';
+import styles from './modal.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSModalBase from './modal-base';
 import '../dialog/dialog';

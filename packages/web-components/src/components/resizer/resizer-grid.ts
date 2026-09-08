@@ -8,7 +8,7 @@
 import { LitElement, html } from 'lit';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './resizer-grid.scss?lit';
+import styles from './resizer-grid.scss.js';
 
 /**
  * Resizer grid component for managing resizable panels.

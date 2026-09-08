@@ -9,7 +9,7 @@ import { LitElement, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { prefix } from '../../globals/settings';
-import styles from './stack.scss?lit';
+import styles from './stack.scss.js';
 import { STACK_ORIENTATION, SPACING_STEPS } from './defs';
 
 export { STACK_ORIENTATION, SPACING_STEPS };

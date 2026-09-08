@@ -12,7 +12,7 @@ import ChevronDown20 from '@carbon/icons/es/chevron--down/20.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { forEach } from '../../globals/internal/collection-helpers';
 import FocusMixin from '../../globals/mixins/focus';
-import styles from './side-nav.scss?lit';
+import styles from './side-nav.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

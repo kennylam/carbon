@@ -25,7 +25,7 @@ import {
   DefaultLocale,
   UNKNOWN,
 } from './constants';
-import styles from './big-number.scss?lit';
+import styles from './big-number.scss.js';
 
 const blockClass = `${prefix}--big-number`;
 

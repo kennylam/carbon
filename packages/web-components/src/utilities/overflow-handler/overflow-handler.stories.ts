@@ -18,7 +18,7 @@ import {
   createOverflowHandler,
   type OverflowHandler,
 } from '@carbon/utilities/overflowHandler';
-import styles from './overflow-handler-story.scss?lit';
+import styles from './overflow-handler-story.scss.js';
 
 const ITEM_LABELS = [
   'All',

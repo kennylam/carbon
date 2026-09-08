@@ -12,7 +12,7 @@ import Folders16 from '@carbon/icons/es/folders/16.js';
 import './index';
 import '../icon-button/index';
 import '../button/index';
-import styles from './ai-label-story.scss?lit';
+import styles from './ai-label-story.scss.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 
 import { POPOVER_ALIGNMENT } from '../popover/defs';

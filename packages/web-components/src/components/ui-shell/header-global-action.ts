@@ -15,7 +15,7 @@ import {
 } from '../button/button';
 import CDSButton from '../button/button';
 import HostListener from '../../globals/decorators/host-listener';
-import styles from './header.scss?lit';
+import styles from './header.scss.js';
 import { prefix } from '../../globals/settings';
 
 /**

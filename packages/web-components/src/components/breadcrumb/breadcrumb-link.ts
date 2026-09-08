@@ -8,7 +8,7 @@
 import { html } from 'lit';
 import { prefix } from '../../globals/settings';
 import CDSLink from '../link/link';
-import styles from './breadcrumb.scss?lit';
+import styles from './breadcrumb.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { property } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';

@@ -10,7 +10,7 @@ import { html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import CDSDatePickerInput from '../date-picker/date-picker-input';
-import styles from './fluid-date-picker.scss?lit';
+import styles from './fluid-date-picker.scss.js';
 
 /**
  * Fluid date picker input.

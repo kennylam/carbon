@@ -25,7 +25,7 @@ import {
   mapKeyboardToStateMachineEvent,
   ClickOutsideHandler,
 } from '@carbon/utilities/date-picker';
-import styles from './date-picker.scss?lit';
+import styles from './date-picker.scss.js';
 import { carbonElement as customElement } from '../../../../globals/decorators/carbon-element';
 
 /**

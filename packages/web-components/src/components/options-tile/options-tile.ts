@@ -10,7 +10,7 @@ import { property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { prefix } from '../../globals/settings';
 import HostListenerMixin from '../../globals/mixins/host-listener';
-import styles from './options-tile.scss?lit';
+import styles from './options-tile.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import ChevronDown16 from '@carbon/icons/es/chevron--down/16';
 import WarningAltFilled16 from '@carbon/icons/es/warning--alt--filled/16';

@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { LitElement, html } from 'lit';
+import { LitElement, html, type CSSResultGroup } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import flatpickr from 'flatpickr';
 import { Instance as FlatpickrInstance } from 'flatpickr/dist/types/instance';
@@ -29,7 +29,7 @@ import monthSelectPlugin from './month-select-plugin';
 import rangePlugin from './range-plugin';
 import shadowDOMEventPlugin from './shadow-dom-events-plugin';
 import stateHandshakePlugin from './state-handshake-plugin';
-import styles from './date-picker.scss?lit';
+import styles from './date-picker.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
@@ -718,7 +718,7 @@ class CDSDatePicker extends HostListenerMixin(FormMixin(LitElement)) {
     return `${prefix}-date-picker-changed`;
   }
 
-  static styles = styles;
+  static styles: CSSResultGroup = styles;
 }
 
 export default CDSDatePicker;

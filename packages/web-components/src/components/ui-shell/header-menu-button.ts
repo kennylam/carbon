@@ -15,7 +15,7 @@ import Close16 from '@carbon/icons/es/close/16.js';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import FocusMixin from '../../globals/mixins/focus';
 import { SIDE_NAV_COLLAPSE_MODE } from './side-nav';
-import styles from './header.scss?lit';
+import styles from './header.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**

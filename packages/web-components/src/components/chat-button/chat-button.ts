@@ -11,8 +11,8 @@ import { prefix } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import '../button/button';
 import { CHAT_BUTTON_SIZE, CHAT_BUTTON_KIND } from './defs';
-import buttonStyles from '../button/button.scss?lit';
-import styles from './chat-button.scss?lit';
+import buttonStyles from '../button/button.scss.js';
+import styles from './chat-button.scss.js';
 
 export { CHAT_BUTTON_SIZE, CHAT_BUTTON_KIND };
 

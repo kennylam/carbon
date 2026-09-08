@@ -18,7 +18,7 @@ import {
   TABLE_SORT_DIRECTION,
 } from './defs';
 import { iconLoader } from '../../globals/internal/icon-loader';
-import styles from './data-table.scss?lit';
+import styles from './data-table.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 export { TABLE_SORT_CYCLE, TABLE_SORT_CYCLES, TABLE_SORT_DIRECTION };

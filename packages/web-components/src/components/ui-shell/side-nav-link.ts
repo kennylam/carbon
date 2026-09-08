@@ -11,7 +11,7 @@ import { LitElement, html } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { prefix } from '../../globals/settings';
 import FocusMixin from '../../globals/mixins/focus';
-import styles from './side-nav.scss?lit';
+import styles from './side-nav.scss.js';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 
 /**
