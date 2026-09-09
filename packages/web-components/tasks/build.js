@@ -85,6 +85,9 @@ async function build() {
       outputOptions(options) {
         return {
           ...options,
+          // tsdown defaults CJS output to `.cjs`
+          chunkFileNames: '[name].js',
+          entryFileNames: '[name].js',
           exports: 'named',
           preserveModules: true,
           preserveModulesRoot: path.resolve(packageRoot, 'src'),

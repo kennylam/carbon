@@ -55,7 +55,7 @@
     "build": "yarn clean && yarn build:styles && node tasks/build.js && yarn wca",
     "build:dist": "yarn build:styles:dist && node tasks/build-dist.js",
     "build:cdn": "yarn clean && yarn build:dist",
-    "ci-check": "yarn registration-coverage && yarn wca && yarn typecheck",
+    "ci-check": "yarn registration-coverage && yarn wca && yarn typecheck && yarn test:styles",
     "clean": "rimraf es es-custom lib scss dist storybook-static storybook-static-v12 .storybook-v12/generated \"src/**/*.scss.ts\" \".storybook/**/*.scss.ts\"",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "registration-coverage": "node tasks/registration-coverage.mjs",
@@ -73,7 +73,8 @@
     "telemetry:config": "npx -y @ibm/telemetry-js-config-generator generate --wc --id 8cf8b3b8-a121-47d3-9eec-e4bea0ff23f5 --endpoint https://www-api.ibm.com/ibm-telemetry/v1/metrics --files ./src/components",
     "build:styles": "node tasks/build-styles.js",
     "build:styles:dist": "node tasks/build-styles.js --dist",
-    "build:styles:v12": "node tasks/build-styles.js --v12"
+    "build:styles:v12": "node tasks/build-styles.js --v12",
+    "test:styles": "node --test tasks/__tests__/*.test.js"
   },
   "dependencies": {
     "@carbon/icon-helpers": "10.47.0",

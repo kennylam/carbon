@@ -14,6 +14,7 @@ import { mergeConfig } from 'vite';
 
 import baseConfig from '../.storybook/main.ts';
 import { productMigratedStoryGlobs } from '../product-migrated-components.mjs';
+import { v12FeatureFlagPrelude } from '../tasks/v12-feature-flags.js';
 
 const configDir = fileURLToPath(new URL('.', import.meta.url));
 const manifestPath = path.join(configDir, 'generated', 'manifest.json');
@@ -27,7 +28,8 @@ const replacedDocs = new Set(
     return story.replace(/\.stories\.[^.]+$/, '.mdx');
   })
 );
-const v12FeatureFlags = `@use '@carbon/styles/scss/feature-flags' with ($feature-flags: ('enable-v12-release': true));\n`;
+// Shared with `tasks/build-styles.js --v12` so there's no drift
+const v12FeatureFlags = v12FeatureFlagPrelude;
 const v12FeatureFlagPattern = /\benable-v12-[a-z0-9-]+\b/;
 const titlePatterns = {
   Deprecated: /(?:title:\s*['"`]|<Meta\s+title=["'])Deprecated(?:\/|['"`])/,

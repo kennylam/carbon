@@ -26,6 +26,8 @@ import path from 'path';
 import fixHostPseudo from '../tools/postcss-fix-host-pseudo.js';
 import postcss from 'postcss';
 import * as sass from 'sass';
+import { escapeForTemplate, verifyRoundTrip } from './lit-css-template.js';
+import { v12FeatureFlagPrelude } from './v12-feature-flags.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, '..');
@@ -62,8 +64,6 @@ const isDist = process.argv.includes('--dist');
  * bundler, so the flag is injected here instead.
  */
 const isV12 = process.argv.includes('--v12');
-
-const v12Prelude = `@use '@carbon/styles/scss/feature-flags' with ($feature-flags: ('enable-v12-release': true));\n`;
 
 const postCSSPlugins = isDist
   ? [fixHostPseudo(), autoprefixer(), cssnano()]
@@ -114,51 +114,6 @@ async function collectTargets() {
 }
 
 /**
- * Escapes CSS for embedding in a tagged template literal.
- *
- * Backslashes matter here: Carbon's compiled CSS contains escaped selectors
- * such as `.cds--\:col-span`, and an unescaped `\:` is an invalid escape
- * sequence whose cooked value in a tagged template is `undefined`.
- *
- * @param {string} css The CSS to escape.
- * @returns {string} The escaped CSS.
- */
-function escapeForTemplate(css) {
-  return css
-    .replace(/\\/g, '\\\\')
-    .replace(/`/g, '\\`')
-    .replace(/\$\{/g, '\\${');
-}
-
-/**
- * Asserts that a template literal built from `escaped` cooks back to `css`.
- *
- * Uses the real JavaScript template-literal grammar rather than re-implementing
- * escape processing, so the check cannot share a bug with `escapeForTemplate`.
- *
- * @param {string} escaped The escaped CSS.
- * @param {string} css The original CSS.
- * @param {string} source The SCSS file, for error reporting.
- */
-function verifyRoundTrip(escaped, css, source) {
-  let cooked;
-
-  try {
-    cooked = new Function(`return \`${escaped}\`;`)();
-  } catch (error) {
-    throw new Error(
-      `[build-styles] escaped CSS for ${source} is not a valid template literal: ${error.message}`
-    );
-  }
-
-  if (cooked !== css) {
-    throw new Error(
-      `[build-styles] escaped CSS for ${source} does not round-trip; refusing to emit corrupt styles`
-    );
-  }
-}
-
-/**
  * Compiles one SCSS file to a `.scss.ts` module.
  *
  * @param {string} file The absolute path to the SCSS file.
@@ -167,7 +122,7 @@ function verifyRoundTrip(escaped, css, source) {
 async function generate(file) {
   const contents = await fs.readFile(file, 'utf8');
 
-  const prelude = `${isV12 ? v12Prelude : ''}${sassPrelude}`;
+  const prelude = `${isV12 ? v12FeatureFlagPrelude : ''}${sassPrelude}`;
 
   const { css: compiled } = sass.compileString(`${prelude}${contents}`, {
     url: pathToFileURL(file),
@@ -221,7 +176,13 @@ async function buildStyles() {
   return generated;
 }
 
-buildStyles().catch((error) => {
-  console.error(error.message ?? error);
-  process.exitCode = 1;
-});
+// Only run when invoked directly, so tests can import the helpers above.
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  buildStyles().catch((error) => {
+    console.error(error.message ?? error);
+    process.exitCode = 1;
+  });
+}
