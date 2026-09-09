@@ -18,7 +18,7 @@ import { provide } from '@lit/context';
 import { prefix } from '../../globals/settings';
 import HostListener from '../../globals/decorators/host-listener';
 import HostListenerMixin from '../../globals/mixins/host-listener';
-import styles from './notification-panel.scss?lit';
+import styles from './notification-panel.scss.js';
 import { selectorTabbable } from '../../globals/settings';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { classMap } from 'lit/directives/class-map.js';

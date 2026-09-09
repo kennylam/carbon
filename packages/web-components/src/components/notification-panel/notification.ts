@@ -14,7 +14,7 @@ import { dateTimeFormat } from '@carbon/utilities';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
 import { consume } from '@lit/context';
 import { dateTimeLocaleContext } from './date-time-context';
-import styles from './notification.scss?lit';
+import styles from './notification.scss.js';
 import '../button/index';
 import Close16 from '@carbon/icons/es/close/16';
 import ErrorFilled16 from '@carbon/icons/es/error--filled/16';

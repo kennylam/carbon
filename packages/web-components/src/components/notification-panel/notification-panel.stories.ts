@@ -8,7 +8,7 @@ import { html } from 'lit';
 import { classMap } from 'lit/directives/class-map.js';
 import { action } from 'storybook/actions';
 import './index';
-import styles from './story-styles.scss?lit';
+import styles from './story-styles.scss.js';
 import { useState } from 'storybook/preview-api';
 import { prefix } from '../../globals/settings';
 

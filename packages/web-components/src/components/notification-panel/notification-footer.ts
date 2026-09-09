@@ -13,7 +13,7 @@ import HostListenerMixin from '../../globals/mixins/host-listener';
 import Settings16 from '@carbon/icons/es/settings/16';
 import { iconLoader } from '../../globals/internal/icon-loader';
 import { carbonElement as customElement } from '../../globals/decorators/carbon-element';
-import styles from './notification-footer.scss?lit';
+import styles from './notification-footer.scss.js';
 
 const blockClass = `${prefix}--notifications-panel`;
 
