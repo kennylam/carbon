@@ -56,7 +56,7 @@
     "build:dist": "yarn build:styles:dist && node tasks/build-dist.js",
     "build:cdn": "yarn clean && yarn build:dist",
     "ci-check": "yarn registration-coverage && yarn wca && yarn typecheck && yarn test:styles",
-    "clean": "rimraf es es-custom lib scss dist storybook-static storybook-static-v12 .storybook-v12/generated \"src/**/*.scss.ts\" \".storybook/**/*.scss.ts\"",
+    "clean": "rimraf --glob es es-custom lib scss dist storybook-static storybook-static-v12 .storybook-v12/generated \"src/**/*.scss.ts\" \".storybook/**/*.scss.ts\" \".storybook-v12/**/*.scss.ts\"",
     "postinstall": "ibmtelemetry --config=telemetry.yml",
     "registration-coverage": "node tasks/registration-coverage.mjs",
     "serve": "node tasks/build.js --serve",
