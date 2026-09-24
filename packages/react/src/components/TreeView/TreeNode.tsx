@@ -226,10 +226,12 @@ const useEllipsisCheck = (
     return () => {
       cancelAnimationFrame(animationFrameId);
       if (resizeObserver) {
+        // oxlint-disable-next-line react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
         if (labelTextRef.current) {
           // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
           resizeObserver.unobserve(labelTextRef.current);
         }
+        // oxlint-disable-next-line react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
         if (detailsWrapperRef.current) {
           // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
           resizeObserver.unobserve(detailsWrapperRef.current);
@@ -634,6 +636,7 @@ const TreeNode = React.forwardRef<HTMLElement, TreeNodeProps>(
         {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props -- https://github.com/carbon-design-system/carbon/issues/20452 */}
         <li
           {...treeNodeProps}
+          // oxlint-disable-next-line jsx-a11y/role-supports-aria-props -- https://github.com/carbon-design-system/carbon/issues/20452
           aria-expanded={children ? !!expanded : undefined}
           ref={setRefs}>
           {nodeContent}

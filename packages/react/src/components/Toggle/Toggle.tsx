@@ -163,7 +163,7 @@ export function Toggle({
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-    <div
+    <div // oxlint-disable-line jsx-a11y/no-static-element-interactions -- https://github.com/carbon-design-system/carbon/issues/20452
       className={wrapperClasses}
       onClick={
         !labelText

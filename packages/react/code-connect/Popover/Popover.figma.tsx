@@ -37,7 +37,7 @@ figma.connect(
         dropShadow: figma.boolean('Shadow'),
       }),
     },
-    example: ({ align, open, popoverItem }) => {
+    example: ({ align, popoverItem }) => {
       const [open, setOpen] = React.useState(false);
       return (
         <Popover
@@ -75,7 +75,7 @@ figma.connect(
         children: figma.instance('Swap slot'),
       }),
     },
-    example: ({ align, open, dropShadow, popoverItem }) => {
+    example: ({ align, dropShadow, popoverItem }) => {
       const [open, setOpen] = React.useState(false);
       return (
         <Popover isTabTip align={align} open={open} dropShadow={dropShadow}>

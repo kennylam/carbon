@@ -424,6 +424,7 @@ const Dropdown = React.forwardRef(
         itemToString,
         initialSelectedItem,
         onSelectedItemChange,
+        // oxlint-disable-next-line react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
         stateReducer,
         onHighlightedIndexChange,
         downshiftProps,

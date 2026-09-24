@@ -564,7 +564,7 @@ export const Popover: PopoverComponent & {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
       const className = (item?.props as any)?.className;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any -- https://github.com/carbon-design-system/carbon/issues/20452
-      const ref = (item?.props as any).ref;
+      const ref = (item?.props as any)?.ref;
       const tabTipClasses = cx(
         `${prefix}--popover--tab-tip__button`,
         className

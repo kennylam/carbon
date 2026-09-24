@@ -167,6 +167,7 @@ function ProgressBar({
         className={`${prefix}--progress-bar__track`}
         role="progressbar"
         aria-busy={!isFinished}
+        // oxlint-disable-next-line jsx-a11y/role-supports-aria-props
         aria-invalid={isError}
         aria-labelledby={labelId}
         aria-describedby={helperText ? helperTextId : undefined}

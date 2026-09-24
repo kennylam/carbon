@@ -11,7 +11,6 @@ import React, {
   type ChangeEvent,
   type DragEvent,
   type HTMLAttributes,
-  type SyntheticEvent,
 } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';

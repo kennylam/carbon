@@ -302,6 +302,7 @@ const TreeView: TreeViewComponent = ({
       selected,
       size,
     }),
+    // oxlint-disable-next-line react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
     [active, multiselect, setActive, handleTreeSelect, selected, size]
   );
 
