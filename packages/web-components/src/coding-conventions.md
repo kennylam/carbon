@@ -32,9 +32,9 @@
 
 ## Linters/formatters
 
-`carbon-web-components` uses ESLint with `typescript-eslint` for linting, and
-Prettier for code formatting. Most of ESLint configurations are same as ones in
-`carbon-components`.
+`carbon-web-components` uses oxlint for linting, and Prettier for code
+formatting. The lint configuration is shared across the monorepo in the root
+`.oxlintrc.json`.
 
 ## TSDoc comments
 

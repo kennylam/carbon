@@ -696,8 +696,8 @@ commands one after another. Refer to the documentation of your shell.
 #### Recipes
 
 Below are some common recipes for component testing. Many of the pattern/syntax
-details contained within these recipes are enforced via eslint rules declared in
-the root `eslint.config.mjs`.
+details contained within these recipes are enforced via oxlint rules declared in
+the root `.oxlintrc.json`.
 
 ##### `ComponentName-test.js`
 
