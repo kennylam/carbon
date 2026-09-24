@@ -23,6 +23,7 @@
     "**/types/",
 
     "packages/*/examples/*",
+    "packages/*/src/examples/**/example/**",
 
     // Upgrade
     "**/__testfixtures__/**",
