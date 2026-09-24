@@ -44,6 +44,7 @@ function Pagination({
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
       console.warn(
         '[Carbon] `unstable_Pagination` / `preview_Pagination` is deprecated and will be removed in v12. ' +
           'Use the stable `Pagination` component with the `renderPageSelect` prop instead.'
