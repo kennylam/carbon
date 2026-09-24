@@ -697,7 +697,7 @@ commands one after another. Refer to the documentation of your shell.
 
 Below are some common recipes for component testing. Many of the pattern/syntax
 details contained within these recipes are enforced via eslint rules declared in
-`eslint-config-carbon`.
+the root `eslint.config.mjs`.
 
 ##### `ComponentName-test.js`
 

@@ -505,7 +505,7 @@ This can be done without having to do a major version bump across all packages.
 
 For instance:
 
-- `eslint-config-carbon` needs a new major
+- `stylelint-config-carbon` needs a new major
 - All other packages should only be bumped as a new patch
 - The tag for the release should remain at the current major `v11.x`, and not be
   bumped to `v12.x`

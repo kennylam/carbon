@@ -147,11 +147,6 @@
       "prettier --cache --write"
     ]
   },
-  "eslintConfig": {
-    "extends": [
-      "eslint-config-carbon/internal"
-    ]
-  },
   "stylelint": {
     "extends": [
       "./config/stylelint-config-carbon/index.js"
