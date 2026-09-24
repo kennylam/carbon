@@ -332,7 +332,8 @@ header with a
 [`style-src` directive](https://content-security-policy.com/style-src/). When
 this is configured, inline styles are blocked. Due to this, `style={{}}` cannot
 be used on any element within the codebase. The `react/forbid-component-props`
-eslint rule is configured to flag invalid usages of the `style` attribute/prop.
+and `react/forbid-dom-props` rules in `.oxlintrc.json` flag invalid usages of
+the `style` attribute/prop. Stories are exempt.
 
 Components that need dynamic or inline styles can author these via the
 [CSS Object Model (CSSOM)](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model).
@@ -695,9 +696,9 @@ commands one after another. Refer to the documentation of your shell.
 
 #### Recipes
 
-Below are some common recipes for component testing. Many of the pattern/syntax
-details contained within these recipes are enforced via oxlint rules declared in
-the root `.oxlintrc.json`.
+Below are some common recipes for component testing. Test files are not linted
+yet, so these conventions are not enforced automatically; follow them when
+writing or reviewing tests.
 
 ##### `ComponentName-test.js`
 

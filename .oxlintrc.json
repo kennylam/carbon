@@ -166,6 +166,21 @@
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
 
+    // inline styles are blocked by CSP `style-src`, see
+    // docs/style.md#authoring-dynamicinline-styles
+    "react/forbid-component-props": [
+      "error",
+      {
+        "forbid": [{ "propName": "style", "message": "Avoid using style prop" }]
+      }
+    ],
+    "react/forbid-dom-props": [
+      "error",
+      {
+        "forbid": [{ "propName": "style", "message": "Avoid using style prop" }]
+      }
+    ],
+
     // eslint-plugin-jsx-a11y recommended
     "jsx-a11y/alt-text": "error",
     "jsx-a11y/anchor-has-content": "error",
@@ -321,6 +336,19 @@
       ],
       "rules": {
         "no-console": "off"
+      }
+    },
+    {
+      // Stories are demo code and are not subject to the CSP restriction.
+      "files": [
+        "**/*.stories.*",
+        "**/*-story.js",
+        "**/__stories__/**",
+        "**/preview-components/**"
+      ],
+      "rules": {
+        "react/forbid-component-props": "off",
+        "react/forbid-dom-props": "off"
       }
     },
     {
