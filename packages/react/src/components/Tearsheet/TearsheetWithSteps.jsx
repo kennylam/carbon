@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-/* eslint-disable react/prop-types */
 import React, { useEffect, useRef, useState } from 'react';
 import {
   StepGroup,

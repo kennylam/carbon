@@ -4,6 +4,9 @@
   "categories": {
     "correctness": "off"
   },
+  "options": {
+    "reportUnusedDisableDirectives": "warn"
+  },
   "env": {
     "builtin": true,
     "browser": true,

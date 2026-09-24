@@ -54,7 +54,6 @@ declare global {
      * Matching them prevents collisions and tsc errors for TS 6 consumers,
      * and for TS 5 consumers nothing changes, they still get these types
      */
-    // eslint-disable-next-line no-var
     var PlainYearMonth: PlainYearMonthConstructor;
 
     interface PlainDateConstructor {
@@ -64,7 +63,6 @@ declare global {
       compare(one: PlainDate, two: PlainDate): number;
     }
 
-    // eslint-disable-next-line no-var
     var PlainDate: PlainDateConstructor;
 
     // eslint-disable-next-line @typescript-eslint/no-namespace

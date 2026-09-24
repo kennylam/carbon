@@ -62,7 +62,6 @@ for (const methodName of consoleMethods) {
     ]);
   };
 
-  // eslint-disable-next-line no-console
   console[methodName] = patchedConsoleMethod;
 
   global.beforeEach(() => {
@@ -73,7 +72,6 @@ for (const methodName of consoleMethods) {
   });
 
   global.afterEach(() => {
-    // eslint-disable-next-line no-console
     if (console[methodName] !== patchedConsoleMethod) {
       throw new Error(`Test did not restore a mock for console.${methodName}`);
     }

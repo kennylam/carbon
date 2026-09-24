@@ -21,7 +21,6 @@ const makeCrumbs = (n) =>
     onClick: () => {},
   }));
 
-// eslint-disable-next-line react/prop-types
 export const Breadcrumbs = ({ className }) => {
   const breadcrumbs = makeCrumbs(4);
 

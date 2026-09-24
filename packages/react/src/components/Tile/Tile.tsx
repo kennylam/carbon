@@ -573,7 +573,6 @@ export const SelectableTile = React.forwardRef<
     );
 
     const selectableTile = (
-      // eslint-disable-next-line jsx-a11y/interactive-supports-focus
       <div
         className={classes}
         onClick={!disabled ? handleClick : undefined}

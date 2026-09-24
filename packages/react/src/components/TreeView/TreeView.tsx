@@ -134,7 +134,6 @@ const TreeView: TreeViewComponent = ({
     );
   }
 
-  // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
   function handleTreeSelect(
     event,
     node: Parameters<NonNullable<TreeNodeProps['onTreeSelect']>>[1]
@@ -302,7 +301,7 @@ const TreeView: TreeViewComponent = ({
       selected,
       size,
     }),
-    // oxlint-disable-next-line react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
     [active, multiselect, setActive, handleTreeSelect, selected, size]
   );
 

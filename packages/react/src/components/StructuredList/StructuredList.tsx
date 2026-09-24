@@ -318,7 +318,6 @@ export function StructuredListRow(props: StructuredListRowProps) {
       {children}
     </div>
   ) : (
-    // eslint-disable-next-line jsx-a11y/interactive-supports-focus
     <div
       {...other}
       role="row"

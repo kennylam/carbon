@@ -22,7 +22,6 @@ import {
 } from '../../UIShell';
 import { UserAvatar } from '@carbon/icons-react';
 
-// eslint-disable-next-line react/prop-types
 export const UiShell = ({ children }) => {
   return (
     <>

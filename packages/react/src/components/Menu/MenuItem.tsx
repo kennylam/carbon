@@ -693,7 +693,7 @@ export const MenuItemDivider = forwardRef<HTMLLIElement, MenuItemDividerProps>(
     const classNames = cx(className, `${prefix}--menu-item-divider`);
 
     return (
-      // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role -- https://github.com/carbon-design-system/carbon/issues/20452
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role -- https://github.com/carbon-design-system/carbon/issues/20452
       <li {...rest} className={classNames} role="separator" ref={forwardRef} />
     );
   }

@@ -766,7 +766,6 @@ export const MultiSelect = React.forwardRef(
           totalSelectableCount,
         };
       },
-      // eslint-disable-next-line  react-hooks/exhaustive-deps -- https://github.com/carbon-design-system/carbon/issues/20452
       [selectedItems, filteredItems]
     );
 

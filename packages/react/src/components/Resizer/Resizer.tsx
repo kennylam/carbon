@@ -331,12 +331,10 @@ export const Resizer = forwardRef<HTMLDivElement, ResizerProps>(
     };
 
     return (
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
       <div
         {...rest}
         ref={ref as React.RefObject<HTMLDivElement>}
         role="separator"
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
         aria-orientation={orientation}
         aria-live="assertive"
