@@ -102,6 +102,7 @@ export const TruncatedText = forwardRef<HTMLDivElement, TruncatedTextProps>(
         ref={contentRef}
         className={textContentClasses}
         id={id}
+        // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
         style={textContentStyles}>
         {value}
       </span>

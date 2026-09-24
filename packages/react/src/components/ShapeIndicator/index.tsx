@@ -48,6 +48,7 @@ const incompleteIcon = (props) => (
       fill="#fff"
       fillOpacity={0.01}
       d="M0 0h16v16H0z"
+      // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
       style={{
         mixBlendMode: 'multiply',
       }}

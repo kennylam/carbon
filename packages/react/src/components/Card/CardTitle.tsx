@@ -149,12 +149,14 @@ export const CardTitle = forwardRef<HTMLDivElement, CardTitleProps>(
               [`${blockClass}__label--truncate`]: labelTruncate === true,
               [`${blockClass}__label--truncate-multi`]: isLabelMulti,
             })}
+            // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
             style={labelVars as React.CSSProperties}>
             {label}
           </div>
         )}
         <span
           className={textRowClasses}
+          // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
           style={titleVars as React.CSSProperties}>
           {titleStart && (
             <span className={`${blockClass}__title-start-icon`}>
@@ -173,6 +175,7 @@ export const CardTitle = forwardRef<HTMLDivElement, CardTitleProps>(
                 descriptionTruncate === true,
               [`${blockClass}__description--truncate-multi`]: isDescMulti,
             })}
+            // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
             style={descVars as React.CSSProperties}>
             {description}
           </div>

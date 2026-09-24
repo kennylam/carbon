@@ -56,6 +56,7 @@ export const CardMedia = ({
     return (
       <div
         className={`${blockClass}__media ${blockClass}__media--horizontal`}
+        // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
         style={
           {
             [`--${prefix}--card--media-width`]: mediaWidth,

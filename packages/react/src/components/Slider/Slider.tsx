@@ -65,12 +65,14 @@ const ThumbWrapper = ({
 }: ThumbWrapperProps) => {
   if (hasTooltip) {
     return (
+      // eslint-disable-next-line react/forbid-component-props -- https://github.com/carbon-design-system/carbon/issues/20452
       <Tooltip className={className} style={style} {...rest}>
         {children}
       </Tooltip>
     );
   } else {
     return (
+      // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
       <div className={className} style={style}>
         {children}
       </div>

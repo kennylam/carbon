@@ -131,6 +131,7 @@ export const CardActions = ({
         data-offset
         data-hidden
         data-floating-menu-container
+        // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
         style={{
           position: 'relative',
         }}>

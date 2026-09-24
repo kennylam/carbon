@@ -273,6 +273,7 @@ function TabsVertical({
 
   if (!isSm) {
     return (
+      // eslint-disable-next-line react/forbid-component-props -- https://github.com/carbon-design-system/carbon/issues/20452
       <Grid style={{ height: height }}>
         <Tabs {...props}>{children}</Tabs>
       </Grid>

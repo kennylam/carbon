@@ -166,7 +166,7 @@ function ProgressBar({
         className={`${prefix}--progress-bar__track`}
         role="progressbar"
         aria-busy={!isFinished}
-        // eslint-disable-next-line jsx-a11y/role-supports-aria-props
+        // eslint-disable-next-line jsx-a11y/role-supports-aria-props -- https://github.com/carbon-design-system/carbon/issues/20452
         aria-invalid={isError}
         aria-labelledby={labelId}
         aria-describedby={helperText ? helperTextId : undefined}

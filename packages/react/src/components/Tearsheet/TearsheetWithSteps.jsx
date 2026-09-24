@@ -143,6 +143,7 @@ function Step3() {
           role="status"
           aria-live="polite"
           aria-atomic="true"
+          // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
           style={{
             position: 'absolute',
             left: '-10000px',
@@ -306,6 +307,7 @@ function TearsheetWithStepsInner({
               role="status"
               aria-live="polite"
               aria-atomic="true"
+              // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
               style={{
                 position: 'absolute',
                 left: '-10000px',

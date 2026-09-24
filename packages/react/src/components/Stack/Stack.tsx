@@ -90,6 +90,7 @@ export const Stack = forwardRef<HTMLElement, StackProps>((props, ref) => {
   }
 
   return (
+    // eslint-disable-next-line react/forbid-component-props -- https://github.com/carbon-design-system/carbon/issues/20452
     <BaseComponent {...rest} ref={ref} className={className} style={style}>
       {children}
     </BaseComponent>

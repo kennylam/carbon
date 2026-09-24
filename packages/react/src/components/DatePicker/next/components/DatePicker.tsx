@@ -311,6 +311,7 @@ export function DatePicker({
         tabIndex={-1}
         aria-hidden={true}
         onFocus={handleExitSentinelFocus}
+        // eslint-disable-next-line react/forbid-dom-props -- https://github.com/carbon-design-system/carbon/issues/20452
         style={{
           position: 'absolute',
           width: 0,
