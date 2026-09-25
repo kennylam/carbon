@@ -455,8 +455,6 @@ jobs:
         run: yarn install --immutable
       - name: Build project
         run: yarn build
-      - name: Build storybook
-        run: yarn workspace @carbon/react storybook:build --stats-json
       - id: chromatic
         name: Run Chromatic
         uses: chromaui/action@bb3b582719a93c1828c5e520e62992b2937d7889 # v18.9.4
