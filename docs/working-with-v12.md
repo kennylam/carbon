@@ -6,6 +6,9 @@ important rule is to keep the preview explicit: v11 remains the default
 experience, and v12 behavior is enabled through the v12 release flag in the v12
 Storybook environment.
 
+For the outstanding work and the branch cutover, see the
+[v12 release plan](v12-release-plan.md).
+
 ## v12 Storybooks
 
 The v12 Storybooks are run separately from the existing ones and use different
