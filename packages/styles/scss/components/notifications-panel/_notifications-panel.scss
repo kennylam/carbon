@@ -392,68 +392,71 @@
   // Inline empty-state styles — scoped to NotificationsPanel.
   // NOTE: These styles exist solely to support the inline NotificationsEmptyState
   // companion component. Remove when Carbon core provides its own empty-state
-  // pattern and NotificationsEmptyState.tsx is deleted.
+  // pattern and NotificationsEmptyState.tsx is deleted. Keep them nested under
+  // the panel so the generic `empty-state` classes don't leak to other markup.
   // ---------------------------------------------------------------------------
 
-  .#{$prefix}--empty-state {
-    display: flex;
-    color: $text-primary;
-  }
-
-  .#{$prefix}--empty-state-position--top {
-    flex-direction: column;
-  }
-
-  .#{$prefix}--empty-state-position--right {
-    flex-direction: row-reverse;
-  }
-
-  .#{$prefix}--empty-state-position--bottom {
-    flex-direction: column-reverse;
-  }
-
-  .#{$prefix}--empty-state-position--left {
-    flex-direction: row;
-  }
-
-  .#{$prefix}--empty-state__illustration {
-    block-size: auto;
-    margin-block-end: $spacing-05;
-
-    &.#{$prefix}--empty-state__illustration--lg {
-      max-inline-size: $spacing-11;
-      min-inline-size: $spacing-11;
+  .#{$block-class} {
+    .#{$prefix}--empty-state {
+      display: flex;
+      color: $text-primary;
     }
 
-    &.#{$prefix}--empty-state__illustration--sm {
-      max-inline-size: $spacing-10;
-      min-inline-size: $spacing-10;
-    }
-  }
-
-  .#{$prefix}--empty-state__content {
-    .#{$prefix}--empty-state__header {
-      @include type.type-style('heading-03');
-
-      margin: 0;
-      padding-block-end: $spacing-03;
+    .#{$prefix}--empty-state-position--top {
+      flex-direction: column;
     }
 
-    .#{$prefix}--empty-state__header--small {
-      @include type.type-style('body-compact-02');
-
-      padding-block-end: $spacing-03;
+    .#{$prefix}--empty-state-position--right {
+      flex-direction: row-reverse;
     }
 
-    .#{$prefix}--empty-state__subtitle {
-      @include type.type-style('body-01');
-
-      color: $text-secondary;
-      padding-block-end: $spacing-05;
+    .#{$prefix}--empty-state-position--bottom {
+      flex-direction: column-reverse;
     }
 
-    .#{$prefix}--empty-state__subtitle--small {
-      @include type.type-style('label-01');
+    .#{$prefix}--empty-state-position--left {
+      flex-direction: row;
+    }
+
+    .#{$prefix}--empty-state__illustration {
+      block-size: auto;
+      margin-block-end: $spacing-05;
+
+      &.#{$prefix}--empty-state__illustration--lg {
+        max-inline-size: $spacing-11;
+        min-inline-size: $spacing-11;
+      }
+
+      &.#{$prefix}--empty-state__illustration--sm {
+        max-inline-size: $spacing-10;
+        min-inline-size: $spacing-10;
+      }
+    }
+
+    .#{$prefix}--empty-state__content {
+      .#{$prefix}--empty-state__header {
+        @include type.type-style('heading-03');
+
+        margin: 0;
+        padding-block-end: $spacing-03;
+      }
+
+      .#{$prefix}--empty-state__header--small {
+        @include type.type-style('body-compact-02');
+
+        padding-block-end: $spacing-03;
+      }
+
+      .#{$prefix}--empty-state__subtitle {
+        @include type.type-style('body-01');
+
+        color: $text-secondary;
+        padding-block-end: $spacing-05;
+      }
+
+      .#{$prefix}--empty-state__subtitle--small {
+        @include type.type-style('label-01');
+      }
     }
   }
 }
