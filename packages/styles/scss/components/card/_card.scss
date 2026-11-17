@@ -18,7 +18,7 @@
 @use '../../type' as *;
 @use '../../utilities/ai-gradient' as *;
 @use '../../utilities/focus-outline' as *;
-@use '../button';
+@use '../button/radius' as button;
 
 /// Card styles
 /// @access public

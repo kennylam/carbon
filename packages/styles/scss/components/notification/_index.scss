@@ -8,6 +8,7 @@
 @forward './tokens';
 @forward 'inline-notification';
 @forward 'toast-notification';
+@use '../button';
 @forward 'actionable-notification';
 
 @use '../../theme';

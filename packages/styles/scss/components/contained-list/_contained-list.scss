@@ -7,8 +7,7 @@
 
 @use 'sass:map';
 
-@use '../button';
-@use '../overflow-menu';
+@use '../button/radius' as button;
 @use '../../border-radius' as *;
 @use '../../config' as *;
 @use '../../feature-flags' as *;

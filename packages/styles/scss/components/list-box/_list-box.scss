@@ -6,8 +6,6 @@
 //
 
 @use '../button/tokens' as *;
-@use '../text-input';
-@use '../tag';
 @use '../tag/mixins' as *;
 @use '../../border-radius' as *;
 @use '../../feature-flags' as *;

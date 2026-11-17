@@ -19,9 +19,7 @@
 @use '../../utilities/layout';
 @use '../../utilities/visually-hidden' as *;
 
-@use '../button';
-@use '../form';
-@use '../loading';
+@use '../button/tokens' as button;
 
 /// Gap between the filename row and the error message, also used as block
 /// padding on invalid file items.

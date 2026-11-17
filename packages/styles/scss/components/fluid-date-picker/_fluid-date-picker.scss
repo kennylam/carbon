@@ -17,7 +17,6 @@
 @use '../../utilities/focus-outline' as *;
 @use '../../border-radius' as *;
 @use '../../feature-flags' as *;
-@use '../date-picker';
 
 @mixin fluid-date-picker {
   .#{$prefix}--date-picker--fluid {

@@ -6,6 +6,8 @@
 //
 
 @forward 'vars';
+@use '../checkbox';
+@use '../radio-button';
 @forward 'data-table';
 @use 'data-table';
 

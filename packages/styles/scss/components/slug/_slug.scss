@@ -18,8 +18,6 @@
 @use '../../utilities/custom-property';
 @use '../button/radius' as button;
 @use '../../utilities/high-contrast-mode' as *;
-@use '../toggletip';
-@use '../popover';
 
 $sizes: (
   mini: (

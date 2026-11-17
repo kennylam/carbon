@@ -5,6 +5,9 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+// load order matches the original partial; keyframes before loading
+@use 'keyframes';
+@use '../loading';
 @forward 'inline-loading';
 @use 'inline-loading';
 

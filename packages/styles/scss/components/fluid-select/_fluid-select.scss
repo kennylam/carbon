@@ -16,7 +16,6 @@
 @use '../../feature-flags' as *;
 @use '../../utilities/convert';
 @use '../../utilities/focus-outline' as *;
-@use '../select';
 
 @mixin fluid-select {
   .#{$prefix}--select--fluid .#{$prefix}--select {

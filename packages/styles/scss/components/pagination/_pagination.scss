@@ -5,8 +5,7 @@
 // LICENSE file in the root directory of this source tree.
 //
 
-@use '../button';
-@use '../select';
+@use '../button/radius' as button;
 @use '../../border-radius' as *;
 @use '../../layer' as *;
 @use '../../config' as *;

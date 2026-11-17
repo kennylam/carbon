@@ -5,6 +5,8 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+@use '../dropdown';
+@use '../fluid-list-box';
 @forward 'fluid-combo-box';
 @use 'fluid-combo-box';
 

@@ -5,6 +5,8 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+@use '../fluid-text-input';
+@use '../fluid-select';
 @forward 'fluid-time-picker';
 @use 'fluid-time-picker';
 
