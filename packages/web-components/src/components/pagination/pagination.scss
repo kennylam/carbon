@@ -12,9 +12,14 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/theme' as *;
 @use '@carbon/styles/scss/type' as *;
 @use '@carbon/styles/scss/breakpoint' as *;
-@use '@carbon/styles/scss/components/pagination' as *;
+@use '@carbon/styles/scss/components/button/button';
+@use '@carbon/styles/scss/components/pagination/pagination' as *;
 @use '@carbon/styles/scss/utilities/visually-hidden' as *;
 @use '@carbon/styles/scss/utilities/layout' as *;
+
+@include button.button;
+
+@include pagination;
 
 :host(#{$prefix}-pagination) {
   @extend .#{$prefix}--pagination;

@@ -14,8 +14,7 @@
 @use '@carbon/styles/scss/type' as *;
 @use '@carbon/styles/scss/border-radius' as *;
 @use '@carbon/styles/scss/feature-flags' as flags;
-@use '@carbon/styles/scss/components/button/index' as *;
-@use '@carbon/styles/scss/components/button/radius' as button-radius;
+@use '@carbon/styles/scss/components/button/tokens' as *;
 @use '@carbon/styles/scss/components/tabs/index';
 @use '@carbon/styles/scss/components/tabs/vars' as *;
 @use '@carbon/styles/scss/utilities/button-reset';

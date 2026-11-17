@@ -15,7 +15,6 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/type' as *;
 @use '@carbon/styles/scss/utilities' as *;
 @use '@carbon/styles/scss/components/fluid-text-input' as *;
-@use '@carbon/styles/scss/components/search' as *;
 
 :host(#{$prefix}-fluid-search) {
   @extend .#{$prefix}--search;

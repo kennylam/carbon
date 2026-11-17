@@ -12,7 +12,6 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/theme' as *;
 @use '@carbon/styles/scss/border-radius' as *;
 @use '@carbon/styles/scss/feature-flags' as flags;
-@use '@carbon/styles/scss/components/select';
 @use '@carbon/styles/scss/colors';
 @use '@carbon/styles/scss/utilities/convert' as *;
 @use '@carbon/styles/scss/utilities/skeleton' as *;

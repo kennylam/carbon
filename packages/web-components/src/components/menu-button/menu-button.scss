@@ -7,7 +7,10 @@
 $css--plex: true !default;
 @use '@carbon/styles/scss/config' as *;
 @use '@carbon/styles/scss/motion' as *;
-@use '@carbon/styles/scss/components/menu-button/index' as *;
+@use '@carbon/styles/scss/components/menu';
+@use '@carbon/styles/scss/components/menu-button/menu-button' as *;
+
+@include menu-button;
 
 :host(#{$prefix}-menu-button) {
   @extend .#{$prefix}--menu-button__container;

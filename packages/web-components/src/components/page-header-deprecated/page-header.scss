@@ -17,7 +17,9 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/spacing' as *;
 @use '@carbon/styles/scss/breakpoint' as *;
 @use '@carbon/grid';
-@use '@carbon/styles/scss/components/page-header/index' as *;
+@use '@carbon/styles/scss/components/page-header/page-header' as *;
+
+@include page-header;
 
 :host(#{$prefix}-page-header) {
   @extend .#{$prefix}--page-header;

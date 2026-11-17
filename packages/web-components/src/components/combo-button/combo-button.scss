@@ -10,8 +10,10 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/motion' as *;
 @use '@carbon/styles/scss/border-radius' as *;
 @use '@carbon/styles/scss/feature-flags' as flags;
-@use '@carbon/styles/scss/components/button' as button;
-@use '@carbon/styles/scss/components/combo-button/index' as *;
+@use '@carbon/styles/scss/components/menu';
+@use '@carbon/styles/scss/components/combo-button/combo-button' as *;
+
+@include combo-button;
 
 :host(#{$prefix}-combo-button) {
   @extend .#{$prefix}--combo-button__container;

@@ -14,14 +14,15 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/utilities';
 @use '@carbon/styles/scss/utilities/skeleton' as *;
 @use '@carbon/styles/scss/border-radius' as *;
-@use '@carbon/styles/scss/components/form';
-@use '@carbon/styles/scss/components/number-input/index';
 @use '@carbon/styles/scss/components/number-input/vars' as *;
-@use '@carbon/styles/scss/components/fluid-number-input' as *;
+@use '@carbon/styles/scss/components/number-input';
+@use '@carbon/styles/scss/components/fluid-number-input/fluid-number-input' as *;
 @use '@carbon/styles/scss/utilities/ai-gradient' as *;
 @use '@carbon/styles/scss/utilities/layout' as *;
 @use '@carbon/styles/scss/utilities/layout';
 @use '@carbon/styles/scss/spacing' as *;
+
+@include fluid-number-input;
 
 @include emit-layout-context-classes();
 

@@ -15,9 +15,10 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/feature-flags' as flags;
 @use '@carbon/styles/scss/utilities/high-contrast-mode' as *;
 @use '@carbon/styles/scss/utilities/layout' as *;
-@use '@carbon/styles/scss/components/button/radius' as button;
-@use '@carbon/styles/scss/components/contained-list';
-@use '@carbon/styles/scss/components/form' as *;
+@use '@carbon/styles/scss/components/contained-list/contained-list';
+@use '@carbon/styles/scss/components/form/form' as *;
+
+@include contained-list.contained-list;
 
 @include emit-layout-context-classes();
 

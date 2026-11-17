@@ -15,11 +15,10 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/utilities/convert';
 @use '@carbon/styles/scss/utilities/skeleton' as *;
 @use '@carbon/styles/scss/components/fluid-date-picker' as *;
-@use '@carbon/styles/scss/components/date-picker/index';
 @use '@carbon/styles/scss/utilities/focus-outline' as *;
 @use '@carbon/styles/scss/feature-flags' as flags;
 
-// ── Fluid date picker (wrapper) ──────────────────────────────────────────────
+// Fluid date picker (wrapper)
 
 :host(#{$prefix}-fluid-date-picker) {
   @if not flags.enabled('enable-v12-release') {

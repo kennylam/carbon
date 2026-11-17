@@ -6,7 +6,7 @@
  */
 
 $css--plex: true !default;
-@use '@carbon/styles/scss/components/fluid-multiselect/index';
+@use '@carbon/styles/scss/components/fluid-multiselect/fluid-multiselect';
 @use '@carbon/styles/scss/utilities/layout' as *;
 @use '@carbon/styles/scss/type' as *;
 @use '@carbon/styles/scss/config' as *;
@@ -17,9 +17,10 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/components/multiselect' as *;
 @use '@carbon/styles/scss/colors';
 @use '@carbon/styles/scss/utilities/convert' as *;
-@use '@carbon/styles/scss/components/list-box/list-box';
 @use '@carbon/styles/scss/components/fluid-list-box';
 @use '@carbon/styles/scss/utilities' as *;
+
+@include fluid-multiselect.fluid-multiselect;
 
 :host(#{$prefix}-fluid-multi-select) {
   @include emit-layout-tokens();

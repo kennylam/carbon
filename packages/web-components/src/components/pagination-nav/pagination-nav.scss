@@ -8,9 +8,11 @@
 $css--plex: true !default;
 
 @use '@carbon/styles/scss/config' as *;
-@use '@carbon/styles/scss/components/pagination-nav' as *;
+@use '@carbon/styles/scss/components/pagination-nav/pagination-nav' as *;
 @use '@carbon/styles/scss/utilities/layout' as *;
 @use '@carbon/styles/scss/theme' as *;
+
+@include pagination-nav;
 
 @include emit-layout-context-classes();
 
