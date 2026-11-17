@@ -14,10 +14,19 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/theme' as *;
 @use '@carbon/styles/scss/spacing' as *;
 @use '@carbon/styles/scss/utilities/convert';
-@use '@carbon/styles/scss/components/notification/index' as *;
+@use '@carbon/styles/scss/components/button/button';
+@use '@carbon/styles/scss/components/notification/tokens' as *;
+@use '@carbon/styles/scss/components/notification/inline-notification' as *;
+@use '@carbon/styles/scss/components/notification/toast-notification' as *;
+@use '@carbon/styles/scss/components/notification/actionable-notification' as *;
 @use '@carbon/styles/scss/components/button/mixins' as button-mixins;
 @use '@carbon/styles/scss/components/button/vars' as button-vars;
 @use '@carbon/styles/scss/utilities/layout' as *;
+
+@include button.button;
+@include inline-notification;
+@include toast-notification;
+@include actionable-notification;
 
 @include actionable-notification;
 

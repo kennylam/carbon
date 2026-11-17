@@ -13,8 +13,6 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/spacing' as *;
 @use '@carbon/styles/scss/utilities' as *;
 // Loaded before multiselect so these rules keep their original cascade order.
-@use '@carbon/styles/scss/components/text-input';
-@use '@carbon/styles/scss/components/tag';
 @use '@carbon/styles/scss/components/multiselect/index';
 @use '@carbon/styles/scss/utilities/convert';
 @use '@carbon/styles/scss/layout' as *;

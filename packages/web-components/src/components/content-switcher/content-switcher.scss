@@ -13,10 +13,15 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/type' as *;
 @use '@carbon/styles/scss/utilities/convert' as *;
 @use '@carbon/styles/scss/components/content-switcher/content-switcher' as *;
-@use '@carbon/styles/scss/components/tooltip';
+@use '@carbon/styles/scss/components/tooltip/tooltip';
+@use '@carbon/styles/scss/components/button/button' as *;
 @use '@carbon/styles/scss/components/button/tokens' as *;
 @use '@carbon/styles/scss/components/content-switcher/tokens' as *;
 @use '@carbon/styles/scss/layout' as *;
+
+@include tooltip.tooltip;
+@include tooltip.icon-tooltip;
+@include tooltip.definition-tooltip;
 
 // https://github.com/carbon-design-system/carbon/issues/11408
 @include content-switcher;
