@@ -6,6 +6,7 @@
 //
 
 @use '@carbon/styles/scss/components/date-picker/date-picker' as *;
+// renders form label and helper-text classes
 @use '@carbon/styles/scss/components/form';
 @use '@carbon/styles/scss/components/date-picker/date-picker-next';
 @use '@carbon/styles/scss/config' as *;

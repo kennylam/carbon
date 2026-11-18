@@ -7,6 +7,4 @@
 
 @use '../tooltip';
 @forward 'tabs';
-@use 'tabs';
-
-@include tabs.tabs;
+@use 'css';

@@ -9,6 +9,4 @@
 @use '../checkbox';
 @use '../radio-button';
 @forward 'data-table';
-@use 'data-table';
-
-@include data-table.data-table;
+@use 'css';

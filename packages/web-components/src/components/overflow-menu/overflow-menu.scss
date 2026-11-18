@@ -16,6 +16,7 @@
 @use '@carbon/styles/scss/utilities/focus-outline' as *;
 @use '@carbon/styles/scss/components/button/radius' as button;
 @use '@carbon/styles/scss/components/overflow-menu/overflow-menu' as *;
+// button and tooltip styles are needed here
 @use '@carbon/styles/scss/components/button' as button-styles;
 
 // https://github.com/carbon-design-system/carbon/issues/11408

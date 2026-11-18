@@ -1,0 +1,16 @@
+//
+// Copyright IBM Corp. 2026
+//
+// This source code is licensed under the Apache-2.0 license found in the
+// LICENSE file in the root directory of this source tree.
+//
+
+// The table toolbar renders button, overflow-menu and search classes. Emit only
+// their own rules (not the tooltip/popover their indexes also pull in)
+@use '@carbon/styles/scss/components/button/button';
+@use '@carbon/styles/scss/components/overflow-menu/overflow-menu';
+@use '@carbon/styles/scss/components/search/search';
+
+@include button.button;
+@include overflow-menu.overflow-menu;
+@include search.search;

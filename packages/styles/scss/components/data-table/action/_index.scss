@@ -5,7 +5,8 @@
 // LICENSE file in the root directory of this source tree.
 //
 
+@use '../../button';
+@use '../../overflow-menu';
+@use '../../search';
 @forward 'data-table-action';
-@use 'data-table-action';
-
-@include data-table-action.data-table-action;
+@use 'css';

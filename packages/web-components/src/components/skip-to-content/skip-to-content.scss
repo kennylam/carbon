@@ -6,7 +6,7 @@
  */
 
 @use '@carbon/styles/scss/config' as *;
-@use '@carbon/styles/scss/components/ui-shell/header';
+@use '@carbon/styles/scss/components/ui-shell/header/css' as ui-shell-header-css;
 
 :host(#{$prefix}-skip-to-content) {
   display: block;

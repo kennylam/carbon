@@ -15,7 +15,8 @@
 @use '@carbon/styles/scss/border-radius' as *;
 @use '@carbon/styles/scss/feature-flags' as flags;
 @use '@carbon/styles/scss/components/button/tokens' as *;
-@use '@carbon/styles/scss/components/tabs/index';
+@use '@carbon/styles/scss/components/tooltip/tooltip';
+@use '@carbon/styles/scss/components/tabs/css' as tabs-css;
 @use '@carbon/styles/scss/components/tabs/vars' as *;
 @use '@carbon/styles/scss/utilities/button-reset';
 @use '@carbon/styles/scss/utilities/layout' as *;
@@ -23,6 +24,10 @@
 @use '@carbon/styles/scss/utilities/convert';
 @use '@carbon/styles/scss/utilities/skeleton' as *;
 @use '@carbon/styles/scss/utilities/update_fields_on_layer' as *;
+
+@include tooltip.tooltip;
+@include tooltip.icon-tooltip;
+@include tooltip.definition-tooltip;
 
 @include emit-layout-context-classes();
 @include emit-layout-context-classes('density');

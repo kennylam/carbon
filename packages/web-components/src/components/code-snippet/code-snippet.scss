@@ -13,8 +13,7 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/spacing' as *;
 @use '@carbon/styles/scss/motion' as *;
 @use '@carbon/styles/scss/utilities' as *;
-@use '@carbon/styles/scss/components/code-snippet/index';
-@use '@carbon/styles/scss/components/copy-button/copy-button';
+@use '@carbon/styles/scss/components/code-snippet/css' as code-snippet-css;
 
 :host(#{$prefix}-code-snippet),
 :host(#{$prefix}-code-snippet-skeleton) {

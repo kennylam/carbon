@@ -10,7 +10,10 @@
 @use '@carbon/styles/scss/spacing' as *;
 @use '@carbon/styles/scss/motion' as *;
 @use '@carbon/styles/scss/theme' as *;
-@use '@carbon/styles/scss/components/data-table/action';
+@use '@carbon/styles/scss/components/data-table/action/data-table-action' as
+  action;
+@use '@carbon/styles/scss/components/data-table/action/css' as
+  data-table-action-css;
 @use '@carbon/styles/scss/utilities/layout';
 //
 // Table toolbar

@@ -13,6 +13,7 @@ $css--plex: true !default;
 @use '@carbon/styles/scss/theme' as *;
 @use '@carbon/styles/scss/components/button' as *;
 @use '@carbon/styles/scss/components/code-snippet/code-snippet' as *;
+// cds-copy (an icon-button) renders copy-btn classes and uses these styles
 @use '@carbon/styles/scss/components/copy-button';
 @use '@carbon/styles/scss/components/chat-button' as *;
 @use '@carbon/styles/scss/utilities/layout' as *;
