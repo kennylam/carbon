@@ -785,7 +785,8 @@ describe('ComponentName', () => {
 
 ##### `ComponentName-test.a11y.js`
 
-- Use `accessibility-checker` and `axe`
+- Use `axe`. `accessibility-checker` runs in the Playwright AVT tests under
+  `e2e/`, not in unit tests
 - Optionally configure common props to ensure component variants do not contain
   accessibility errors.
 - Always use the destructured `container` from `render()` to ensure the entire
@@ -796,11 +797,6 @@ describe('ComponentName AVT1', () => {
   it('should have no aXe violations', async () => {
     const { container } = render(<ComponentName />);
     await expect(container).toHaveNoAxeViolations();
-  });
-
-  it('should have no AC violations', async () => {
-    const { container } = render(<ComponentName />);
-    await expect(container).toHaveNoACViolations('ComponentName');
   });
 });
 ```

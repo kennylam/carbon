@@ -165,7 +165,7 @@ function ProgressBar({
       <div
         className={`${prefix}--progress-bar__track`}
         role="progressbar"
-        aria-busy={!isFinished}
+        aria-busy={!isFinished && !isError}
         // eslint-disable-next-line jsx-a11y/role-supports-aria-props -- https://github.com/carbon-design-system/carbon/issues/20452
         aria-invalid={isError}
         aria-labelledby={labelId}
@@ -184,7 +184,7 @@ function ProgressBar({
             className={`${prefix}--visually-hidden`}
             aria-live="polite"
             id={helperId}>
-            {isFinished ? 'Done' : 'Loading'}
+            {isFinished ? 'Done' : isError ? 'Error' : 'Loading'}
           </div>
         </div>
       )}
