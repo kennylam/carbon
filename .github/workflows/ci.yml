@@ -173,34 +173,6 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-  elements-previews:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Use Node.js version from .nvmrc
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: '.nvmrc'
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: github.event_name != 'merge_group'
-        with:
-          path: |
-            node_modules
-            */**/node_modules
-          key:
-            ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock',
-            'packages/**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - name: Install dependencies
-        env:
-          YARN_ENABLE_HARDENED_MODE: 0
-        run: yarn install --immutable
-      - name: Build project
-        run: yarn build
-      - name: Build elements previews
-        run: node tasks/examples.js
-
   e2e:
     name: 'test:e2e'
     runs-on: ubuntu-24.04
