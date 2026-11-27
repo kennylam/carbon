@@ -5715,6 +5715,9 @@ Map {
       "className": {
         "type": "string",
       },
+      "id": {
+        "type": "string",
+      },
       "isActive": {
         "type": "bool",
       },
@@ -12280,17 +12283,7 @@ Map {
         "type": "string",
       },
       "children": {
-        "args": [
-          [
-            {
-              "type": "node",
-            },
-            {
-              "type": "func",
-            },
-          ],
-        ],
-        "type": "oneOfType",
+        "type": "func",
       },
       "className": {
         "type": "string",
@@ -14600,17 +14593,7 @@ Map {
         "type": "string",
       },
       "children": {
-        "args": [
-          [
-            {
-              "type": "node",
-            },
-            {
-              "type": "func",
-            },
-          ],
-        ],
-        "type": "oneOfType",
+        "type": "func",
       },
       "className": {
         "type": "string",

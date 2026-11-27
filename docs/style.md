@@ -333,7 +333,7 @@ header with a
 this is configured, inline styles are blocked. Due to this, `style={{}}` cannot
 be used on any element within the codebase. The `react/forbid-component-props`
 and `react/forbid-dom-props` rules in `.oxlintrc.json` flag invalid usages of
-the `style` attribute/prop. Stories are exempt.
+the `style` attribute/prop. Stories and tests are exempt.
 
 Components that need dynamic or inline styles can author these via the
 [CSS Object Model (CSSOM)](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model).
@@ -696,9 +696,7 @@ commands one after another. Refer to the documentation of your shell.
 
 #### Recipes
 
-Below are some common recipes for component testing. Test files are not linted
-yet, so these conventions are not enforced automatically; follow them when
-writing or reviewing tests.
+Below are some common recipes for component testing.
 
 ##### `ComponentName-test.js`
 

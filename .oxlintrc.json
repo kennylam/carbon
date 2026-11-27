@@ -23,13 +23,17 @@
     "**/types/",
 
     "packages/*/examples/*",
-    "packages/*/src/examples/**/example/**",
+
+    // Pattern code (stories are linted). oxlint has no extglob support, so
+    // ignore everything and re-include the stories.
+    "packages/{react,web-components}/src/examples/**/*.{js,jsx,ts,tsx}",
+    "!packages/{react,web-components}/src/examples/**/*.stories.*",
 
     // Upgrade
     "**/__testfixtures__/**",
 
     // React
-    "**/storybook-static/**",
+    "**/storybook-static*/**",
 
     // Templates
     "packages/cli/src/component/templates/**",
@@ -340,12 +344,14 @@
       }
     },
     {
-      // Stories are demo code and are not subject to the CSP restriction.
+      // Stories and tests don't ship, so the CSP restriction doesn't apply.
       "files": [
         "**/*.stories.*",
         "**/*-story.js",
         "**/__stories__/**",
-        "**/preview-components/**"
+        "**/preview-components/**",
+        "**/*-test.*",
+        "**/__tests__/**"
       ],
       "rules": {
         "react/forbid-component-props": "off",

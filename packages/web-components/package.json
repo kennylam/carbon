@@ -43,10 +43,10 @@
       "default": "./es/globals/*"
     },
     "./es": "./es/index.js",
-    "./es/": "./es/",
+    "./es/*": "./es/*",
     "./es-custom/*": "./es-custom/*",
-    "./lib/": "./lib/",
-    "./scss/": "./scss/",
+    "./lib/*": "./lib/*",
+    "./scss/*": "./scss/*",
     "./custom-elements.json": "./custom-elements.json",
     "./package.json": "./package.json"
   },
@@ -92,6 +92,7 @@
     "@mordech/vite-lit-loader": "^0.40.0",
     "@open-wc/testing": "^5.0.0",
     "@playwright/test": "^1.36.2",
+    "@stackblitz/sdk": "^1.11.0",
     "@storybook/addon-docs": "^10.3.5",
     "@storybook/addon-links": "^10.3.5",
     "@storybook/web-components-vite": "^10.3.5",
