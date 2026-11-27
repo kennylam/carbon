@@ -9833,7 +9833,7 @@ __metadata:
     jest-junit: "npm:^17.0.0"
     lerna: "npm:^10.0.0"
     lint-staged: "npm:^17.0.0"
-    oxlint: "npm:^1.85.0"
+    oxlint: "npm:^1.95.0"
     prettier: "npm:^3.3.3"
     react: "npm:^19.2.3"
     react-dom: "npm:^19.2.3"
@@ -17299,7 +17299,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oxlint@npm:^1.85.0":
+"oxlint@npm:^1.95.0":
   version: 1.95.0
   resolution: "oxlint@npm:1.95.0"
   dependencies:
